@@ -1,0 +1,88 @@
+@font-face {
+  font-family: "Half-Elven";
+  src: url(/fonts/HalfElven-gzj4.ttf);
+}
+@font-face {
+  font-family: "Hobbiton Brush hand";
+  src: url(/fonts/hobbitonbrushhand.ttf);
+}
+body {
+  color: #d8d8d8;
+  background-color: #222;
+}
+
+a, a:visited {
+  color: #2f8de6;
+  text-decoration: none;
+}
+a:hover {
+  color: #e6882f;
+}
+
+input, textarea {
+  background-color: #6c6c6c;
+  border: none;
+}
+input:focus, textarea:focus {
+  outline: none;
+  background-color: #888;
+}
+
+.hidden {
+  display: none;
+}
+
+.main-message {
+  width: 100%;
+  color: #0f73dd;
+  text-align: center;
+}
+.main-message.modern {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -80%);
+  font-family: "Tangerine";
+  font-size: 14vw;
+}
+.main-message.elvish {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  font-family: "Half-Elven";
+  font-size: 6.6666667vw;
+}
+
+.sub-message {
+  width: 100%;
+  text-align: center;
+}
+.sub-message, .sub-message a {
+  color: #0c4a8d;
+}
+.sub-message.modern {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 60%);
+  font-family: "Cinzel Decorative";
+  font-size: 3vw;
+}
+.sub-message.elvish {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 10%);
+  font-family: "Hobbiton Brush hand";
+  font-size: 4vw;
+}
+
+.toggle {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  color: #606060;
+  font-size: 12pt;
+  cursor: pointer;
+}

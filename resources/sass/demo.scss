@@ -1,0 +1,94 @@
+@font-face {
+    font-family: "Half-Elven";
+    src: url(/fonts/HalfElven-gzj4.ttf);
+}
+
+@font-face {
+    font-family: "Hobbiton Brush hand";
+    src: url(/fonts/hobbitonbrushhand.ttf);
+}
+
+@mixin fixed-center($tx: -50%, $ty: -50%) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate($tx, $ty);
+}
+
+body {
+    color: #d8d8d8;
+    background-color: #222;
+}
+
+a {
+    &, &:visited {
+        color: #2f8de6;
+        text-decoration: none;
+    }
+
+    &:hover {
+        color: #e6882f;
+    }
+}
+
+input, textarea {
+    background-color: #6c6c6c;
+    border: none;
+
+    &:focus {
+        outline: none;
+        background-color: #888;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.main-message {
+    width: 100%;
+    color: #0f73dd;
+    text-align: center;
+
+    &.modern {
+        @include fixed-center($ty: -80%);
+        font-family: "Tangerine";
+        font-size: 14vw;
+    }
+
+    &.elvish {
+        @include fixed-center($ty: -100%);
+        font-family: "Half-Elven";
+        font-size: 6.6666667vw;
+    }
+}
+
+.sub-message {
+    width: 100%;
+    text-align: center;
+
+    &, a {
+        color: #0c4a8d;
+    }
+
+    &.modern {
+        @include fixed-center($ty: 60%);
+        font-family: "Cinzel Decorative";
+        font-size: 3vw;
+    }
+
+    &.elvish {
+        @include fixed-center($ty: 10%);
+        font-family: "Hobbiton Brush hand";
+        font-size: 4vw;
+    }
+}
+
+.toggle {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    color: #606060;
+    font-size: 12pt;
+    cursor: pointer;
+}

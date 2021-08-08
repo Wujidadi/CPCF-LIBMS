@@ -1,0 +1,10 @@
+{
+    "top": {
+        "App\\": "app/",
+        "Libraries\\": "libraries/"
+    },
+    "exception": [
+        "app/Injects/",
+        "libraries/Framework/"
+    ]
+}
