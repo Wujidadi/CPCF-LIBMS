@@ -19,7 +19,7 @@ $autoloadTopDir = $autoloadMap['top'];
 $autoloadExcept = $autoloadMap['exception'];
 
 $classMap = "<?php\n\nreturn " . VarExportFormat(traverse($autoloadTopDir, BASE_DIR . DIRECTORY_SEPARATOR, $autoloadExcept)) . ";\n";
-$mapFile  = VENDOR_DIR . DIRECTORY_SEPARATOR . 'autoload_map.php';
+$mapFile  = VENDOR_DIR . DIRECTORY_SEPARATOR . 'autoload' . DIRECTORY_SEPARATOR . 'autoload_map.php';
 file_put_contents($mapFile, $classMap);
 
 

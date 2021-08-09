@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Handlers\Demo;
 use Libraries\Logger;
 
+/**
+ * Demo controller.
+ */
 class DemoController
 {
     /**

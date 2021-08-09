@@ -1,7 +1,8 @@
 {
     "top": {
         "App\\": "app/",
-        "Libraries\\": "libraries/"
+        "Libraries\\": "libraries/",
+        "Database\\": "database/"
     },
     "exception": [
         "app/Injects/",

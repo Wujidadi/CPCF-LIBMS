@@ -59,6 +59,13 @@ define('ROUTE_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'routes');
 define('LIBRARY_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'libraries');
 
 /**
+ * Database directory.
+ *
+ * @var string
+ */
+define('DATABASE_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'database');
+
+/**
  * Resources directory.
  *
  * @var string

@@ -41,6 +41,11 @@ else
             echo `php tools/dumpAutoload.php`;
             break;
 
+        case 'migrate':
+        case 'migration':
+            echo `php tools/migrate.php`;
+            break;
+
         default:
             showHelp();
             break;
@@ -83,5 +88,9 @@ function showHelp()
     echo sprintf("       \033[33m%s\033[0m\n", 'classmap');
     echo sprintf("       \033[33m%s\033[0m\n", 'autoloadmap');
     echo sprintf("       \033[33m%s\033[0m\n", 'autoloadclassmap');
+    echo PHP_EOL;
+    echo sprintf("     * %s\n", 'Database migrating:');
+    echo sprintf("       \033[33m%s\033[0m\n", 'migrate');
+    echo sprintf("       \033[33m%s\033[0m\n", 'migration');
     exit(0);
 }

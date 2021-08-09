@@ -2,6 +2,9 @@
 
 namespace App\Handlers;
 
+/**
+ * Demo handler.
+ */
 class Demo
 {
     /**

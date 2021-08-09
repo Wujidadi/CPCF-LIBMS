@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models;
 
 /**
- * Parent class of model.
+ * Demo model.
  */
 class DemoModel extends Model
 {
@@ -15,13 +15,6 @@ class DemoModel extends Model
      * @var self|null
      */
     protected static $_uniqueInstance = null;
-
-    /**
-     * Constructor.
-     *
-     * @return void
-     */
-    protected function __construct() {}
 
     /**
      * Get the instance of this class.

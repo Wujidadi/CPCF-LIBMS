@@ -5,5 +5,8 @@
 
 ## 開發日誌
 
+### 2021 年 8 月 9 日
+完成 migration 機制並同步 Tarascanta Beta。
+
 ### 2021 年 8 月 8 日
 正式始動，完成 Docker 容器部署。
