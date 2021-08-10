@@ -178,19 +178,12 @@ class Logger
     {
         try
         {
-            $prefix = $this->_logPrefix;
-            $prefix .= $prefix == '' ? '' : ' ';
-
-            $logMessage = sprintf(
-                "%s %s %s[%s]: [%s](%d) %s\n",
-                MsTime(),
-                php_uname('n'),
-                $prefix,
-                getmypid(),
-                $type,
-                ++$this->_logSequence,
-                $message
-            );
+            $time     = MsTime();
+            $uname    = php_uname('n');
+            $prefix   = $this->_logPrefix;
+            $pid      = getmypid();
+            $sequence = ++$this->_logSequence;
+            $logMessage = "{$time} {$uname} {$prefix}[{$pid}]: [{$type}]({$sequence}) {$message}\n";
 
             $result = file_put_contents($this->_logFile, $logMessage, FILE_APPEND);
 

@@ -12,6 +12,7 @@
 |
 | + Views
 |   - function  view
+|   - function  viewPath
 |
 */
 
@@ -40,18 +41,36 @@ if (!function_exists('view'))
     /**
      * Render view page by short path of the view file and the given data.
      *
-     * @param  string  $_path  Short path of the view file
-     * @param  array   $_data  Data to be rendered to the view page
+     * @param  string  $_path     Short path of the view file
+     * @param  array   $_rawdata  Data to be rendered to the view page
      * @return void
      */
-    function view($_path = '', $_data = [])
+    function view($_path = '', $_rawdata = [])
     {
         if ($_path !== '')
         {
             $path = preg_replace('/\./', DIRECTORY_SEPARATOR, $_path) . '.view.php';
-            extract($_data);
+            extract($_rawdata);
             include VIEW_DIR . DIRECTORY_SEPARATOR . $path;
         }
         exit;
+    }
+}
+
+if (!function_exists('viewPath'))
+{
+    /**
+     * Return the path of a view file.
+     *
+     * @param  string  $_path  Short path of the view file
+     * @return string
+     */
+    function viewPath($_path = '')
+    {
+        if ($_path !== '')
+        {
+            $path = preg_replace('/\./', DIRECTORY_SEPARATOR, $_path) . '.view.php';
+            return VIEW_DIR . DIRECTORY_SEPARATOR . $path;
+        }
     }
 }
