@@ -1,13 +1,14 @@
 <?php
 
-use App\Controllers\DemoController;
+use App\Controllers\HomeController;
 
 $Route->map('GET', '/', function()
 {
-    view('Demo.Home', [
-        'title' => 'Tarascanta',
-        'mainMessage' => 'Welcome to Tarascanta!'
-    ]);
+    header('Location: /home');
+    exit();
 });
 
-$Route->map('GET', '/demo', [DemoController::getInstance(), 'main']);
+$Route->map('GET', '/home', function()
+{
+    HomeController::getInstance()->main();
+});

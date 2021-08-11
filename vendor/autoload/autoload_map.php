@@ -1,10 +1,11 @@
 <?php
 
 return array(
-    'App\\Controllers\\DemoController' => 'app/Controllers/DemoController.php',
+    'App\\Constant' => 'app/Constant.php',
+    'App\\Controllers\\HomeController' => 'app/Controllers/HomeController.php',
     'App\\Handlers\\Demo' => 'app/Handlers/Demo.php',
+    'App\\Model' => 'app/Model.php',
     'App\\Models\\DemoModel' => 'app/Models/DemoModel.php',
-    'App\\Models\\Model' => 'app/Models/Model.php',
     'Database\\Migration' => 'database/Migration.php',
     'Database\\Migrations\\DemoTable' => 'database/Migrations/DemoTable.php',
     'Database\\Migrations\\ExampleTable' => 'database/Migrations/ExampleTable.php',

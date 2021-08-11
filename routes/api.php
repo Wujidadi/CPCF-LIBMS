@@ -1,5 +1,7 @@
 <?php
 
-use App\Controllers\DemoController;
-
-$Route->map('GET', '/api', [DemoController::getInstance(), 'api']);
+$Route->map('GET', '/api', function()
+{
+    header('Content-Type: text/plain');
+    echo 'API';
+});
