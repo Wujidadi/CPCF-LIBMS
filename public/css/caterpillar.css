@@ -1,0 +1,23 @@
+body.caterpillar header .navbar.fixed-top {
+  font-size: 1.25rem;
+  line-height: 1em;
+  padding: 1.25rem 1rem;
+}
+body.caterpillar main {
+  margin-top: 3.75rem;
+  margin-left: 15rem;
+  padding: 1rem;
+}
+body.caterpillar aside.navbar.fixed-left {
+  position: fixed;
+  float: left;
+  background-color: #bae7fc;
+  width: 15rem;
+  height: calc(100vh - 3.75rem);
+  padding: 1rem;
+  align-items: initial;
+}
+body.caterpillar-default header .navbar.fixed-top {
+  background-color: #236c1d;
+  color: white;
+}

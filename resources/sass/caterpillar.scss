@@ -1,0 +1,49 @@
+@import 'color.scss';
+@import 'value.scss';
+
+body {
+    &.caterpillar {
+        header {
+            .navbar {
+                &.fixed-top {
+                    font-size: 1.25rem;
+                    line-height: 1em;
+                    padding: 1.25rem 1rem;
+                }
+            }
+        }
+
+        main {
+            margin: {
+                top: $top-navbar-height;
+                left: 15rem;
+            }
+            padding: 1rem;
+        }
+
+        aside {
+            &.navbar {
+                &.fixed-left {
+                    position: fixed;
+                    float: left;
+                    background-color: $left-aside-bgcolor;
+                    width: 15rem;
+                    height: calc(100vh - #{$top-navbar-height});
+                    padding: 1rem;
+                    align-items: initial;
+                }
+            }
+        }
+
+        &-default {
+            header {
+                .navbar {
+                    &.fixed-top {
+                        background-color: $official-top-bgcolor;
+                        color: $official-top-fgcolor;
+                    }
+                }
+            }
+        }
+    }
+}
