@@ -22,6 +22,11 @@ else
             echo "\033[32mTest\033[0m" . PHP_EOL;
             break;
 
+        case 'migrate':
+        case 'migration':
+            echo `php tools/migrate.php`;
+            break;
+
         case 'sass2css':
         case 'scss2css':
         case 'sasstocss':
@@ -30,20 +35,6 @@ else
         case 'scss':
         case 'css':
             echo `php tools/sass2css.php`;
-            break;
-
-        case 'dumpautoload':
-        case 'dump':
-        case 'autoload':
-        case 'classmap':
-        case 'autoloadmap':
-        case 'autoloadclassmap':
-            echo `php tools/dumpAutoload.php`;
-            break;
-
-        case 'migrate':
-        case 'migration':
-            echo `php tools/migrate.php`;
             break;
 
         default:
@@ -72,6 +63,10 @@ function showHelp()
     echo PHP_EOL;
     echo "    Tool names:\n";
     echo PHP_EOL;
+    echo sprintf("     * %s\n", 'Database migrating:');
+    echo sprintf("       \033[33m%s\033[0m\n", 'migrate');
+    echo sprintf("       \033[33m%s\033[0m\n", 'migration');
+    echo PHP_EOL;
     echo sprintf("     * %s\n", 'Convert SASS/SCSS to CSS:');
     echo sprintf("       \033[33m%s\033[0m\n", 'sass2css');
     echo sprintf("       \033[33m%s\033[0m\n", 'scss2css');
@@ -80,17 +75,5 @@ function showHelp()
     echo sprintf("       \033[33m%s\033[0m\n", 'sass');
     echo sprintf("       \033[33m%s\033[0m\n", 'scss');
     echo sprintf("       \033[33m%s\033[0m\n", 'css');
-    echo PHP_EOL;
-    echo sprintf("     * %s\n", 'Dump autoload classes map:');
-    echo sprintf("       \033[33m%s\033[0m\n", 'dumpautoload');
-    echo sprintf("       \033[33m%s\033[0m\n", 'dump');
-    echo sprintf("       \033[33m%s\033[0m\n", 'autoload');
-    echo sprintf("       \033[33m%s\033[0m\n", 'classmap');
-    echo sprintf("       \033[33m%s\033[0m\n", 'autoloadmap');
-    echo sprintf("       \033[33m%s\033[0m\n", 'autoloadclassmap');
-    echo PHP_EOL;
-    echo sprintf("     * %s\n", 'Database migrating:');
-    echo sprintf("       \033[33m%s\033[0m\n", 'migrate');
-    echo sprintf("       \033[33m%s\033[0m\n", 'migration');
     exit(0);
 }

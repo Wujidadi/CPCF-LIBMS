@@ -15,7 +15,7 @@ use Libraries\Logger;
 
 $prefix = 'Database\Migrations';
 
-$migrationMap = require_once VENDOR_DIR . '/migration/migration_map.php';
+$migrationMap = require_once DATABASE_DIR . DIRECTORY_SEPARATOR . 'migration_map.php';
 
 foreach ($migrationMap as $class => $functionArray)
 {

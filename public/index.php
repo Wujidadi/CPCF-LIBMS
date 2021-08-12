@@ -22,7 +22,7 @@ chdir(__DIR__);
 require_once '../bootstrap/definitions.php';
 
 # Autoload
-require_once VENDOR_DIR . '/autoload/autoload.php';
+require_once VENDOR_DIR . '/autoload.php';
 
 # Configurations
 require_once CONFIG_DIR . '/env.php';
