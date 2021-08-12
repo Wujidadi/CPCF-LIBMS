@@ -1,0 +1,78 @@
+@use 'Bootstrap/bootstrap-utilities.scss';
+@import 'color.scss';
+@import 'value.scss';
+
+body {
+    &.caterpillar {
+        // header {
+        //     .navbar {
+        //         &.fixed-top {
+        //             color: bootstrap-utilities.$white;
+        //         }
+        //     }
+        // }
+
+        main {
+            margin: {
+                top: $top-navbar-height;
+                left: $left-aside-width;
+            }
+            padding: 1rem;
+        }
+
+        aside {
+            &.navbar {
+                &.fixed-left {
+                    position: fixed;
+                    float: left;
+                    width: $left-aside-width;
+                    height: calc(100vh - #{$top-navbar-height});
+                    align-items: initial;
+
+                    .nav {
+                        width: 100%;
+
+                        .nav-link {
+                            font-size: 1.15rem;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+
+        &-default {
+            header {
+                .navbar {
+                    &.fixed-top {
+                        background-image: linear-gradient(157.5deg, lighten($official-bgcolor, 2.5%), lighten($official-bgcolor, 20%));
+                        color: bootstrap-utilities.$white;
+                    }
+                }
+            }
+
+            aside {
+                &.navbar {
+                    &.fixed-left {
+                        background-image: linear-gradient(112.5deg, $left-aside-bgcolor, $left-aside-bgcolor-end);
+
+                        .nav {
+                            .nav-link {
+                                color: $left-aside-fgcolor;
+
+                                &.active {
+                                    color: darken($left-aside-fgcolor, 33.333333%);
+                                    background-color: transparentize($left-aside-fgcolor, 0.6);
+                                }
+
+                                &:not(.active):hover {
+                                    color: darken($left-aside-fgcolor, 10%);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
