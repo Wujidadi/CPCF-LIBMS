@@ -12,30 +12,18 @@
 
 return [
 
-    // 'DomainUnsignedTinyint' => [
+    // 'Domains\UnsignedTinyint' => [
     //     // 'up',
     //     // 'down'
     // ],
 
-    // 'TriggerFunctionUpdateTimestamp' => [
+    // 'TriggerFunctions\UpdateTimestamp' => [
     //     // 'up',
     //     // 'down'
     // ],
 
-    // 'TableDemoTable' => [
+    // 'Tables\Books' => [
     //     // 'up',
-    //     // 'down'
-    // ],
-
-    // 'TriggerAutoUpdateTimeOnDemoTable' => [
-    //     // 'up',
-    //     // 'down'
-    // ],
-
-    // 'TableExampleTable' => [
-    //     // 'up',
-    //     // 'changeNameOfCreatedTime',
-    //     // 'changeNameOfUpdatedTime',
     //     // 'down'
     // ]
 

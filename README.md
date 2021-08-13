@@ -5,6 +5,10 @@
 
 ## 開發日誌
 
+### 2021 年 8 月 13 日
+* 更新 DBAPI 及 Model 父類別，變更 migration 類別和資料夾結構、更新相關程式，並同步 Tarascanta Beta。
+* 初步整理原始書單。
+
 ### 2021 年 8 月 12 日
 * 引入 Bootstrap SCSS 檔案。
 * 變更 SCSS 檔案引用結構及輸出的 CSS 檔。

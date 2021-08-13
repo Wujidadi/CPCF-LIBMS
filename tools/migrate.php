@@ -19,7 +19,9 @@ $migrationMap = require_once DATABASE_DIR . DIRECTORY_SEPARATOR . 'migration_map
 
 foreach ($migrationMap as $class => $functionArray)
 {
-    if (is_file(DATABASE_DIR . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR . $class . '.php'))
+    $classFileName = DATABASE_DIR . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR . preg_replace('/[\/\\\]/', DIRECTORY_SEPARATOR, $class) . '.php';
+
+    if (is_file($classFileName))
     {
         $fullClass = "{$prefix}\\{$class}";
 

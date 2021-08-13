@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Migrations;
+namespace Database\Migrations\Domains;
 
 use PDOException;
 use Libraries\DBAPI;
@@ -8,16 +8,16 @@ use Libraries\Logger;
 use Database\Migration;
 
 /**
- * Migration class of the trigger function `update_timestamp()`.
+ * Migration class of the domain `unsigned_tinyint`.
  */
-class TriggerFunctionUpdateTimestamp extends Migration
+class UnsignedTinyint extends Migration
 {
     /**
-     * Name of the target trigger function.
+     * Name of the target domain.
      *
      * @var string
      */
-    protected $_triggerFunctionName = 'update_timestamp';
+    protected $_domainName = 'unsigned_tinyint';
 
     protected $_className;
 
@@ -39,7 +39,7 @@ class TriggerFunctionUpdateTimestamp extends Migration
     }
 
     /**
-     * Create the trigger function.
+     * Create the domain.
      *
      * @return boolean
      */
@@ -48,29 +48,25 @@ class TriggerFunctionUpdateTimestamp extends Migration
         $sqlArray = [
 
             <<<EOT
-            CREATE OR REPLACE FUNCTION public.{$this->_triggerFunctionName}()
-                RETURNS trigger
-                LANGUAGE 'plpgsql'
-            AS $$
-            BEGIN
-                new."UpdatedAt" = CURRENT_TIMESTAMP;
-                RETURN new;
-            END
-            $$;
+            CREATE DOMAIN public."{$this->_domainName}"
+                AS int2
+                CHECK (
+                    VALUE >= 0 AND VALUE < 256
+                );
             EOT
 
         ];
 
         if ($runResult = $this->_run($this->_className, __FUNCTION__, $sqlArray))
         {
-            Logger::getInstance()->logInfo("Trigger function \"{$this->_triggerFunctionName}\" created");
+            Logger::getInstance()->logInfo("Domain \"{$this->_domainName}\" created");
         }
 
         return $runResult;
     }
 
     /**
-     * Drop the trigger function.
+     * Drop the domain.
      *
      * @return boolean
      */
@@ -78,13 +74,13 @@ class TriggerFunctionUpdateTimestamp extends Migration
     {
         $sqlArray = [
 
-            "DROP FUNCTION IF EXISTS public.{$this->_triggerFunctionName}"
+            "DROP DOMAIN IF EXISTS public.\"{$this->_domainName}\""
 
         ];
 
         if ($runResult = $this->_run($this->_className, __FUNCTION__, $sqlArray))
         {
-            Logger::getInstance()->logInfo("Trigger function \"{$this->_triggerFunctionName}\" dropped");
+            Logger::getInstance()->logInfo("Domain \"{$this->_domainName}\" dropped");
         }
 
         return $runResult;
