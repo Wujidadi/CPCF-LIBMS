@@ -19,28 +19,42 @@ $migrationMap = require_once DATABASE_DIR . DIRECTORY_SEPARATOR . 'migration_map
 
 foreach ($migrationMap as $class => $functionArray)
 {
-    foreach ($functionArray as $function)
+    if (is_file(DATABASE_DIR . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR . $class . '.php'))
     {
-        $_isRunning = false;
+        $fullClass = "{$prefix}\\{$class}";
 
-        try
+        foreach ($functionArray as $function)
         {
-            $fullClass = "{$prefix}\\{$class}";
+            if (method_exists($fullClass, $function))
+            {
+                $_isRunning = false;
 
-            echo "Executing {$fullClass}::{$function} ... ";
-            $_isRunning = true;
+                try
+                {
+                    echo "Executing {$fullClass}::{$function} ... ";
+                    $_isRunning = true;
 
-            $fullClass::getInstance()->$function();
+                    $fullClass::getInstance()->$function();
 
-            echo "\033[32;1mDone\033[0m\n";
+                    echo "\033[32;1mDone\033[0m\n";
+                }
+                catch (Throwable $ex)
+                {
+                    if ($_isRunning) echo "\033[31;1mFailed\033[0m\n";
+
+                    $exCode = $ex->getCode();
+                    $exMsg  = $ex->getMessage();
+                    Logger::getInstance()->logError("Exception while migrate {$class}::{$function}: ({$exCode}) {$exMsg}");
+                }
+            }
+            else
+            {
+                echo "Migration function \033[33;1m{$class}::{$function}\033[0m does not exist\n";
+            }
         }
-        catch (Exception $ex)
-        {
-            if ($_isRunning) echo "\033[31;1mFailed\033[0m\n";
-
-            $exCode = $ex->getCode();
-            $exMsg  = $ex->getMessage();
-            Logger::getInstance()->logError("Exception while migrate {$class}::{$function}: ({$exCode}) {$exMsg}");
-        }
+    }
+    else
+    {
+        echo "Migration class \033[33;1m{$class}\033[0m does not exist\n";
     }
 }

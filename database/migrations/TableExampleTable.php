@@ -7,14 +7,19 @@ use Libraries\DBAPI;
 use Libraries\Logger;
 use Database\Migration;
 
-class ExampleTable extends Migration
+/**
+ * Migration class of the table `ExampleTable`.
+ */
+class TableExampleTable extends Migration
 {
     /**
-     * Name of the target table, must be the same as the class name.
+     * Name of the target table.
      *
      * @var string
      */
     protected $_tableName = 'ExampleTable';
+
+    protected $_className;
 
     protected static $_uniqueInstance = null;
 
@@ -27,6 +32,12 @@ class ExampleTable extends Migration
         return self::$_uniqueInstance;
     }
 
+    protected function __construct()
+    {
+        parent::__construct();
+        $this->_className = basename(__FILE__, '.php');
+    }
+
     /**
      * Create the table.
      *
@@ -37,7 +48,7 @@ class ExampleTable extends Migration
         $sqlArray = [
 
             <<<EOT
-            CREATE TABLE public."{$this->_tableName}"
+            CREATE TABLE IF EXISTS public."{$this->_tableName}"
             (
                 "ID"        bigserial                                           NOT NULL,
                 "Content"   character varying(800) COLLATE pg_catalog."C.UTF-8" NOT NULL,
@@ -63,7 +74,7 @@ class ExampleTable extends Migration
 
         ];
 
-        if ($runResult = $this->_run($this->_tableName, __FUNCTION__, $sqlArray))
+        if ($runResult = $this->_run($this->_className, __FUNCTION__, $sqlArray))
         {
             Logger::getInstance()->logInfo("Table \"{$this->_tableName}\" created");
         }
@@ -84,7 +95,7 @@ class ExampleTable extends Migration
 
         ];
 
-        if ($runResult = $this->_run($this->_tableName, __FUNCTION__, $sqlArray))
+        if ($runResult = $this->_run($this->_className, __FUNCTION__, $sqlArray))
         {
             Logger::getInstance()->logInfo("Column \"{$this->_tableName}\".\"CreatedAt\" renamed to \"{$this->_tableName}\".\"CreatedTime\"");
         }
@@ -105,7 +116,7 @@ class ExampleTable extends Migration
 
         ];
 
-        if ($runResult = $this->_run($this->_tableName, __FUNCTION__, $sqlArray))
+        if ($runResult = $this->_run($this->_className, __FUNCTION__, $sqlArray))
         {
             Logger::getInstance()->logInfo("Column \"{$this->_tableName}\".\"UpdatedAt\" renamed to \"{$this->_tableName}\".\"UpdatedTime\"");
         }
@@ -126,7 +137,7 @@ class ExampleTable extends Migration
 
         ];
 
-        if ($runResult = $this->_run($this->_tableName, __FUNCTION__, $sqlArray))
+        if ($runResult = $this->_run($this->_className, __FUNCTION__, $sqlArray))
         {
             Logger::getInstance()->logInfo("Table \"{$this->_tableName}\" dropped");
         }

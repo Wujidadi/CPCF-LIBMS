@@ -20,12 +20,12 @@ abstract class Migration
     /**
      * Run migration commands.
      *
-     * @param  string    $tableName     Table name
-     * @param  string    $functionName  Name of the migration function which calls the _run method
+     * @param  string    $className     Name of the migration class in which the _run method is called
+     * @param  string    $functionName  Name of the migration function in which the _run method is called
      * @param  string[]  $queryArray    Array of SQL commands
      * @return boolean
      */
-    protected function _run($tableName, $functionName, $queryArray)
+    protected function _run($className, $functionName, $queryArray)
     {
         try
         {
@@ -42,7 +42,7 @@ abstract class Migration
 
             $exCode = $ex->getCode();
             $exMsg  = $ex->getMessage();
-            Logger::getInstance()->logError("{$tableName}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
+            Logger::getInstance()->logError("{$className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
 
             return false;
         }
