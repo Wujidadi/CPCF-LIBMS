@@ -45,6 +45,13 @@ define('CONFIG_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'configs');
 define('APP_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'app');
 
 /**
+ * Bin directory.
+ *
+ * @var string
+ */
+define('BIN_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'bin');
+
+/**
  * Routes directory.
  *
  * @var string

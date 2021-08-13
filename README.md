@@ -10,6 +10,7 @@
 * 變更 SCSS 檔案引用結構及輸出的 CSS 檔。
 * 修改 SCSS 檔案架構；HTML 樣式儘量以 Bootstrap CSS class 指定。
 * 放棄自製 autoload，引入 composer，重新編排自製 migration 機制，並同步 Tarascanta Beta。
+* 新增 bin 資料夾，並同步 Tarascanta Beta。
 
 ### 2021 年 8 月 11 日
 * 開始建構專案基本頁面。

@@ -2,10 +2,10 @@
 
 /*
 |--------------------------------------------------------------------------
-| Tools Startup
+| Bin Startup
 |--------------------------------------------------------------------------
 |
-| Entry point of command line tools.
+| Entry point of command line scripts.
 |
 */
 
