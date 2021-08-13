@@ -50,15 +50,15 @@ class TableDemoTable extends Migration
             <<<EOT
             CREATE TABLE public."{$this->_tableName}"
             (
-                "ID"        bigserial                                            NOT NULL,
-                "Type"      character varying(191)  COLLATE pg_catalog."C.UTF-8" NOT NULL,
-                "Content"   character varying(2048) COLLATE pg_catalog."C.UTF-8" NOT NULL,
-                "Data"      jsonb                                                NOT NULL,
-                "Flag"      boolean,
-                "Available" unsigned_tinyint                                     NOT NULL DEFAULT 1,
-                "Editable"  unsigned_tinyint                                     NOT NULL DEFAULT 1,
-                "CreatedAt" timestamp(6) with time zone                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                "UpdatedAt" timestamp(6) with time zone                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                "ID"         bigserial                                              NOT NULL,
+                "Type"       character varying(191)   COLLATE pg_catalog."C.UTF-8"  NOT NULL,
+                "Content"    character varying(2048)  COLLATE pg_catalog."C.UTF-8"  NOT NULL,
+                "Data"       jsonb                                                  NOT NULL,
+                "Flag"       boolean,
+                "Available"  unsigned_tinyint                                       NOT NULL DEFAULT 1,
+                "Editable"   unsigned_tinyint                                       NOT NULL DEFAULT 1,
+                "CreatedAt"  timestamp(6) with time zone                            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                "UpdatedAt"  timestamp(6) with time zone                            NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
                 CONSTRAINT "{$this->_tableName}_ID" UNIQUE ("ID"),
 

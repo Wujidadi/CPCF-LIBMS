@@ -50,10 +50,10 @@ class TableExampleTable extends Migration
             <<<EOT
             CREATE TABLE IF EXISTS public."{$this->_tableName}"
             (
-                "ID"        bigserial                                           NOT NULL,
-                "Content"   character varying(800) COLLATE pg_catalog."C.UTF-8" NOT NULL,
-                "CreatedAt" timestamp(6) with time zone                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                "UpdatedAt" timestamp(6) with time zone                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                "ID"         bigserial                                             NOT NULL,
+                "Content"    character varying(800)  COLLATE pg_catalog."C.UTF-8"  NOT NULL,
+                "CreatedAt"  timestamp(6) with time zone                           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                "UpdatedAt"  timestamp(6) with time zone                           NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
                 CONSTRAINT "{$this->_tableName}_ID" UNIQUE ("ID"),
 

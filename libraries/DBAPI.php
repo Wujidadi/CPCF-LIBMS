@@ -3,6 +3,7 @@
 namespace Libraries;
 
 use PDO;
+use PDOStatement;
 use PDOException;
 use Libraries\Logger;
 
@@ -11,7 +12,14 @@ use Libraries\Logger;
  */
 class DBAPI
 {
+    /**
+     * @var PDO|null
+     */
     private $_pdo;
+
+    /**
+     * @var PDOStatement|false
+     */
     private $_pdoStatement;
 
     private $_dbtype;

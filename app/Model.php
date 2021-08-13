@@ -20,7 +20,7 @@ abstract class Model
 
     public function beginTransaction()
     {
-        return $this->_db->beginTransaction();
+        return !$this->_db->inTransaction() ? $this->_db->beginTransaction() : false;
     }
 
     public function commit()
@@ -31,5 +31,10 @@ abstract class Model
     public function rollBack()
     {
         return $this->_db->rollBack();
+    }
+
+    public function inTransaction()
+    {
+        return $this->_db->inTransaction();
     }
 }
