@@ -16,8 +16,8 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-$strSourceFileName = '/Users/wujidadi/Library/Mobile Documents/com~apple~CloudDocs/毛毛蟲/20181024-整理毛毛蟲書單_寶芳.xls';
-$strTargetFileName = '/Users/wujidadi/Library/Mobile Documents/com~apple~CloudDocs/毛毛蟲/CPCF_Books_trimmed_20210813.xlsx';
+$strSourceFileName = STORAGE_DIR . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'books' . DIRECTORY_SEPARATOR . '0181024-整理毛毛蟲書單_寶芳.xls';
+$strTargetFileName = STORAGE_DIR . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'books' . DIRECTORY_SEPARATOR . 'CPCF_Books_trimmed_20210813.xlsx';
 
 $arrColumns = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L' ];
 
@@ -124,7 +124,7 @@ try
         $objToWorkSheet->getColumnDimension('A')->setWidth( 5.1875 + $dblMargin);
         $objToWorkSheet->getColumnDimension('B')->setWidth(13.3125 + $dblMargin);
         $objToWorkSheet->getColumnDimension('C')->setWidth(20      + $dblMargin);
-        $objToWorkSheet->getColumnDimension('D')->setWidth(55.8125 + $dblMargin);
+        $objToWorkSheet->getColumnDimension('D')->setWidth(59.1875 + $dblMargin);
         $objToWorkSheet->getColumnDimension('E')->setWidth(52      + $dblMargin);
         $objToWorkSheet->getColumnDimension('F')->setWidth(51.3125 + $dblMargin);
         $objToWorkSheet->getColumnDimension('G')->setWidth(38      + $dblMargin);
