@@ -1,5 +1,8 @@
 <?php
 
+chdir(__DIR__);
+require_once '../bootstrap/bin.php';
+
 /*
 |--------------------------------------------------------------------------
 | Retrim Book Excel File
@@ -8,8 +11,6 @@
 | 對經由 TrimOriginalBookExcelFile 整理過的書單檔案進行再修整
 |
 */
-
-require_once '_startup.php';
 
 use Libraries\Logger;
 use App\Controllers\SourceFileController;

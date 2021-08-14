@@ -21,15 +21,6 @@ chdir(__DIR__);
 # Basic definitions
 require_once '../bootstrap/definitions.php';
 
-# Autoload
-require_once VENDOR_DIR . '/autoload.php';
-
-# Configurations
-require_once CONFIG_DIR . '/env.php';
-require_once CONFIG_DIR . '/log.php';
-require_once CONFIG_DIR . '/database.php';
-require_once CONFIG_DIR . '/curl.php';
-
 # Framework tools
 require_once BOOTSTRAP_DIR . '/app.php';
 

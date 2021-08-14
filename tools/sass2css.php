@@ -1,5 +1,8 @@
 <?php
 
+chdir(__DIR__);
+require_once '../bootstrap/tools.php';
+
 /*
 |--------------------------------------------------------------------------
 | SASS/SCSS to CSS
@@ -9,8 +12,6 @@
 | It is required to install SASS in your OS first. 
 |
 */
-
-require_once '_startup.php';
 
 $file = 'sassmap.json';
 $path = BASE_DIR . DIRECTORY_SEPARATOR;

@@ -2,19 +2,27 @@
 
 /*
 |--------------------------------------------------------------------------
-| Tools Startup
+| Tools Bootstrap
 |--------------------------------------------------------------------------
 |
-| Entry point of command line tools.
+| Entry point of command line tools under the "tools" directory.
 |
 */
 
-chdir(__DIR__);
+# PHP decimal precision
+ini_set('precision', 16);
 
+# Basic definitions
 require_once '../bootstrap/definitions.php';
+
+# Autoload
 require_once VENDOR_DIR . '/autoload.php';
+
+# Configurations
 require_once CONFIG_DIR . '/env.php';
 require_once CONFIG_DIR . '/log.php';
 require_once CONFIG_DIR . '/database.php';
 require_once CONFIG_DIR . '/curl.php';
-require_once BOOTSTRAP_DIR . '/app.php';
+
+# Framework tools
+require_once BOOTSTRAP_DIR . '/framework.php';

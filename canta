@@ -19,7 +19,7 @@ else
     switch (strtolower($argv[1]))
     {
         case 'test':
-            echo "\033[32mTest\033[0m" . PHP_EOL;
+            echo "\033[32mTest\033[0m\n";
             break;
 
         case 'migrate':

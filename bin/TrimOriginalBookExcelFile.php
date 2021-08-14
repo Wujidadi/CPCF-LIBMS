@@ -1,5 +1,8 @@
 <?php
 
+chdir(__DIR__);
+require_once '../bootstrap/bin.php';
+
 /*
 |--------------------------------------------------------------------------
 | Trim Original Book Excel File
@@ -8,8 +11,6 @@
 | 整理原始書單 Excel 檔案。
 |
 */
-
-require_once '_startup.php';
 
 use Libraries\Logger;
 use App\Controllers\SourceFileController;

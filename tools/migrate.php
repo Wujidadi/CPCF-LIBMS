@@ -1,5 +1,8 @@
 <?php
 
+chdir(__DIR__);
+require_once '../bootstrap/tools.php';
+
 /*
 |--------------------------------------------------------------------------
 | Database migrate
@@ -8,8 +11,6 @@
 | Execute database migration commands.
 |
 */
-
-require_once '_startup.php';
 
 use Libraries\Logger;
 
