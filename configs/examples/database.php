@@ -1,43 +1,82 @@
 <?php
 
 /**
- * Database type.
+ * Database configurations.
  *
- * @var string
+ * @var array
  */
-define('DB_TYPE', 'mysql');
+define('DB_CONFIG', [
 
-/**
- * Database host.
- *
- * @var string
- */
-define('DB_HOST', '127.0.0.1');
+    /**
+     * Default database configurations.
+     *
+     * @var array
+     */
+    'DEFAULT' => [
 
-/**
- * Database port.
- *
- * @var integer|string
- */
-define('DB_PORT', '3306');
+        /**
+         * Database type.
+         *
+         * @var string
+         */
+        'TYPE' => 'mysql',
 
-/**
- * Database name.
- *
- * @var string
- */
-define('DB_DATABASE', 'default_db');
+        /**
+         * Database host.
+         *
+         * @var string
+         */
+        'HOST' => '127.0.0.1',
 
-/**
- * Database username.
- *
- * @var string
- */
-define('DB_USERNAME', 'root');
+        /**
+         * Database port.
+         *
+         * @var integer|string
+         */
+        'PORT' => '3306',
 
-/**
- * Database password.
- *
- * @var string
- */
-define('DB_PASSWORD', '');
+        /**
+         * Database name.
+         *
+         * @var string
+         */
+        'DATABASE' => 'default_db',
+
+        /**
+         * Database username.
+         *
+         * @var string
+         */
+        'USERNAME' => 'root',
+
+        /**
+         * Database password.
+         *
+         * @var string
+         */
+        'PASSWORD' => ''
+
+    ],
+
+    /**
+     * Configurations of second database as example.
+     *
+     * @var array
+     */
+    'SECOND' => [
+
+        'TYPE' => 'pgsql',
+
+        'HOST' => '192.168.0.150',
+
+        'PORT' => 5432,
+
+        'DATABASE' => 'default_db',
+
+        'USERNAME' => 'root',
+
+        'PASSWORD' => ''
+
+    ]
+
+]);

@@ -32,9 +32,14 @@ class UnsignedTinyint extends Migration
         return self::$_uniqueInstance;
     }
 
+    /**
+     * Constructor.
+     *
+     * Override the constructor of parent `Migration` class to use different DB configurations.
+     */
     protected function __construct()
     {
-        parent::__construct();
+        parent::__construct('DEFAULT');
         $this->_className = basename(__FILE__, '.php');
     }
 

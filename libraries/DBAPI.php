@@ -46,20 +46,21 @@ class DBAPI
 
     /**
      * Get the instance of this class.
-     * 
+     *
+     * @param  string  $configKey  Key of the database configurations array.
      * @return self
      */
-    public static function getInstance()
+    public static function getInstance($configKey = 'DEFAULT')
     {
         if (self::$_uniqueInstance === null)
         {
             self::$_uniqueInstance = new self(
-                DB_TYPE,
-                DB_HOST,
-                DB_PORT,
-                DB_DATABASE,
-                DB_USERNAME,
-                DB_PASSWORD
+                DB_CONFIG[$configKey]['TYPE'],
+                DB_CONFIG[$configKey]['HOST'],
+                DB_CONFIG[$configKey]['PORT'],
+                DB_CONFIG[$configKey]['DATABASE'],
+                DB_CONFIG[$configKey]['USERNAME'],
+                DB_CONFIG[$configKey]['PASSWORD']
             );
         }
         return self::$_uniqueInstance;

@@ -12,9 +12,14 @@ abstract class Migration
 
     abstract public static function getInstance();
 
-    protected function __construct()
+    /**
+     * Constructor.
+     *
+     * @param  string  $dbConfigKey  Key of the database configurations in `DB_CONFIG` array which shall be use.
+     */
+    protected function __construct($dbConfigKey = 'DEFAULT')
     {
-        $this->_db = DBAPI::getInstance();
+        $this->_db = DBAPI::getInstance($dbConfigKey);
     }
 
     /**

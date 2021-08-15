@@ -5,6 +5,9 @@
 
 ## 開發日誌
 
+### 2021 年 8 月 15 日
+* 改寫資料庫設定檔架構與 `DBAPI` 取得單一實例的方式，更新 `Migration`、`Model` 及其子類別的建構子與繼承方法，以適配多資料庫設定值的情形，並同步 Tarascanta Beta。
+
 ### 2021 年 8 月 14 日
 * 將 `bin` 命令行腳本的邏輯移到 controller 中實作，腳本僅呼叫 controller 方法。
 * 將 `bin` 及 `tools` 的進入點移到 bootstrap 資料夾，更新 bootstrap 檔案架構，並同步 Tarascanta Beta。
