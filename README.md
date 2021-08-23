@@ -5,6 +5,10 @@
 
 ## 開發日誌
 
+### 2021 年 8 月 23 日
+* 引入 JavaScript 程式碼壓縮及混淆工具（基於 npm 套件 `webpack`、`webpack-cli` 及 `terser-webpack-plugin`）。
+* 引入 CSS 壓縮工具（基於 npm 套件 `clean-css` 及 `clean-css-cli`）。
+
 ### 2021 年 8 月 15 日
 * 改寫資料庫設定檔架構與 `DBAPI` 取得單一實例的方式，更新 `Migration`、`Model` 及其子類別的建構子與繼承方法，以適配多資料庫設定值的情形，並同步 Tarascanta Beta。
 

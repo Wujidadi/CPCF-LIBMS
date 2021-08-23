@@ -43,7 +43,26 @@ else
         case 'sass':
         case 'scss':
         case 'css':
-            echo `php tools/sass2css.php`;
+            if (in_array('-c', $argv))
+            {
+                echo `php tools/sass2css.php -c`;
+            }
+            else
+            {
+                echo `php tools/sass2css.php`;
+            }
+            break;
+
+        case 'js':
+        case 'javascript':
+            if (in_array('-c', $argv))
+            {
+                echo `php tools/jsMinObf.php -c`;
+            }
+            else
+            {
+                echo `php tools/jsMinObf.php`;
+            }
             break;
 
         default:

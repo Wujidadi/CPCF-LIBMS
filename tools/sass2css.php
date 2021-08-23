@@ -9,13 +9,13 @@ require_once '../bootstrap/tools.php';
 |--------------------------------------------------------------------------
 |
 | Convert SASS/SCSS to CSS according to the sassmap file (sassmap.json).
-| It is required to install SASS in your OS first. 
+| It is required to install SASS and clean-css (npm) in your OS first.
 |
 */
 
 $file = 'sassmap.json';
 $path = BASE_DIR . DIRECTORY_SEPARATOR;
-$json = file_get_contents($path . $file);
+$json = file_get_contents("{$path}{$file}");
 
 $stylesheetMap = json_decode($json, true);
 
@@ -34,17 +34,29 @@ if ($stylesheetMap)
         $sassWithFullPath = RESOURCE_DIR . DIRECTORY_SEPARATOR . 'sass' . DIRECTORY_SEPARATOR . preg_replace('/\//', DIRECTORY_SEPARATOR, $sass);
         $cssWithFullPath  = PUBLIC_DIR   . DIRECTORY_SEPARATOR . 'css'  . DIRECTORY_SEPARATOR . preg_replace('/\//', DIRECTORY_SEPARATOR, $css);
 
-        echo sprintf("\033[33;1m%s\033[0m => \033[32;1m%s\033[0m ... \033[31;1m", $sassWithRelativePath, $cssWithRelativePath);
+        echo "\033[33;1m{$sassWithRelativePath}\033[0m => \033[32;1m{$cssWithRelativePath}\033[0m ... ";
 
-        $command = sprintf('sass --charset --no-source-map "%s" "%s"', $sassWithFullPath, $cssWithFullPath);
+        $command = "sass --charset --no-source-map \"{$sassWithFullPath}\" \"{$cssWithFullPath}\"";
         $result = system($command, $return_var);
         if ($return_var == 0)
         {
-            echo sprintf("\033[0m\033[36;1m%s\033[0m\n", 'Done');
+            if (in_array('-c', $argv))
+            {
+                $command = "cleancss {$cssWithFullPath} -o {$cssWithFullPath}.temp ; mv {$cssWithFullPath}.temp {$cssWithFullPath}";
+                $result = system($command, $return_var);
+                if ($return_var == 0)
+                {
+                    echo "\033[36;1mDone with CSS minimized\033[0m\n";
+                }
+            }
+            else
+            {
+                echo "\033[36;1mDone\033[0m\n";
+            }
         }
     }
 }
 else
 {
-    echo sprintf('There may be problem(s) in %s, please check the file.%s', $file, PHP_EOL);
+    echo "\033[31;1mThere may be problem(s) in {$file}, please check the file.\033[0m\n";
 }
