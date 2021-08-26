@@ -5,6 +5,9 @@
 
 ## 開發日誌
 
+### 2021 年 8 月 26 日
+* 在 `canta` 工具中加入 `--verbose` 選項以允許查看原始執行訊息，並同步 Tarascanta Beta。
+
 ### 2021 年 8 月 23 日
 * 引入 JavaScript 程式碼壓縮及混淆工具（基於 npm 套件 `webpack`、`webpack-cli` 及 `terser-webpack-plugin`）。
 * 引入 CSS 壓縮工具（基於 npm 套件 `clean-css` 及 `clean-css-cli`）。

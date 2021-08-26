@@ -43,26 +43,30 @@ else
         case 'sass':
         case 'scss':
         case 'css':
+            $command = 'php tools/sass2css.php';
             if (in_array('-c', $argv))
             {
-                echo `php tools/sass2css.php -c`;
+                $command .= ' -c';
             }
-            else
+            if (in_array('--verbose', $argv))
             {
-                echo `php tools/sass2css.php`;
+                $command .= ' --verbose';
             }
+            echo shell_exec($command);
             break;
 
         case 'js':
         case 'javascript':
+            $command = 'php tools/jsMinObf.php';
             if (in_array('-c', $argv))
             {
-                echo `php tools/jsMinObf.php -c`;
+                $command .= ' -c';
             }
-            else
+            if (in_array('--verbose', $argv))
             {
-                echo `php tools/jsMinObf.php`;
+                $command .= ' --verbose';
             }
+            echo shell_exec($command);
             break;
 
         default:

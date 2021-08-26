@@ -37,6 +37,10 @@ if ($stylesheetMap)
         echo "\033[33;1m{$sassWithRelativePath}\033[0m => \033[32;1m{$cssWithRelativePath}\033[0m ... ";
 
         $command = "sass --charset --no-source-map \"{$sassWithFullPath}\" \"{$cssWithFullPath}\"";
+        if (!in_array('--verbose', $argv))
+        {
+            $command .= ' > /dev/null 2>&1';
+        }
         $result = system($command, $return_var);
         if ($return_var == 0)
         {
