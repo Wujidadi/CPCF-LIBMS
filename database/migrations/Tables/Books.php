@@ -58,7 +58,7 @@ class Books extends Migration
             |--------------------------------------------------
             */
 
-            <<<EOT
+            <<<SQL
             CREATE TABLE public."{$this->_tableName}"
             (
                 "Id"               bigserial                                              NOT NULL,
@@ -96,7 +96,8 @@ class Books extends Migration
                 PRIMARY KEY ("Id")
             )
             TABLESPACE pg_default
-            EOT,
+            SQL,
+            "COMMENT ON TABLE public.\"{$this->_tableName}\" IS '書籍資料表'",
             "ALTER TABLE public.\"{$this->_tableName}\" OWNER to root",
 
             /*
@@ -141,161 +142,163 @@ class Books extends Migration
             |--------------------------------------------------
             */
 
-            <<<EOT
-            CREATE INDEX "{$this->_tableName}_No" ON public."{$this->_tableName}" USING btree (
+            "COMMENT ON CONSTRAINT \"{$this->_tableName}_Id\" ON public.\"{$this->_tableName}\" IS '書籍資料表主鍵'",
+
+            <<<SQL
+            CREATE UNIQUE INDEX "{$this->_tableName}_No" ON public."{$this->_tableName}" USING btree (
                 "No"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_No\" IS '書號索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Name" ON public."{$this->_tableName}" USING btree (
                 "Name"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Name\" IS '書名索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_OriginalName" ON public."{$this->_tableName}" USING btree (
                 "OriginalName"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_OriginalName\" IS '原文書名索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Author" ON public."{$this->_tableName}" USING btree (
                 "Author"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Author\" IS '作者索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Illustrator" ON public."{$this->_tableName}" USING btree (
                 "Illustrator"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Illustrator\" IS '繪者索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Editor" ON public."{$this->_tableName}" USING btree (
                 "Editor"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Editor\" IS '編者索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Translator" ON public."{$this->_tableName}" USING btree (
                 "Translator"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Translator\" IS '譯者索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Maker" ON public."{$this->_tableName}" USING btree (
                 "Author"       COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST,
                 "Illustrator"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST,
                 "Editor"       COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST,
                 "Translator"   COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Maker\" IS '創作者索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Series" ON public."{$this->_tableName}" USING btree (
                 "Series"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Series\" IS '系列/叢書名索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Publisher" ON public."{$this->_tableName}" USING btree (
                 "Publisher"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Publisher\" IS '出版者索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_PublishDate" ON public."{$this->_tableName}" USING btree (
                 "PublishDate"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_PublishDate\" IS '出版日期索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Edition" ON public."{$this->_tableName}" USING btree (
                 "Edition"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Edition\" IS '版本別索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Print" ON public."{$this->_tableName}" USING btree (
                 "Print"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Print\" IS '印刷別索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_StorageDate" ON public."{$this->_tableName}" USING btree (
                 "StorageDate"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_StorageDate\" IS '入庫日期索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_Deleted" ON public."{$this->_tableName}" USING btree (
                 "Deleted"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Deleted\" IS '報廢/刪除索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_DeleteDate" ON public."{$this->_tableName}" USING btree (
                 "DeleteDate"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Deleted\" IS '報廢/刪除日期索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_ISN" ON public."{$this->_tableName}" USING btree (
                 "ISN"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_ISN\" IS 'ISBN或ISSN索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_EAN" ON public."{$this->_tableName}" USING btree (
                 "EAN"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_EAN\" IS '國際商品條碼索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_CategoryId" ON public."{$this->_tableName}" USING btree (
                 "CategoryId"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_CategoryId\" IS '書籍分類索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_LocationId" ON public."{$this->_tableName}" USING btree (
                 "LocationId"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_LocationId\" IS '書籍架位索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_CreatedAt" ON public."{$this->_tableName}" USING btree (
                 "CreatedAt"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_CreatedAt\" IS '資料創建時間索引（書籍資料表）'",
 
-            <<<EOT
+            <<<SQL
             CREATE INDEX "{$this->_tableName}_UpdatedAt" ON public."{$this->_tableName}" USING btree (
                 "UpdatedAt"  ASC  NULLS LAST
             )
-            EOT,
+            SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_UpdatedAt\" IS '資料最後更新時間索引（書籍資料表）'",
 
             /*
@@ -304,10 +307,10 @@ class Books extends Migration
             |--------------------------------------------------
             */
 
-            <<<EOT
+            <<<SQL
             CREATE TRIGGER auto_update_time BEFORE UPDATE ON public."{$this->_tableName}"
                 FOR EACH ROW EXECUTE FUNCTION public.update_timestamp();
-            EOT,
+            SQL
 
         ];
 

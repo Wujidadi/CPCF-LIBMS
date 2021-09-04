@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Handlers;
 
 use stdClass;
 use Throwable;
@@ -9,11 +9,12 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use App\Models\BookModel;
 
 /**
- * 原始資料檔處理控制器
+ * 原始資料檔處理類別
  */
-class SourceFileController
+class SourceFileHandler
 {
     /**
      * 原始資料檔存放路徑
@@ -212,7 +213,7 @@ class SourceFileController
     }
 
     /**
-     * 對經由 `trimOriginalBookExcelFile()` 方法整理過的書單 Excel 檔進行再整理
+     * 對經由 `trimOriginalBookExcelFile` 方法整理過的書單 Excel 檔進行再整理
      *
      * @param  string|null  $srcFileSuffix  原始檔名後綴
      * @param  string|null  $dstFileSuffix  輸出檔名後綴：建議為當天日期（`Ymd` 格式）
@@ -342,5 +343,143 @@ class SourceFileController
         }
 
         return $objReturns;
+    }
+
+    /**
+     * 將經 `retrimBookExcelFile` 及人工處理過的最終書籍原資料匯入資料庫
+     *
+     * @param  string        $strFile    書單 Excel 檔名   
+     * @param  integer|null  $intCount   匯入筆數：預設值為 `null` 即全部匯入
+     * @param  integer       $intOffset  偏移量：從第幾筆開始匯入，預設為 `0` 即第 1 筆
+     * @param  integer       $intGroup   分組：SQL insert 時每次執行的筆數，預設為 `200`
+     * @return object
+     */
+    public function insertBookDataToDB($strFile, $intCount = null, $intOffset = 0, $intGroup = 200)
+    {
+        $strFunction = __FUNCTION__;
+
+        $strSourceFileName = "{$this->_srcStoragePath}{$strFile}";
+
+        $objReturns = new stdClass;
+        $objReturns->status  = true;
+        $objReturns->message = '';
+
+        try
+        {
+            $objFromSpreadsheet = IOFactory::load($strSourceFileName);
+
+            $intFromSheetIndex = 0;
+            $objFromWorkSheet = $objFromSpreadsheet->getSheet($intFromSheetIndex);
+
+            $intMaxColumn = 11;
+            $intMaxRow = 5219;
+
+            $intRow = 2;
+
+            $intBeginRow = $intRow + $intOffset;
+            $intEndRow   = is_null($intCount) ? $intMaxRow : $intCount + $intBeginRow - 1;
+            if ($intEndRow > $intMaxRow)
+            {
+                $intEndRow = $intMaxRow;
+            }
+
+            $intInserted = 0;
+
+            $intGroupCounter = 0;
+            $intGroupRow     = 0;
+
+            for ($row = $intBeginRow; $row <= $intEndRow; $row++)
+            {
+                $intCol = 0;
+
+                $arrMade = [];
+
+                for ($col = 1; $col <= $intMaxColumn; $col++)
+                {
+                    $strValue = trim($objFromWorkSheet->getCellByColumnAndRow($col, $row)->getValue());
+                    $arrMade[$intCol++] = ($strValue == '') ? null : $strValue;
+                }
+
+                $arrMade[7] = str_replace('-', '', $arrMade[7]);
+
+                if (!is_null($arrMade[9]))
+                {
+                    $arrMade[9] = date('Y-m-d', strtotime($arrMade[9]));
+                }
+
+                $arrParams = [
+                    'No'          => $arrMade[0],
+                    'Name'        => $arrMade[3],
+                    'Author'      => $arrMade[4],
+                    'Illustrator' => $arrMade[5],
+                    'Translator'  => $arrMade[6],
+                    'Series'      => $arrMade[8],
+                    'Publisher'   => $arrMade[2],
+                    'StorageDate' => $arrMade[9],
+                    'StorageType' => is_null($arrMade[10]) ? null : 2,
+                    'Deleted'     => is_null($arrMade[1]) ? 0 : 1,    // 使用 0 和 1 分別代替 false 和 true，避免 PDOStatement::bindParam 將 false 轉為空字串
+                    'Notes'       => $this->_makeStorageNotes($arrMade[10]),
+                    'ISN'         => $arrMade[7]
+                ];
+
+                if ($intGroupRow === 0)
+                {
+                    BookModel::getInstance()->beginTransaction();
+                }
+
+                BookModel::getInstance()->addOne($arrParams);
+                $intInserted++;
+
+                $intGroupRow++;
+                if ($intGroupRow === $intGroup || $row === $intEndRow)
+                {
+                    BookModel::getInstance()->commit();
+                    $intGroupCounter++;
+                    $intGroupRow = 0;
+                }
+            }
+
+            $objReturns->message = "新增 {$intInserted} 筆書籍資料";
+
+            $strAssignedCount = is_null($intCount) ? '全部書籍資料' : " {$intInserted} 筆書籍資料";
+            $intBeginRow = $intOffset + 1;
+            $strLogMessage = "來源檔案：{$strSourceFileName}；指定新增{$strAssignedCount}，從原檔案第 {$intBeginRow} 筆起，每 {$intGroup} 筆寫入資料庫；實際{$objReturns->message}";
+            Logger::getInstance()->logInfo($strLogMessage);
+        }
+        catch (Throwable $ex)
+        {
+            $exCode = $ex->getCode();
+            $exMsg  = $ex->getMessage();
+
+            $objReturns->status  = false;
+            $objReturns->message = "Exception: ({$exCode}) {$exMsg}";
+
+            $strLogMessage = "{$this->_className}::{$strFunction} {$objReturns->message}";
+            Logger::getInstance()->logError($strLogMessage);
+        }
+
+        return $objReturns;
+    }
+
+    /**
+     * 轉換入庫事由附註
+     *
+     * @param  string  $strValue  原始入庫事由
+     * @return string
+     */
+    protected function _makeStorageNotes($strValue)
+    {
+        switch ($strValue)
+        {
+            case null:
+                return null;
+
+            case '楊老師藏書':
+            case '今泉吉晴解說':
+                return $strValue;
+
+            default:
+                return "{$strValue}贈書";
+        }
     }
 }

@@ -52,7 +52,7 @@ class UpdateTimestamp extends Migration
     {
         $sqlArray = [
 
-            <<<EOT
+            <<<SQL
             CREATE OR REPLACE FUNCTION public.{$this->_triggerFunctionName}()
                 RETURNS trigger
                 LANGUAGE 'plpgsql'
@@ -62,7 +62,7 @@ class UpdateTimestamp extends Migration
                 RETURN new;
             END
             $$;
-            EOT
+            SQL
 
         ];
 

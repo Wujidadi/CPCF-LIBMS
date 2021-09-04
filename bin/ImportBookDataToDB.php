@@ -5,10 +5,10 @@ require_once '../bootstrap/bin.php';
 
 /*
 |--------------------------------------------------------------------------
-| Retrim Book Excel File
+| Import Book Data to DB
 |--------------------------------------------------------------------------
 |
-| 對經由 TrimOriginalBookExcelFile 整理過的書單檔案進行再修整
+| 將經 RetrimBookExcelFile 及人工處理過的最終書籍原資料匯入資料庫
 |
 */
 
@@ -17,7 +17,7 @@ use App\Handlers\SourceFileHandler;
 
 try
 {
-    $objTrimResult = SourceFileHandler::getInstance()->retrimBookExcelFile('20210813', date('Ymd'));
+    $objTrimResult = SourceFileHandler::getInstance()->insertBookDataToDB('CPCF_Books_retrimmed_20210813.xlsx', null, 1200, 200);
 
     if ($objTrimResult->status)
     {

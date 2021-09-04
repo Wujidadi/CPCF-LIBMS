@@ -20,3 +20,9 @@ vendor/
 
 # VS Code related
 .vscode/
+
+# Microsoft Office related
+~$*
+
+# For this project
+bin/Test.php

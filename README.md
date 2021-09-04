@@ -5,6 +5,12 @@
 
 ## 開發日誌
 
+### 2021 年 9 月 4 日
+* 完成匯入 Excel 書單至資料庫的命令行工具。
+* 以下 2 項同步 Tarascanta Beta：
+  - 變更各 migration class 檔案中 SQL 語法 heredoc 字串的辨識符為 `SQL`（原為 `EOT`），以便在 IDE 中渲染 SQL 語句的顏色。
+  - 執行 migration 時遇到 PDOException 的處理方式，由返回 `false` 改為拋出 Exception code 35。
+
 ### 2021 年 8 月 26 日
 * 在 `canta` 工具中加入 `--verbose` 選項以允許查看原始執行訊息，並同步 Tarascanta Beta。
 

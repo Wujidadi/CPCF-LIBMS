@@ -25,6 +25,11 @@ return [
     // 'Tables\Books' => [
     //     // 'up',
     //     // 'down'
+    // ],
+
+    // 'Tables\StorageTypes' => [
+    //     // 'up',
+    //     // 'down'
     // ]
 
 ];

@@ -13,11 +13,11 @@ require_once '../bootstrap/bin.php';
 */
 
 use Libraries\Logger;
-use App\Controllers\SourceFileController;
+use App\Handlers\SourceFileHandler;
 
 try
 {
-    $objTrimResult = SourceFileController::getInstance()->trimOriginalBookExcelFile(date('Ymd'));
+    $objTrimResult = SourceFileHandler::getInstance()->trimOriginalBookExcelFile(date('Ymd'));
 
     if ($objTrimResult->status)
     {

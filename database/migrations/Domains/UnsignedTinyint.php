@@ -52,13 +52,13 @@ class UnsignedTinyint extends Migration
     {
         $sqlArray = [
 
-            <<<EOT
+            <<<SQL
             CREATE DOMAIN public."{$this->_domainName}"
                 AS int2
                 CHECK (
                     VALUE >= 0 AND VALUE < 256
                 );
-            EOT
+            SQL
 
         ];
 
