@@ -31,6 +31,15 @@ else
             echo "\033[32mTest\033[0m\n";
             break;
 
+        case 'init':
+        case 'initial':
+        case 'initiate':
+        case 'initialize':
+        case 'initialization':
+            system('cp configs/examples/* configs/');
+            system('composer install');
+            break;
+
         case 'migrate':
         case 'migration':
             echo `php tools/migrate.php`;
@@ -94,6 +103,13 @@ function showHelp()
     echo sprintf("    %s \033[32m{tool name}\033[0m\n", $myName);
     echo PHP_EOL;
     echo "    Tool names:\n";
+    echo PHP_EOL;
+    echo sprintf("     * %s\n", 'Project initialization:');
+    echo sprintf("       \033[33m%s\033[0m\n", 'init');
+    echo sprintf("       \033[33m%s\033[0m\n", 'initial');
+    echo sprintf("       \033[33m%s\033[0m\n", 'initiate');
+    echo sprintf("       \033[33m%s\033[0m\n", 'initialize');
+    echo sprintf("       \033[33m%s\033[0m\n", 'initialization');
     echo PHP_EOL;
     echo sprintf("     * %s\n", 'Database migrating:');
     echo sprintf("       \033[33m%s\033[0m\n", 'migrate');
