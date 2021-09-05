@@ -17,6 +17,13 @@ use App\Models\BookModel;
 class SourceFileHandler
 {
     /**
+     * 類別名稱
+     *
+     * @var string
+     */
+    protected $_className;
+
+    /**
      * 原始資料檔存放路徑
      *
      * @var string
@@ -37,8 +44,6 @@ class SourceFileHandler
      */
     const COLUMN_MARGIN = 0.8125;
 
-    protected $_className;
-
     protected static $_uniqueInstance = null;
 
     protected function __construct()
@@ -46,9 +51,7 @@ class SourceFileHandler
         $this->_className = basename(__FILE__, '.php');
     }
 
-    /**
-     * @return self
-     */
+    /** @return self */
     public static function getInstance()
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();

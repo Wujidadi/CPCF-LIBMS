@@ -50,7 +50,7 @@ abstract class Migration
             $exMsg  = $ex->getMessage();
             Logger::getInstance()->logError("{$className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
 
-            throw new Exception($exMsg, 35);    // P (16) + D (4) + O (15) = 35
+            throw new Exception($exMsg, 35);    // Sum of alphabet number of "PDO"
         }
 
         $commitResult = $this->_db->commit();

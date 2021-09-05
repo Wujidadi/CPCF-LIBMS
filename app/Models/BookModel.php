@@ -131,9 +131,64 @@ class BookModel extends Model
             $exMsg  = $ex->getMessage();
             Logger::getInstance()->logError("{$this->_className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
 
-            throw new Exception($exMsg, 35);    // P (16) + D (4) + O (15) = 35
+            throw new Exception($exMsg, 35);    // Sum of alphabet number of "PDO"
         }
 
         return $intResult;
+    }
+
+    /**
+     * 依指定的欄位和值查詢書籍資料
+     *
+     * @param  string          $field  欄位名稱
+     * @param  string|integer  $value  關鍵字
+     * @return array
+     */
+    public function get($field, $value)
+    {
+        $functionName = __FUNCTION__;
+
+        try
+        {
+            switch ($field)
+            {
+                case 'No':
+                case 'ISN':
+                case 'EAN':
+                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" = :{$field}";
+                    $arrBind = [ $field => $value ];
+                    return $this->_db->query($strSQL, $arrBind);
+
+                case 'Name':
+                case 'OriginalName':
+                case 'Author':
+                case 'Illustrator':
+                case 'Editor':
+                case 'Translator':
+                case 'Series':
+                case 'Publisher':
+                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" LIKE :{$field}";
+                    $arrBind = [ $field => "%{$value}%" ];
+                    return $this->_db->query($strSQL, $arrBind);
+
+                case 'Maker':
+                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE CONCAT(\"Author\", \"Illustrator\", \"Editor\", \"Translator\") LIKE :{$field}";
+                    $arrBind = [ $field => "%{$value}%" ];
+                    return $this->_db->query($strSQL, $arrBind);
+            }
+        }
+        catch (PDOException $ex)
+        {
+            if ($this->_db->inTransaction())
+            {
+                $this->_db->rollBack();
+            }
+
+            $exCode = $ex->getCode();
+            $exMsg  = $ex->getMessage();
+            Logger::getInstance()->logError("{$this->_className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
+
+            throw new Exception($exMsg, 35);    // Sum of alphabet number of "PDO"
+        }
     }
 }

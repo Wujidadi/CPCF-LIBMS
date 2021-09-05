@@ -1,7 +1,9 @@
 <?php
 
-$Route->map('GET', '/api', function()
+use App\Controllers\BookController;
+
+# 查詢書籍資料
+$Route->map('GET', '/api/books/{field}/{value}', function($field, $param)
 {
-    header('Content-Type: text/plain');
-    echo 'API';
+    BookController::getInstance()->getBooks($field, $param);
 });
