@@ -140,22 +140,25 @@ class BookModel extends Model
     /**
      * 依指定的欄位和值查詢書籍資料
      *
-     * @param  string          $field  欄位名稱
-     * @param  string|integer  $value  關鍵字
+     * @param  string          $field           欄位名稱
+     * @param  string|integer  $value           關鍵字
+     * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
      * @return array
      */
-    public function get($field, $value)
+    public function get($field, $value, $includeDeleted = false)
     {
         $functionName = __FUNCTION__;
 
         try
         {
+            $strIncludeDeleted = ($includeDeleted) ? '' : ' AND "Deleted" IS FALSE';
+
             switch ($field)
             {
                 case 'No':
                 case 'ISN':
                 case 'EAN':
-                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" = :{$field}";
+                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" = :{$field}{$strIncludeDeleted}";
                     $arrBind = [ $field => $value ];
                     return $this->_db->query($strSQL, $arrBind);
 
@@ -167,12 +170,12 @@ class BookModel extends Model
                 case 'Translator':
                 case 'Series':
                 case 'Publisher':
-                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" LIKE :{$field}";
+                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" LIKE :{$field}{$strIncludeDeleted}";
                     $arrBind = [ $field => "%{$value}%" ];
                     return $this->_db->query($strSQL, $arrBind);
 
                 case 'Maker':
-                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE CONCAT(\"Author\", \"Illustrator\", \"Editor\", \"Translator\") LIKE :{$field}";
+                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE CONCAT(\"Author\", \"Illustrator\", \"Editor\", \"Translator\") LIKE :{$field}{$strIncludeDeleted}";
                     $arrBind = [ $field => "%{$value}%" ];
                     return $this->_db->query($strSQL, $arrBind);
             }

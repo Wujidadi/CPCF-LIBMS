@@ -42,8 +42,10 @@ class BookController
     {
         $functionName = __FUNCTION__;
 
+        $includeDeleted = false;
+
         $output = [
-            'Code'    => '200',
+            'Code'    => 200,
             'Message' => 'OK'
         ];
 
@@ -52,9 +54,12 @@ class BookController
 
         try
         {
-            $bookData = BookHandler::getInstance()->get($field, $param);
+            if (isset($_GET['include-deleted']))
+            {
+                $includeDeleted = true;
+            }
 
-            $output['Data'] = $bookData;
+            $output['Data'] = BookHandler::getInstance()->get($field, $param, $includeDeleted);
         }
         catch (Throwable $ex)
         {
@@ -67,5 +72,16 @@ class BookController
         }
 
         echo JsonUnescaped($output);
+    }
+
+    /**
+     * 刪除指定 ID 的書籍資料（軟刪除）
+     *
+     * @param  integer  $bookId  書籍 ID
+     * @return integer
+     */
+    public function deleteBook($bookId)
+    {
+        //
     }
 }

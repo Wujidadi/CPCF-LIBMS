@@ -2,6 +2,7 @@
 
 namespace App\Handlers;
 
+use Exception;
 use Libraries\Logger;
 use App\Models\BookModel;
 
@@ -48,11 +49,12 @@ class BookHandler
     /**
      * 指定欄位和值查詢書籍資料
      *
-     * @param  string          $strField  欄位名稱
-     * @param  string|integer  $mixParam  關鍵字
+     * @param  string          $strField           欄位名稱
+     * @param  string|integer  $mixParam           關鍵字
+     * @param  boolean         $bolIncludeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
      * @return void
      */
-    public function get($strField, $mixParam)
+    public function get($strField, $mixParam, $bolIncludeDeleted)
     {
         $functionName = __FUNCTION__;
 
@@ -63,7 +65,7 @@ class BookHandler
                 $mixParam = str_replace('-', '', $mixParam);
             }
 
-            $arrResult = BookModel::getInstance()->get($strField, $mixParam);
+            $arrResult = BookModel::getInstance()->get($strField, $mixParam, $bolIncludeDeleted);
             return [
                 'BookTotal' => count($arrResult),
                 'BookList'  => $arrResult
@@ -71,7 +73,7 @@ class BookHandler
         }
         else
         {
-            $strErrorMessage = 'Given field is not allowed';
+            $strErrorMessage = "Given field ({$strField}) is not allowed";
 
             $strLogMessage = "{$this->_className}::{$functionName} Error: {$strErrorMessage}";
             Logger::getInstance()->logError($strLogMessage);
