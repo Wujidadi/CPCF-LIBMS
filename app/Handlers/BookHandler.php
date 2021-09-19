@@ -12,13 +12,6 @@ use App\Models\BookModel;
 class BookHandler
 {
     /**
-     * 類別名稱
-     *
-     * @var string
-     */
-    protected $_className;
-
-    /**
      * 可用於查詢書籍資料的欄位名稱
      *
      * @var string[]
@@ -32,18 +25,20 @@ class BookHandler
         'ISN', 'EAN'
     ];
 
-    protected static $_uniqueInstance = null;
+    protected $_className;
 
-    protected function __construct()
-    {
-        $this->_className = basename(__FILE__, '.php');
-    }
+    protected static $_uniqueInstance = null;
 
     /** @return self */
     public static function getInstance()
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
+    }
+
+    protected function __construct()
+    {
+        $this->_className = basename(__FILE__, '.php');
     }
 
     /**

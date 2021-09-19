@@ -2,15 +2,34 @@
 
 namespace Database;
 
-use Exception;
 use PDOException;
 use Libraries\DBAPI;
 use Libraries\Logger;
 
+/**
+ * Parent class of migration.
+ */
 abstract class Migration
 {
-    protected $_db = null;
+    /**
+     * Name of this class.
+     *
+     * @var string
+     */
+    protected $_className;
 
+    /**
+     * Instance of Database connection.
+     *
+     * @var Libraries\DBAPI
+     */
+    protected $_db;
+
+    /**
+     * Get the instance of this class.
+     * 
+     * @return self
+     */
     abstract public static function getInstance();
 
     /**

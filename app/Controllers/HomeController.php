@@ -9,25 +9,20 @@ use App\Constant;
  */
 class HomeController
 {
-    /**
-     * 類別名稱
-     *
-     * @var string
-     */
     protected $_className;
 
     protected static $_uniqueInstance = null;
-
-    protected function __construct()
-    {
-        $this->_className = basename(__FILE__, '.php');
-    }
 
     /** @return self */
     public static function getInstance()
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
+    }
+
+    protected function __construct()
+    {
+        $this->_className = basename(__FILE__, '.php');
     }
 
     /**

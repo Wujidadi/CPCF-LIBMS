@@ -2,6 +2,12 @@
 
 use App\Controllers\BookController;
 
+# 新增書籍資料
+$Route->map('POST', '/api/book', function()
+{
+    BookController::getInstance()->addBook();
+});
+
 # 查詢書籍資料
 $Route->map('GET', '/api/books/{field}/{value}', function($field, $param)
 {

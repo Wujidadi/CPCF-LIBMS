@@ -13,13 +13,6 @@ use App\Model;
 class BookModel extends Model
 {
     /**
-     * 類別名稱
-     *
-     * @var string
-     */
-    protected $_className;
-
-    /**
      * 資料表名稱
      *
      * @var string
@@ -61,6 +54,8 @@ class BookModel extends Model
         "LocationId"      => [ 'required' => false ]
 
     ];
+
+    protected $_className;
 
     protected static $_uniqueInstance = null;
 

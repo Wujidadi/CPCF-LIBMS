@@ -19,13 +19,14 @@ class UpdateTimestamp extends Migration
      */
     protected $_triggerFunctionName = 'update_timestamp';
 
-    protected $_className;
-
+    /**
+     * Instance of this class.
+     *
+     * @var self|null
+     */
     protected static $_uniqueInstance = null;
 
-    /**
-     * @return self
-     */
+    /** @return self */
     public static function getInstance()
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();

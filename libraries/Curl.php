@@ -29,16 +29,6 @@ class Curl
     protected static $_uniqueInstance = null;
 
     /**
-     * Constructor.
-     *
-     * @return void
-     */
-    protected function __construct()
-    {
-        $this->_init();
-    }
-
-    /**
      * Get the instance of this class.
      * 
      * @return self
@@ -47,6 +37,16 @@ class Curl
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @return void
+     */
+    protected function __construct()
+    {
+        $this->_init();
     }
 
     /**
