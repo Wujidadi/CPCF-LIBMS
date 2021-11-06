@@ -8,16 +8,16 @@ use Libraries\Logger;
 use Database\Migration;
 
 /**
- * 書籍入庫類別資料表（`StorageTypes`）遷移類別
+ * 書籍分類資料表（`BookCategories`）遷移類別
  */
-class StorageTypes extends Migration
+class BookCategories extends Migration
 {
     /**
      * Name of the target table.
      *
      * @var string
      */
-    protected $_tableName = 'StorageTypes';
+    protected $_tableName = 'BookCategories';
 
     /**
      * Instance of this class.
@@ -62,11 +62,13 @@ class StorageTypes extends Migration
             <<<SQL
             CREATE TABLE public."{$this->_tableName}"
             (
-                "Id"         smallserial                                           NOT NULL,
-                "Name"       character varying(100)  COLLATE pg_catalog."C.UTF-8"  NOT NULL,
-                "Alias"      character varying(100)  COLLATE pg_catalog."C.UTF-8"      NULL,
-                "CreatedAt"  timestamp(6) with time zone                           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-                "UpdatedAt"  timestamp(6) with time zone                           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+                "Id"         smallserial                                          NOT NULL,
+                "Code"       character varying(10)  COLLATE pg_catalog."C.UTF-8"  NOT NULL,
+                "Name"       character varying(50)  COLLATE pg_catalog."C.UTF-8"  NOT NULL,
+                "Level"      unsigned_tinyint                                     NOT NULL,
+                "ParentId"   bigint                                                   NULL,
+                "CreatedAt"  timestamp(6) with time zone                          NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+                "UpdatedAt"  timestamp(6) with time zone                          NOT NULL  DEFAULT CURRENT_TIMESTAMP,
 
                 CONSTRAINT "{$this->_tableName}_Id" UNIQUE ("Id"),
 
@@ -74,7 +76,7 @@ class StorageTypes extends Migration
             )
             TABLESPACE pg_default
             SQL,
-            "COMMENT ON TABLE public.\"{$this->_tableName}\" IS '書籍入庫類別資料表'",
+            "COMMENT ON TABLE public.\"{$this->_tableName}\" IS '書籍分類資料表'",
             "ALTER TABLE public.\"{$this->_tableName}\" OWNER to root",
 
             /*
@@ -83,9 +85,11 @@ class StorageTypes extends Migration
             |--------------------------------------------------
             */
 
-            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Id\"        IS '書籍入庫類別ID (流水號)'",
-            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Name\"      IS '書籍入庫類別名稱'",
-            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Alias\"     IS '書籍入庫類別別名'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Id\"        IS '書籍分類ID (流水號)'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Code\"      IS '書籍分類代碼'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Name\"      IS '書籍分類名稱'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Level\"     IS '書籍分類階層'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"ParentId\"  IS '上一級書籍分類ID'",
             "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"CreatedAt\" IS '資料創建時間'",
             "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"UpdatedAt\" IS '資料最後更新時間'",
 
@@ -95,35 +99,49 @@ class StorageTypes extends Migration
             |--------------------------------------------------
             */
 
-            "COMMENT ON CONSTRAINT \"{$this->_tableName}_Id\" ON public.\"{$this->_tableName}\" IS '書籍入庫類別資料表主鍵'",
+            "COMMENT ON CONSTRAINT \"{$this->_tableName}_Id\" ON public.\"{$this->_tableName}\" IS '書籍分類資料表主鍵'",
 
             <<<SQL
-            CREATE UNIQUE INDEX "{$this->_tableName}_Name" ON public."{$this->_tableName}" USING btree (
+            CREATE UNIQUE INDEX "{$this->_tableName}_Code" ON public."{$this->_tableName}" USING btree (
+                "Code"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
+            )
+            SQL,
+            "COMMENT ON INDEX public.\"{$this->_tableName}_Code\" IS '書籍分類代碼索引（書籍分類資料表）'",
+
+            <<<SQL
+            CREATE INDEX "{$this->_tableName}_Name" ON public."{$this->_tableName}" USING btree (
                 "Name"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
             )
             SQL,
-            "COMMENT ON INDEX public.\"{$this->_tableName}_Name\" IS '書籍入庫類別名稱索引（書籍入庫類別資料表）'",
+            "COMMENT ON INDEX public.\"{$this->_tableName}_Name\" IS '書籍分類名稱索引（書籍分類資料表）'",
 
             <<<SQL
-            CREATE INDEX "{$this->_tableName}_Alias" ON public."{$this->_tableName}" USING btree (
-                "Alias"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
+            CREATE INDEX "{$this->_tableName}_Level" ON public."{$this->_tableName}" USING btree (
+                "Level"  ASC  NULLS LAST
             )
             SQL,
-            "COMMENT ON INDEX public.\"{$this->_tableName}_Alias\" IS '書籍入庫類別別名索引（書籍入庫類別資料表）'",
+            "COMMENT ON INDEX public.\"{$this->_tableName}_Level\" IS '書籍分類階層索引（書籍分類資料表）'",
+
+            <<<SQL
+            CREATE INDEX "{$this->_tableName}_ParentId" ON public."{$this->_tableName}" USING btree (
+                "ParentId"  ASC  NULLS LAST
+            )
+            SQL,
+            "COMMENT ON INDEX public.\"{$this->_tableName}_ParentId\" IS '上一級書籍分類ID索引（書籍分類資料表）'",
 
             <<<SQL
             CREATE INDEX "{$this->_tableName}_CreatedAt" ON public."{$this->_tableName}" USING btree (
                 "CreatedAt"  ASC  NULLS LAST
             )
             SQL,
-            "COMMENT ON INDEX public.\"{$this->_tableName}_CreatedAt\" IS '資料創建時間索引（書籍入庫類別資料表）'",
+            "COMMENT ON INDEX public.\"{$this->_tableName}_CreatedAt\" IS '資料創建時間（書籍分類資料表）'",
 
             <<<SQL
             CREATE INDEX "{$this->_tableName}_UpdatedAt" ON public."{$this->_tableName}" USING btree (
                 "UpdatedAt"  ASC  NULLS LAST
             )
             SQL,
-            "COMMENT ON INDEX public.\"{$this->_tableName}_UpdatedAt\" IS '資料最後更新時間索引（書籍入庫類別資料表）'",
+            "COMMENT ON INDEX public.\"{$this->_tableName}_UpdatedAt\" IS '資料最後更新時間（書籍分類資料表）'",
 
             /*
             |--------------------------------------------------

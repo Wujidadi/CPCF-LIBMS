@@ -2,6 +2,7 @@
 
 namespace Database;
 
+use Exception;
 use PDOException;
 use Libraries\DBAPI;
 use Libraries\Logger;

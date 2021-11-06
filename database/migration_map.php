@@ -30,6 +30,31 @@ return [
     // 'Tables\StorageTypes' => [
     //     // 'up',
     //     // 'down'
+    // ],
+
+    // 'Tables\DeleteTypes' => [
+    //     // 'up',
+    //     // 'down'
+    // ],
+
+    // 'Tables\BookCategories' => [
+    //     // 'up',
+    //     // 'down'
+    // ],
+
+    // 'Tables\BookLocations' => [
+    //     // 'up',
+    //     // 'down'
+    // ],
+
+    'Tables\Members' => [
+        'up',
+        // 'down'
+    ],
+
+    // 'Tables\Circulation' => [
+    //     // 'up',
+    //     // 'down'
     // ]
 
 ];

@@ -8,7 +8,7 @@ use Libraries\Logger;
 use Database\Migration;
 
 /**
- * Migration class of the table `Books`.
+ * 書籍資料表（`Books`）遷移類別
  */
 class Books extends Migration
 {
