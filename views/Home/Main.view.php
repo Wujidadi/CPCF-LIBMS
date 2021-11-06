@@ -12,7 +12,7 @@
 </head>
 <body class="caterpillar caterpillar-default">
     <?php include viewPath('components.common.header'); ?>
-    <?php include viewPath('components.common.left-side'); ?>
+    <?php include viewPath('components.common.sidebar'); ?>
     <main class="p-3" style="height: 2000px">
         <div id="mainContent" class="tab-content">
             <div id="home"        class="tab-pane fade show active">首頁</div>
