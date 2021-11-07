@@ -2,6 +2,8 @@
 
 namespace Libraries;
 
+use Closure;
+
 /**
  * Router handling class.
  */
@@ -26,12 +28,12 @@ class Router
     /**
      * Register a route.
      *
-     * @param  string     $method  HTTP request method
-     * @param  string     $url     Route URL
-     * @param  \callable  $action  Route action (method/function)
+     * @param  string             $method  HTTP request method
+     * @param  string             $url     Route URL
+     * @param  \callable|Closure  $action  Route action (method/function)
      * @return void
      */
-    public function map(string $method, string $url, \callable $action): void
+    public function map(string $method, string $url, mixed $action): void
     {
         $this->routes[] = [$method, $url, $action];
     }
