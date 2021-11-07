@@ -20,6 +20,7 @@
   - DBAPI 變動：
     1. 增強對陣列型態參數（`IN` 查詢）的支援。
     2. 允許查詢參數指定 `PDO::PARAM_STR` 以外的型態。
+  - 在 `Framework/helpers` 函數集中加入 `SumWord` 方法。
 * 完成新增書籍 API。
 
 ### 2021 年 11 月 6 日

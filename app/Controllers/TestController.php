@@ -29,6 +29,18 @@ class TestController
      */
     public function main()
     {
+        $result = SumWord('kubernetes.117');
+
+        Response::getInstance()->setCode(200)->output(JsonUnescaped($result));
+    }
+
+    /**
+     * DBAPI 巢狀參數使用方法示例
+     *
+     * @return void
+     */
+    public function DbQueryWithNestedParam(): void
+    {
         $sql = <<<SQL
         SELECT
             *

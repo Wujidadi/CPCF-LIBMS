@@ -28,6 +28,7 @@
 |   - function  Blank
 |   - function  TextCompress
 |   - function  RemoveTrailingZeros
+|   - function  SumWord
 |
 | + Regular Expression
 |   - function  CombineRegex
@@ -523,6 +524,59 @@ if (!function_exists('RemoveTrailingZeros'))
             ],
             $strnum
         );
+    }
+}
+
+if (!function_exists('SumWord'))
+{
+    /**
+     * Get the sum value of an English word or sentence by definitions of `A = 1`, `B = 2`, `C = 3` ...
+     *
+     * If the word/sentence include numbers, they will be added into the sum value, too.  
+     * It the numbers are neighbor, they will be taken as a single integer.
+     *
+     * @param  string  $word  The word which the sum value to be calculated from.
+     * @return integer
+     */
+    function SumWord(string $word = ''): int
+    {
+        $dict = ' abcdefghijklmnopqrstuvwxyz';
+
+        $sum = 0;
+        $num = 0;
+        $numStr = '';
+
+        $word = preg_replace('/[^a-z0-9]/', '', strtolower($word));
+        for ($i = 0; $i < strlen($word); $i++)
+        {
+            if (strpos($dict, $word[$i]))
+            {
+                if ($numStr != '')
+                {
+                    $num = (int) $numStr;
+                    $sum += $num;
+
+                    $num = 0;
+                    $numStr = '';
+                }
+
+                $sum += strpos($dict, $word[$i]);
+            }
+            else
+            {
+                if (is_numeric($word[$i]))
+                {
+                    $numStr .= $word[$i];
+                }
+
+                if ($i === strlen($word) - 1)
+                {
+                    $sum += (int) $numStr;
+                }
+            }
+        }
+
+        return $sum;
     }
 }
 
