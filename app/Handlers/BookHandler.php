@@ -30,7 +30,7 @@ class BookHandler
     protected static $_uniqueInstance = null;
 
     /** @return self */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
@@ -44,36 +44,36 @@ class BookHandler
     /**
      * 指定欄位和值查詢書籍資料
      *
-     * @param  string          $strField           欄位名稱
-     * @param  string|integer  $mixParam           關鍵字
-     * @param  boolean         $bolIncludeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
-     * @return void
+     * @param  string          $field           欄位名稱
+     * @param  string|integer  $param           關鍵字
+     * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
+     * @return array
      */
-    public function get($strField, $mixParam, $bolIncludeDeleted)
+    public function get(string $field, mixed $param, bool $includeDeleted): array
     {
         $functionName = __FUNCTION__;
 
-        if (in_array($strField, $this->_allowedQueryField))
+        if (in_array($field, $this->_allowedQueryField))
         {
-            if (in_array($strField, [ 'ISN', 'EAN' ]))
+            if (in_array($field, [ 'ISN', 'EAN' ]))
             {
-                $mixParam = str_replace('-', '', $mixParam);
+                $param = str_replace('-', '', $param);
             }
 
-            $arrResult = BookModel::getInstance()->get($strField, $mixParam, $bolIncludeDeleted);
+            $result = BookModel::getInstance()->get($field, $param, $includeDeleted);
             return [
-                'BookTotal' => count($arrResult),
-                'BookList'  => $arrResult
+                'BookTotal' => count($result),
+                'BookList'  => $result
             ];
         }
         else
         {
-            $strErrorMessage = "Given field ({$strField}) is not allowed";
+            $errorMessage = "Given field ({$field}) is not allowed";
 
-            $strLogMessage = "{$this->_className}::{$functionName} Error: {$strErrorMessage}";
-            Logger::getInstance()->logError($strLogMessage);
+            $logMessage = "{$this->_className}::{$functionName} Error: {$errorMessage}";
+            Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($strErrorMessage, 69);    // Sum of alphabet number of "BookData"
+            throw new Exception($errorMessage, 69);    // 「BookData」的字母值加總
         }
     }
 }

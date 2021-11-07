@@ -24,7 +24,7 @@ if (!function_exists('inject'))
      * @param  string  $_path  Short path of the injection file
      * @return string
      */
-    function inject($_path = '')
+    function inject(string $_path = ''): string
     {
         $path = '';
         if ($_path !== '')
@@ -45,7 +45,7 @@ if (!function_exists('view'))
      * @param  array   $_rawdata  Data to be rendered to the view page
      * @return void
      */
-    function view($_path = '', $_rawdata = [])
+    function view(string $_path = '', array $_rawdata = []): void
     {
         if ($_path !== '')
         {
@@ -65,7 +65,7 @@ if (!function_exists('viewPath'))
      * @param  string  $_path  Short path of the view file
      * @return string
      */
-    function viewPath($_path = '')
+    function viewPath(string $_path = ''): string
     {
         if ($_path !== '')
         {

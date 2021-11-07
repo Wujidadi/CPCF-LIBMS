@@ -50,7 +50,7 @@ class DBAPI
      * @param  string  $configKey  Key of the database configurations array.
      * @return self
      */
-    public static function getInstance($configKey = 'DEFAULT')
+    public static function getInstance(string $configKey = 'DEFAULT'): self
     {
         if (self::$_uniqueInstance === null)
         {
@@ -77,7 +77,7 @@ class DBAPI
      * @param  string          $password  Database password
      * @return void
      */
-    public function __construct($dbtype, $host, $port, $dbname, $username, $password)
+    public function __construct(string $dbtype, string $host, mixed $port, string $dbname, string $username, string $password)
     {
         $this->_dbtype   = $dbtype;
         $this->_host     = $host;
@@ -96,7 +96,7 @@ class DBAPI
      *
      * @return void
      */
-    private function _connect()
+    private function _connect(): void
     {
         try
         {
@@ -129,7 +129,7 @@ class DBAPI
      *
      * @return boolean
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return $this->_pdo->beginTransaction();
     }
@@ -139,7 +139,7 @@ class DBAPI
      *
      * @return boolean
      */
-    public function commit()
+    public function commit(): bool
     {
         return $this->_pdo->commit();
     }
@@ -149,7 +149,7 @@ class DBAPI
      *
      * @return boolean
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         return $this->_pdo->rollBack();
     }
@@ -159,7 +159,7 @@ class DBAPI
      *
      * @return boolean
      */
-    public function inTransaction()
+    public function inTransaction(): bool
     {
         return $this->_pdo->inTransaction();
     }
@@ -169,7 +169,7 @@ class DBAPI
      *
      * @return void
      */
-    public function close()
+    public function close(): void
     {
         $this->_pdo = null;
     }
@@ -179,7 +179,7 @@ class DBAPI
      *
      * @return void
      */
-    private function _setFailureFlag()
+    private function _setFailureFlag(): void
     {
         $this->_pdo = null;
         $this->_connectionStatus = false;
@@ -193,7 +193,7 @@ class DBAPI
      * @param  array       $driverOptions  SQL Driver options
      * @return boolean|null
      */
-    private function _init($query, $parameters = null, $driverOptions = [])
+    private function _init(string $query, mixed $parameters = null, array $driverOptions = []): mixed
     {
         $execResult = null;
 
@@ -222,8 +222,11 @@ class DBAPI
 
                 foreach ($this->_parameters as $column => $value)
                 {
-                    $this->_pdoStatement->bindParam($parametersType ? intval($column) : ":" . $column, $this->_parameters[$column]);
-                    // It would be queried after loop end (before '_pdoStatement->execute()'). It is wrong to use $value.
+                    $this->_pdoStatement->bindParam(
+                        $parametersType ? intval($column) : ":" . $column,
+                        $this->_parameters[$column]['value'],
+                        $this->_parameters[$column]['type']
+                    );
                 }
             }
 
@@ -233,9 +236,9 @@ class DBAPI
             }
             $this->_queryCount++;
         }
-        catch (PDOException $e)
+        catch (PDOException $ex)
         {
-            $this->_exceptionLog($e, $this->_buildParams($query), __FUNCTION__, ['query' => $query, 'parameters' => $parameters]);
+            $this->_exceptionLog($ex, $this->_buildParams($query), __FUNCTION__, ['query' => $query, 'parameters' => $parameters]);
         }
 
         $this->_parameters = [];
@@ -250,7 +253,7 @@ class DBAPI
      * @param  array|null  $params  Binding Variables
      * @return string
      */
-    private function _buildParams($query, $params = null)
+    private function _buildParams(string $query, mixed $params = null): string
     {
         if (!empty($params))
         {
@@ -297,7 +300,7 @@ class DBAPI
      * @param  integer     $fetchMode  Fetch mode
      * @return array|integer|boolean|null
      */
-    public function query($query, $params = null, $fetchMode = PDO::FETCH_ASSOC)
+    public function query(string $query, mixed $params = null, int $fetchMode = PDO::FETCH_ASSOC): mixed
     {
         $query        = trim($query);
         $rawStatement = preg_split("/( |\r|\n)/", $query);
@@ -328,7 +331,7 @@ class DBAPI
      * @param  array         $parameters  Query parameters
      * @return void
      */
-    private function _exceptionLog($ex, $sql = '', $method = '', $parameters = [])
+    private function _exceptionLog(PDOException $ex, string $sql = '', string $method = '', array $parameters = []): void
     {
         $message = $ex->getMessage();
         $exception = "Unhandled exception.<br />{$message}<br />You can find the error back in the log.";

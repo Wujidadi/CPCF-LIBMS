@@ -12,7 +12,7 @@ class BookInputChecker extends InputChecker
     protected static $_uniqueInstance = null;
 
     /** @return self */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;

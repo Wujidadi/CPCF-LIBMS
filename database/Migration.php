@@ -51,7 +51,7 @@ abstract class Migration
      * @param  string[]  $queryArray    Array of SQL commands
      * @return boolean
      */
-    protected function _run($className, $functionName, $queryArray)
+    protected function _run(string $className, string $functionName, array $queryArray): bool
     {
         try
         {

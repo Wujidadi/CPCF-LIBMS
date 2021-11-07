@@ -52,7 +52,7 @@ abstract class Model
      *
      * @return boolean
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return !$this->_db->inTransaction() ? $this->_db->beginTransaction() : false;
     }
@@ -62,7 +62,7 @@ abstract class Model
      *
      * @return boolean
      */
-    public function commit()
+    public function commit(): bool
     {
         return $this->_db->commit();
     }
@@ -72,7 +72,7 @@ abstract class Model
      *
      * @return boolean
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         return $this->_db->rollBack();
     }
@@ -82,7 +82,7 @@ abstract class Model
      *
      * @return boolean
      */
-    public function inTransaction()
+    public function inTransaction(): bool
     {
         return $this->_db->inTransaction();
     }

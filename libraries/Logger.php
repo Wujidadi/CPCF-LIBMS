@@ -42,7 +42,7 @@ class Logger
      * 
      * @return self
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
@@ -63,7 +63,7 @@ class Logger
      * 
      * @return void
      */
-    private function _init()
+    private function _init(): void
     {
         $this->_logFile = LOG_DIR . DIRECTORY_SEPARATOR . 'log_' . date('Ymd') . '.log';
     }
@@ -74,7 +74,7 @@ class Logger
      * @param  string  $prefix  Prefix of the log message.
      * @return void
      */
-    public function setPrefix($prefix)
+    public function setPrefix(string $prefix): void
     {
         $this->_logPrefix = $prefix;
     }
@@ -85,7 +85,7 @@ class Logger
      * @param  string  $message  Log message
      * @return array
      */
-    public function logDebug($message)
+    public function logDebug(string $message): array
     {
         return $this->_writeLog('DEBUG', $message);
     }
@@ -96,7 +96,7 @@ class Logger
      * @param  string  $message  Log message
      * @return array
      */
-    public function logInfo($message)
+    public function logInfo(string $message): array
     {
         return $this->_writeLog('INFO', $message);
     }
@@ -107,7 +107,7 @@ class Logger
      * @param  string  $message  Log message
      * @return array
      */
-    public function logNotice($message)
+    public function logNotice(string $message): array
     {
         return $this->_writeLog('NOTICE', $message);
     }
@@ -118,7 +118,7 @@ class Logger
      * @param  string  $message  Log message
      * @return array
      */
-    public function logWarning($message)
+    public function logWarning(string $message): array
     {
         return $this->_writeLog('WARNING', $message);
     }
@@ -129,7 +129,7 @@ class Logger
      * @param  string  $message  Log message
      * @return array
      */
-    public function logError($message)
+    public function logError(string $message): array
     {
         return $this->_writeLog('ERROR', $message);
     }
@@ -140,7 +140,7 @@ class Logger
      * @param  string  $message  Log message
      * @return array
      */
-    public function logCritical($message)
+    public function logCritical(string $message): array
     {
         return $this->_writeLog('CRITICAL', $message);
     }
@@ -151,7 +151,7 @@ class Logger
      * @param  string  $message  Log message
      * @return array
      */
-    public function logAlert($message)
+    public function logAlert(string $message): array
     {
         return $this->_writeLog('ALERT', $message);
     }
@@ -162,7 +162,7 @@ class Logger
      * @param  string  $message  Log message
      * @return array
      */
-    public function logEmergency($message)
+    public function logEmergency(string $message): array
     {
         return $this->_writeLog('EMERGENCY', $message);
     }
@@ -174,7 +174,7 @@ class Logger
      * @param  string  $message  Log message
      * @return array
      */
-    protected function _writeLog($type, $message)
+    protected function _writeLog(string $type, string $message): array
     {
         try
         {

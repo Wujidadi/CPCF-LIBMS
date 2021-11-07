@@ -4,6 +4,7 @@ namespace App\Handlers;
 
 use stdClass;
 use Throwable;
+use Exception;
 use Libraries\Logger;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -42,7 +43,7 @@ class SourceFileHandler
     protected static $_uniqueInstance = null;
 
     /** @return self */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
@@ -59,7 +60,7 @@ class SourceFileHandler
      * @param  string|null  $fileSuffix  輸出檔名後綴：建議為當天日期（`Ymd` 格式）
      * @return object
      */
-    public function trimOriginalBookExcelFile($fileSuffix = null)
+    public function trimOriginalBookExcelFile(mixed $fileSuffix = null): object
     {
         $strFunction = __FUNCTION__;
 
@@ -217,7 +218,7 @@ class SourceFileHandler
      * @param  string|null  $dstFileSuffix  輸出檔名後綴：建議為當天日期（`Ymd` 格式）
      * @return object
      */
-    public function retrimBookExcelFile($srcFileSuffix = null, $dstFileSuffix = null)
+    public function retrimBookExcelFile(mixed $srcFileSuffix = null, mixed $dstFileSuffix = null): object
     {
         $strFunction = __FUNCTION__;
 
@@ -352,7 +353,7 @@ class SourceFileHandler
      * @param  integer       $intGroup   分組：SQL insert 時每次執行的筆數，預設為 `200`
      * @return object
      */
-    public function insertBookDataToDB($strFile, $intCount = null, $intOffset = 0, $intGroup = 200)
+    public function insertBookDataToDB(string $strFile, mixed $intCount = null, int $intOffset = 0, int $intGroup = 200): object
     {
         $strFunction = __FUNCTION__;
 
@@ -462,22 +463,22 @@ class SourceFileHandler
     /**
      * 轉換入庫事由附註
      *
-     * @param  string  $strValue  原始入庫事由
-     * @return string
+     * @param  string|null  $value  原始入庫事由
+     * @return string|null
      */
-    protected function _makeStorageNotes($strValue)
+    protected function _makeStorageNotes(mixed $value): string|null
     {
-        switch ($strValue)
+        switch ($value)
         {
             case null:
                 return null;
 
             case '楊老師藏書':
             case '今泉吉晴解說':
-                return $strValue;
+                return $value;
 
             default:
-                return "{$strValue}贈書";
+                return "{$value}贈書";
         }
     }
 }

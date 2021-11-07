@@ -23,7 +23,7 @@ if (!function_exists('loadCSS'))
      * @param  string  $file  Path of the CSS file
      * @return void
      */
-    function loadCSS($file)
+    function loadCSS(string $file): void
     {
         $text = file_get_contents($file);
         $text = preg_replace('/[\r\n]/', '', $text);                     // Remove all line breaks
@@ -48,7 +48,7 @@ if (!function_exists('loadJS'))
      * @param  string  $file  Path of the JavaScript file
      * @return void
      */
-    function loadJS($file)
+    function loadJS(string $file): void
     {
         $text = file_get_contents($file);
         $text = preg_replace('/\/\/.*/', '', $text);                     // Remove single line comments before the line breaks

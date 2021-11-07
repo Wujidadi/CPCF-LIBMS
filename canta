@@ -96,7 +96,7 @@ exit(0);
  *
  * @return void
  */
-function showHelp()
+function showHelp(): void
 {
     $myName = basename(__FILE__);
     echo "Usage:\n";

@@ -31,7 +31,7 @@ class Router
      * @param  \callable  $action  Route action (method/function)
      * @return void
      */
-    public function map($method, $url, $action)
+    public function map(string $method, string $url, \callable $action): void
     {
         $this->routes[] = [$method, $url, $action];
     }
@@ -41,7 +41,7 @@ class Router
      *
      * @return array
      */
-    public function getRoutes()
+    public function getRoutes(): array
     {
         return $this->routes;
     }
@@ -52,7 +52,7 @@ class Router
      * @param  string  $basePath  Base path of the project
      * @return void
      */
-    public function setBasePath($basePath)
+    public function setBasePath(string $basePath): void
     {
         $this->basePath = $basePath;
     }
@@ -64,7 +64,7 @@ class Router
      * @param  string|null  $url     Route URL
      * @return boolean
      */
-    public function match($method = null, $url = null)
+    public function match(mixed $method = null, mixed $url = null): bool
     {
         if (is_null($method))
         {
@@ -116,7 +116,7 @@ class Router
      * @param  string  $rule  Route containing parameters
      * @return string|false
      */
-    private function _regex($rule)
+    private function _regex(string $rule): mixed
     {
         $match = preg_match_all('/\{([^\{\}\/]+)\}/', $rule, $matches);
 

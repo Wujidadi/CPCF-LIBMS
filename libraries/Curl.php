@@ -33,7 +33,7 @@ class Curl
      * 
      * @return self
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
@@ -54,7 +54,7 @@ class Curl
      *
      * @return void
      */
-    private function _init()
+    private function _init(): void
     {
         $this->_handle = curl_init();
         curl_setopt($this->_handle, CURLOPT_CONNECTTIMEOUT, CURL_CONNECT_TIMEOUT);
@@ -70,7 +70,7 @@ class Curl
      * @param  integer  $second  Number of seconds
      * @return void
      */
-    public function setConnectTimeout($second)
+    public function setConnectTimeout(int $second): void
     {
         if (is_numeric($second))
         {
@@ -84,7 +84,7 @@ class Curl
      * @param  integer  $second  Number of seconds
      * @return void
      */
-    public function setTimeout($second)
+    public function setTimeout(int $second): void
     {
         if (is_numeric($second))
         {
@@ -98,7 +98,7 @@ class Curl
      * @param  array  $header  cURL HTTP header fields
      * @return void
      */
-    public function setHeader($header)
+    public function setHeader(array $header): void
     {
         if (is_array($header))
         {
@@ -112,7 +112,7 @@ class Curl
      * @param  string  $userAgent  User agent
      * @return void
      */
-    public function setUserAgent($userAgent)
+    public function setUserAgent(string $userAgent): void
     {
         if (gettype($userAgent) == 'string')
         {
@@ -126,7 +126,7 @@ class Curl
      * @param  boolean  $verifypeer  Whether or not to verify the peer's certificate
      * @return void
      */
-    public function setSslVerifypeer($verifypeer)
+    public function setSslVerifypeer(bool $verifypeer): void
     {
         curl_setopt($this->_handle, CURLOPT_SSL_VERIFYPEER, (bool) $verifypeer);
     }
@@ -137,7 +137,7 @@ class Curl
      * @param  boolean  $followLocation  Whether or not to follow the location by "Location: " header
      * @return void
      */
-    public function setFollowLocation($followLocation)
+    public function setFollowLocation(bool $followLocation): void
     {
         curl_setopt($this->_handle, CURLOPT_FOLLOWLOCATION, (bool) $followLocation);
     }
@@ -148,7 +148,7 @@ class Curl
      * @param  boolean  $returnTransfer  Return the response as a string (`true`) or output it directly (`false`)
      * @return void
      */
-    public function setReturnTransfer($returnTransfer)
+    public function setReturnTransfer(bool $returnTransfer): void
     {
         curl_setopt($this->_handle, CURLOPT_RETURNTRANSFER, (bool) $returnTransfer);
     }
@@ -158,9 +158,9 @@ class Curl
      *
      * @param  string  $url   Target URL
      * @param  mixed   $data  Data to send
-     * @return Curl
+     * @return self
      */
-    public function get($url, $data = null)
+    public function get(string $url, mixed $data = null): Curl
     {
         curl_setopt($this->_handle, CURLOPT_CUSTOMREQUEST, NULL);
         if (!is_null($data))
@@ -180,9 +180,9 @@ class Curl
      * @param  string   $url     Target URL
      * @param  mixed    $data    Data to send
      * @param  boolean  $isJson  Whether or not to send the data as JSON
-     * @return Curl
+     * @return self
      */
-    public function head($url, $data = null, $isJson = false)
+    public function head(string $url, mixed $data = null, bool $isJson = false): self
     {
         curl_setopt($this->_handle, CURLOPT_CUSTOMREQUEST, NULL);
         curl_setopt($this->_handle, CURLOPT_URL, $url);
@@ -198,9 +198,9 @@ class Curl
      * @param  string   $url     Target URL
      * @param  mixed    $data    Data to send
      * @param  boolean  $isJson  Whether or not to send the data as JSON
-     * @return Curl
+     * @return self
      */
-    public function post($url, $data = null, $isJson = false)
+    public function post(string $url, mixed $data = null, bool $isJson = false): self
     {
         curl_setopt($this->_handle, CURLOPT_CUSTOMREQUEST, NULL);
         curl_setopt($this->_handle, CURLOPT_URL, $url);
@@ -216,9 +216,9 @@ class Curl
      * @param  string   $url     Target URL
      * @param  mixed    $data    Data to send
      * @param  boolean  $isJson  Whether or not to send the data as JSON
-     * @return Curl
+     * @return self
      */
-    public function put($url, $data = null, $isJson = false)
+    public function put(string $url, mixed $data = null, bool $isJson = false): self
     {
         curl_setopt($this->_handle, CURLOPT_CUSTOMREQUEST, NULL);
         curl_setopt($this->_handle, CURLOPT_URL, $url);
@@ -234,9 +234,9 @@ class Curl
      * @param  string   $url     Target URL
      * @param  mixed    $data    Data to send
      * @param  boolean  $isJson  Whether or not to send the data as JSON
-     * @return Curl
+     * @return self
      */
-    public function delete($url, $data = null, $isJson = false)
+    public function delete(string $url, mixed $data = null, bool $isJson = false): self
     {
         curl_setopt($this->_handle, CURLOPT_CUSTOMREQUEST, NULL);
         curl_setopt($this->_handle, CURLOPT_URL, $url);
@@ -252,9 +252,9 @@ class Curl
      * @param  string   $url     Target URL
      * @param  mixed    $data    Data to send
      * @param  boolean  $isJson  Whether or not to send the data as JSON
-     * @return Curl
+     * @return self
      */
-    public function options($url, $data = null, $isJson = false)
+    public function options(string $url, mixed $data = null, bool $isJson = false): self
     {
         curl_setopt($this->_handle, CURLOPT_CUSTOMREQUEST, NULL);
         curl_setopt($this->_handle, CURLOPT_URL, $url);
@@ -270,9 +270,9 @@ class Curl
      * @param  string   $url     Target URL
      * @param  mixed    $data    Data to send
      * @param  boolean  $isJson  Whether or not to send the data as JSON
-     * @return Curl
+     * @return self
      */
-    public function patch($url, $data = null, $isJson = false)
+    public function patch(string $url, mixed $data = null, bool $isJson = false): self
     {
         curl_setopt($this->_handle, CURLOPT_CUSTOMREQUEST, NULL);
         curl_setopt($this->_handle, CURLOPT_URL, $url);
@@ -287,7 +287,7 @@ class Curl
      *
      * @return string|boolean
      */
-    public function getResponse()
+    public function getResponse(): mixed
     {
         return $this->_response;
     }
@@ -297,7 +297,7 @@ class Curl
      *
      * @return \CurlHandle|resource|null|false
      */
-    public function getHandle()
+    public function getHandle(): mixed
     {
         return $this->_handle;
     }
@@ -309,7 +309,7 @@ class Curl
      * @param  boolean  $isJson  Whether or not to send the data as JSON
      * @return string|array|object|null
      */
-    private function _queryBody($data, $isJson = false)
+    private function _queryBody(mixed $data, bool $isJson = false): mixed
     {
         $dataType = gettype($data);
 

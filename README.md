@@ -14,7 +14,9 @@
 ## 開發日誌
 
 ### 2021 年 11 月 7 日
-* 引入 HTTP request/response 處理類別，並同步 Tarascanta Beta。
+* 引入 HTTP request/response 處理類別。
+* 強化各類別及函數的型態宣告。
+* 以上變動均同步 Tarascanta Beta。
 
 ### 2021 年 11 月 6 日
 * 完成除權限系統外各資料表的遷移檔，並建置資料表完畢。

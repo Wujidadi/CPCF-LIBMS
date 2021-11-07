@@ -3,6 +3,9 @@
 namespace App\Controllers;
 
 use Throwable;
+use Libraries\HTTP\Request;
+use Libraries\HTTP\Response;
+use Libraries\Logger;
 use App\Handlers\BookHandler;
 
 /**
@@ -15,7 +18,7 @@ class BookController
     protected static $_uniqueInstance = null;
 
     /** @return self */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
@@ -26,35 +29,39 @@ class BookController
         $this->_className = basename(__FILE__, '.php');
     }
 
-    public function addBook()
+    /**
+     * 新增書籍資料
+     *
+     * @return void
+     */
+    public function addBook(): void
     {
         $functionName = __FUNCTION__;
 
+        $httpStatusCode = 200;
         $output = [
             'Code'    => 200,
             'Message' => 'OK'
         ];
 
-        header('Content-Type: application/json');
-        header("{$_SERVER['SERVER_PROTOCOL']} 200 OK");
-
         try
         {
-            $input = json_decode(file_get_contents('php://input'), true);
+            $input = Request::getInstance()->getData();
 
             $output['Data'] = $input;
         }
         catch (Throwable $ex)
         {
+            $httpStatusCode = 500;
+
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
             
-            $strLogMessage = "{$this->_className}::{$functionName} (by {$field} with parameter: {$param}) Exception: ({$exCode}) {$exMessage}";
-
-            header("{$_SERVER['SERVER_PROTOCOL']} 500 Internal Server Error");
+            $logMessage = "{$this->_className}::{$functionName} Exception: ({$exCode}) {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
         }
 
-        echo JsonUnescaped($output);
+        Response::getInstance()->setCode($httpStatusCode)->output(JsonUnescaped($output));
     }
 
     /**
@@ -64,19 +71,17 @@ class BookController
      * @param  string|integer  $param  關鍵字
      * @return void
      */
-    public function getBooks($field, $param)
+    public function getBooks(string $field, mixed $param): void
     {
         $functionName = __FUNCTION__;
 
-        $includeDeleted = false;
-
+        $httpStatusCode = 200;
         $output = [
             'Code'    => 200,
             'Message' => 'OK'
         ];
 
-        header('Content-Type: application/json');
-        header("{$_SERVER['SERVER_PROTOCOL']} 200 OK");
+        $includeDeleted = false;
 
         try
         {
@@ -104,9 +109,9 @@ class BookController
      * 刪除指定 ID 的書籍資料（軟刪除）
      *
      * @param  integer  $bookId  書籍 ID
-     * @return integer
+     * @return void
      */
-    public function deleteBook($bookId)
+    public function deleteBook(int $bookId): void
     {
         //
     }

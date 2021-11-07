@@ -79,7 +79,7 @@ if (!function_exists('IsSafe'))
      * @param  integer|string|array|object  $value  Input value
      * @return boolean
      */
-    function IsSafe($value = null)
+    function IsSafe(mixed $value = null): bool
     {
         switch (true)
         {
@@ -103,7 +103,7 @@ if (!function_exists('MsTime'))
      * @param  string|integer|double|null  $Timestamp  Timestamp
      * @return string
      */
-    function MsTime($Timestamp = null)
+    function MsTime(mixed $Timestamp = null): string
     {
         if ($Timestamp !== null)
         {
@@ -131,7 +131,7 @@ if (!function_exists('MsTimestamp'))
      * @param  string|null  $TimeString  Time string
      * @return double
      */
-    function MsTimestamp($TimeString = null)
+    function MsTimestamp(mixed $TimeString = null): float
     {
         if ($TimeString !== null)
         {
@@ -171,7 +171,7 @@ if (!function_exists('CheckYmdHis'))
      * @param  string  $TimeString  Time string
      * @return boolean
      */
-    function CheckYmdHis($TimeString)
+    function CheckYmdHis(string $TimeString): bool
     {
         $TimeFormat = '/^\d{1,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/';
 
@@ -222,7 +222,7 @@ if (!function_exists('SecondsToEnglishString'))
      * @param  integer  $Seconds  Number of seconds
      * @return string|null
      */
-    function SecondsToEnglishString($Seconds)
+    function SecondsToEnglishString(int $Seconds): mixed
     {
         $Second = $Seconds % 60;
         $Minute = ($Seconds - $Second) / 60 % 60;
@@ -294,12 +294,12 @@ if (!function_exists('ChineseWeekDate'))
     /**
      * Convert given date as Chinese in the "Y 年 n 月 j 日" format with name of day of the week
      *
-     * @param  string   $Date    Time string can be parse by `strtotime()`. Default value is `null` and the current date will be substituted in 
-     * @param  boolean  $Gap     Whether to place blanks between numbers and Chinese characters. Default value is `true`
-     * @param  string   $Prefix  Prefix of name of day of the week. Default value is `x` (星期), other options: `z` (週)
+     * @param  string|null   $Date    Time string can be parse by `strtotime()`. Default value is `null` and the current date will be substituted in 
+     * @param  boolean       $Gap     Whether to place blanks between numbers and Chinese characters. Default value is `true`
+     * @param  string        $Prefix  Prefix of name of day of the week. Default value is `x` (星期), other options: `z` (週)
      * @return string[]
      */
-    function ChineseWeekDate($Date = null, $Gap = true, $Prefix = 'x')
+    function ChineseWeekDate(mixed $Date = null, bool $Gap = true, string $Prefix = 'x'): array
     {
         if ($Date === null)
         {
@@ -368,7 +368,7 @@ if (!function_exists('ExcelColumnToNumber'))
      * @param  string  $Column  Column name
      * @return integer|boolean
      */
-    function ExcelColumnToNumber($Column)
+    function ExcelColumnToNumber(string $Column): mixed
     {
         $ColumnChar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $Number = 0;
@@ -401,7 +401,7 @@ if (!function_exists('NumberToExcelColumn'))
      * @param  integer  $Number  Column number
      * @return string
      */
-    function NumberToExcelColumn($Number)
+    function NumberToExcelColumn(int $Number): string
     {
         $ColumnChar = 'ZABCDEFGHIJKLMNOPQRSTUVWXY';     // Dict of the alphabet
         $Column = '';
@@ -465,7 +465,7 @@ if (!function_exists('Blank'))
      * @param  integer  $Number  Number of blanks
      * @return string
      */
-    function Blank($Number = 1)
+    function Blank(int $Number = 1): string
     {
         $Blank = '';
         for ($i = 0; $i < $Number; $i++)
@@ -484,7 +484,7 @@ if (!function_exists('TextCompress'))
      * @param  string  $text  String to be compressed
      * @return string
      */
-    function TextCompress($text = '')
+    function TextCompress(string $text = ''): string
     {
         return preg_replace([
             '/\r?\n */',
@@ -510,7 +510,7 @@ if (!function_exists('RemoveTrailingZeros'))
      * @param  string  $strnum  Formatted number-string
      * @return string
      */
-    function RemoveTrailingZeros($strnum)
+    function RemoveTrailingZeros(string $strnum): string
     {
         return preg_replace(
             [
@@ -534,7 +534,7 @@ if (!function_exists('CombineRegex'))
      * @param  string[]  $segments  Array of regular expression strings
      * @return string
      */
-    function CombineRegex($segments)
+    function CombineRegex(array $segments): string
     {
         $combo = [];
 
@@ -569,7 +569,7 @@ if (!function_exists('StrBase62'))
      * @param  integer  $length  Length of the string
      * @return string
      */
-    function StrBase62($length = 8)
+    function StrBase62(int $length = 8): string
     {
         $str = '';
         for ($i = 0; $i < $length; $i++)
@@ -589,7 +589,7 @@ if (!function_exists('Base10To62'))
      * @param  integer  $num  Decimal (base 10) number
      * @return string
      */
-    function Base10To62($num)
+    function Base10To62(int $num): string
     {
         $to = 62;
         $ret = '';
@@ -611,7 +611,7 @@ if (!function_exists('Base62To10'))
      * @param  integer  $num  Base 62 number
      * @return string
      */
-    function Base62To10($num)
+    function Base62To10(int $num): string
     {
         $from = 62;
         $num = strval($num);
@@ -636,7 +636,7 @@ if (!function_exists('Guid'))
      * @param  boolean  $trim  Whether to remove opening and closing braces
      * @return string
      */
-    function Guid($trim = true)
+    function Guid(bool $trim = true): string
     {
         # Windows
         if (function_exists('com_create_guid') === true) {
@@ -684,7 +684,7 @@ if (!function_exists('Uuid'))
      *
      * @return string
      */
-    function Uuid()
+    function Uuid(): string
     {
         $unid = uniqid() . str_replace('-', '', Guid());
         $uuid = substr($unid, 0, 8) . '-' . substr($unid, 8, 4) . '-' . substr($unid, 12, 4) . '-' . substr($unid, 16, 4) . '-' . substr($unid, 20, 12);
@@ -700,7 +700,7 @@ if (!function_exists('Tguid16'))
      *
      * @return string
      */
-    function Tguid16()
+    function Tguid16(): string
     {
         $entropicGuid = str_replace('.', '-', uniqid('', true)) . '-' . Guid();
         return $entropicGuid;
@@ -715,7 +715,7 @@ if (!function_exists('Base62Guid'))
      * @param  boolean  $dash  Whether to include dashes
      * @return string
      */
-    function Base62Guid($dash = false)
+    function Base62Guid(bool $dash = false): string
     {
         # Separator, none by default ($dash = false)
         $separator = $dash ? '-' : '';
@@ -786,7 +786,7 @@ if (!function_exists('Base62Tguid'))
      * @param  boolean  $dash  Whether to include dashes
      * @return string
      */
-    function Base62Tguid($dash = false)
+    function Base62Tguid(bool $dash = false): string
     {
         # Separator, none by default ($dash = false)
         $separator = $dash ? '-' : '';
@@ -883,7 +883,7 @@ if (!function_exists('Tguid'))
      * @param  boolean  $dash  Whether to include dashes
      * @return string
      */
-    function Tguid($dash = false)
+    function Tguid(bool $dash = false): string
     {
         # Separator, none by default ($dash = false)
         $separator = $dash ? '-' : '';
@@ -919,7 +919,7 @@ if (!function_exists('TguidToTime'))
      * @param  integer  $tguid  TGUID
      * @return string
      */
-    function TguidToTime($tguid = 0)
+    function TguidToTime(int $tguid = 0): string
     {
         # Pick the left-most 10 digits
         $num = substr($tguid, 0, 10);
@@ -963,7 +963,7 @@ if (!function_exists('TimeToBase62Guid'))
      * @param  string  $time  Time string
      * @return string
      */
-    function TimeToBase62Guid($time = '')
+    function TimeToBase62Guid(string $time = ''): string
     {
         # Define $time as `Y-m-d H:i:s.u` format while the time string is empty (by default)
         if ($time == '')
@@ -1022,7 +1022,7 @@ if (!function_exists('VarExportFormat'))
      * @param  mixed  $var  Variable to be converted
      * @return string
      */
-    function VarExportFormat($var)
+    function VarExportFormat(mixed $var): string
     {
         return preg_replace(
             [
@@ -1048,7 +1048,7 @@ if (!function_exists('JsonUnescaped'))
      * @param  array|object  $data  Data to be converted to JSON
      * @return string
      */
-    function JsonUnescaped($data)
+    function JsonUnescaped(mixed $data): string
     {
         return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
@@ -1062,7 +1062,7 @@ if (!function_exists('JsonPrettyPrinted'))
      * @param  array|object  $data  Data to be converted to JSON
      * @return string
      */
-    function JsonPrettyPrinted($data)
+    function JsonPrettyPrinted(mixed $data): string
     {
         return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
     }
@@ -1076,7 +1076,7 @@ if (!function_exists('JsonEmptyObject'))
      * @param  string  $json  JSON string, should be '"{}"'
      * @return string
      */
-    function JsonEmptyObject($json = '"{}"')
+    function JsonEmptyObject(string $json = '"{}"'): string
     {
         return preg_replace('/\"\{\}\"/', '{}', $json);
     }
@@ -1090,7 +1090,7 @@ if (!function_exists('TitleOnlyPage'))
      * @param  string  $title  Title of the page
      * @return string
      */
-    function TitleOnlyPage($title)
+    function TitleOnlyPage(string $title): string
     {
         $html =
             "<!DOCTYPE html>\n" .
@@ -1115,7 +1115,7 @@ if (!function_exists('AssetCachebuster'))
      * @param  integer  $length  Length of the base 62 string
      * @return string
      */
-    function AssetCachebuster($path, $length = 0)
+    function AssetCachebuster(string $path, int $length = 0): string
     {
         # Prepend a slash while the given path is not begin with it to ensure
         # that the path is located from the root of the project

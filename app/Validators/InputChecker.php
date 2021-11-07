@@ -2,6 +2,8 @@
 
 namespace App\Validators;
 
+use DateTime;
+
 /**
  * 輸入驗證抽象類別
  */
@@ -51,7 +53,7 @@ abstract class InputChecker
      * @param  string  $field  欄位名稱
      * @return boolean
      */
-    protected function _isNull($field)
+    protected function _isNull(string $field): bool
     {
         return (!isset($this->_rawInput[$field]) || trim($this->_rawInput[$field]) == '') ? true : false;
     }
@@ -63,7 +65,7 @@ abstract class InputChecker
      * @param  string  $pattern  正規表示式
      * @return boolean
      */
-    protected function _isRegexIllegl($text, $pattern)
+    protected function _isRegexIllegl(string $text, string $pattern): bool
     {
         return (!preg_match($pattern, $text)) ? true : false;
     }
@@ -75,7 +77,7 @@ abstract class InputChecker
      * @param  string  $pattern  日期格式
      * @return boolean
      */
-    protected function _isInvalidDate($date, $format)
+    protected function _isInvalidDate(string $date, string $format): bool
     {
         $objDT = DateTime::createFromFormat($format, $date);
         if ($objDT && $objDT->format($format) == $date)
@@ -94,7 +96,7 @@ abstract class InputChecker
      * @param  integer|double|string  $number  要檢驗的數字或數字字串
      * @return boolean
      */
-    protected function _isInvalidNumber($number)
+    protected function _isInvalidNumber(mixed $number): bool
     {
         if (is_numeric($number))
         {
@@ -109,7 +111,7 @@ abstract class InputChecker
      * @param  array  $error  錯誤欄位資料
      * @return void
      */
-    protected function _pushError($error)
+    protected function _pushError(array $error): void
     {
         $this->_errors['info'][] = $error;
         $this->_errors['fields'][] = $error['field'];
@@ -120,7 +122,7 @@ abstract class InputChecker
      *
      * @return array
      */
-    public function getErrorColumns()
+    public function getErrorColumns(): array
     {
         return $this->_errors['fields'];
     }
@@ -130,7 +132,7 @@ abstract class InputChecker
      *
      * @return void
      */
-    public function resetErrorInfo()
+    public function resetErrorInfo(): void
     {
         $this->_errors = [
             'info' => [],
@@ -141,9 +143,9 @@ abstract class InputChecker
     /**
      * 取得經過驗證的輸入資料
      *
-     * @return object
+     * @return array
      */
-    public function getFilteredData()
+    public function getFilteredData(): array
     {
         return $this->_filteredData;
     }

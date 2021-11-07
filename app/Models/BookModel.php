@@ -25,7 +25,6 @@ class BookModel extends Model
      * @var array
      */
     protected $_columns = [
-
         'No'              => [ 'required' => true  ],
         'Name'            => [ 'required' => true  ],
         "OriginalName"    => [ 'required' => false ],
@@ -52,7 +51,6 @@ class BookModel extends Model
         "Barcode3"        => [ 'required' => false ],
         "CategoryId"      => [ 'required' => false ],
         "LocationId"      => [ 'required' => false ]
-
     ];
 
     protected $_className;
@@ -60,7 +58,7 @@ class BookModel extends Model
     protected static $_uniqueInstance = null;
 
     /** @return self */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
@@ -78,12 +76,12 @@ class BookModel extends Model
      * @param  array  $params  待新增資料陣列
      * @return integer
      */
-    public function addOne($params)
+    public function addOne(array $params): int
     {
         $functionName = __FUNCTION__;
 
-        $arrFields = [];
-        $arrBind = [];
+        $field = [];
+        $bind  = [];
 
         try
         {
@@ -96,24 +94,24 @@ class BookModel extends Model
                         throw new Exception("Column \"{$column}\" is required but unfilled");
                     }
 
-                    ${$column} = $arrBind[$column] = $params[$column];
-                    $arrFields[] = $column;
+                    $bind[$column] = $params[$column];
+                    $field[] = $column;
                 }
                 else
                 {
                     if (isset($params[$column]) && trim($params[$column]) !== '')
                     {
-                        ${$column} = $arrBind[$column] = $params[$column];
-                        $arrFields[] = $column;
+                        $bind[$column] = $params[$column];
+                        $field[] = $column;
                     }
                 }
             }
 
-            $strFields = '"' . implode('", "', $arrFields) . '"';
-            $strBind   = ':' . implode(', :', $arrFields);
-            $strSQL    = "INSERT INTO public.\"{$this->_tableName}\" ({$strFields}) VALUES ({$strBind})";
+            $value = ':' . implode(', :', $field);
+            $field = '"' . implode('", "', $field) . '"';
+            $sql   = "INSERT INTO public.\"{$this->_tableName}\" ({$field}) VALUES ({$value})";
             
-            $intResult = $this->_db->query($strSQL, $arrBind);
+            $result = $this->_db->query($sql, $bind);
         }
         catch (PDOException $ex)
         {
@@ -126,10 +124,10 @@ class BookModel extends Model
             $exMsg  = $ex->getMessage();
             Logger::getInstance()->logError("{$this->_className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
 
-            throw new Exception($exMsg, 35);    // Sum of alphabet number of "PDO"
+            throw new Exception($exMsg, 35);    // 「PDO」的字母值加總
         }
 
-        return $intResult;
+        return $result;
     }
 
     /**
@@ -140,22 +138,22 @@ class BookModel extends Model
      * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
      * @return array
      */
-    public function get($field, $value, $includeDeleted = false)
+    public function get(string $field, mixed $value, bool $includeDeleted = false): array
     {
         $functionName = __FUNCTION__;
 
         try
         {
-            $strIncludeDeleted = ($includeDeleted) ? '' : ' AND "Deleted" IS FALSE';
+            $withDeleted = ($includeDeleted) ? '' : 'AND "Deleted" IS FALSE';
 
             switch ($field)
             {
                 case 'No':
                 case 'ISN':
                 case 'EAN':
-                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" = :{$field}{$strIncludeDeleted}";
-                    $arrBind = [ $field => $value ];
-                    return $this->_db->query($strSQL, $arrBind);
+                    $sql  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" = :{$field} {$withDeleted}";
+                    $bind = [ $field => $value ];
+                    return $this->_db->query($sql, $bind);
 
                 case 'Name':
                 case 'OriginalName':
@@ -165,14 +163,14 @@ class BookModel extends Model
                 case 'Translator':
                 case 'Series':
                 case 'Publisher':
-                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" LIKE :{$field}{$strIncludeDeleted}";
-                    $arrBind = [ $field => "%{$value}%" ];
-                    return $this->_db->query($strSQL, $arrBind);
+                    $sql  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" LIKE :{$field} {$withDeleted}";
+                    $bind = [ $field => "%{$value}%" ];
+                    return $this->_db->query($sql, $bind);
 
                 case 'Maker':
-                    $strSQL  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE CONCAT(\"Author\", \"Illustrator\", \"Editor\", \"Translator\") LIKE :{$field}{$strIncludeDeleted}";
-                    $arrBind = [ $field => "%{$value}%" ];
-                    return $this->_db->query($strSQL, $arrBind);
+                    $sql  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE CONCAT(\"Author\", \"Illustrator\", \"Editor\", \"Translator\") LIKE :{$field} {$withDeleted}";
+                    $bind = [ $field => "%{$value}%" ];
+                    return $this->_db->query($sql, $bind);
             }
         }
         catch (PDOException $ex)
@@ -186,7 +184,7 @@ class BookModel extends Model
             $exMsg  = $ex->getMessage();
             Logger::getInstance()->logError("{$this->_className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
 
-            throw new Exception($exMsg, 35);    // Sum of alphabet number of "PDO"
+            throw new Exception($exMsg, 35);    // 「PDO」的字母值加總
         }
     }
 }

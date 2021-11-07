@@ -27,7 +27,7 @@ class StorageTypes extends Migration
     protected static $_uniqueInstance = null;
 
     /** @return self */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (self::$_uniqueInstance == null) self::$_uniqueInstance = new self();
         return self::$_uniqueInstance;
@@ -49,7 +49,7 @@ class StorageTypes extends Migration
      *
      * @return boolean
      */
-    public function up()
+    public function up(): bool
     {
         $sqlArray = [
 
@@ -151,7 +151,7 @@ class StorageTypes extends Migration
      *
      * @return boolean
      */
-    public function down()
+    public function down(): bool
     {
         $sqlArray = [
 

@@ -47,10 +47,10 @@ return [
     //     // 'down'
     // ],
 
-    'Tables\Members' => [
-        'up',
-        // 'down'
-    ],
+    // 'Tables\Members' => [
+    //     // 'up',
+    //     // 'down'
+    // ],
 
     // 'Tables\Circulation' => [
     //     // 'up',
