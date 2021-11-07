@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use PDO;
 use Exception;
 use PDOException;
 use Libraries\Logger;
@@ -91,10 +92,18 @@ class BookModel extends Model
                 {
                     if (!isset($params[$column]) || (trim($params[$column]) === '' && $params[$column] !== false))
                     {
-                        throw new Exception("Column \"{$column}\" is required but unfilled");
+                        throw new Exception("Column \"{$column}\" is required but unfilled", 83);    // 「unfilled」的字母值加總
                     }
 
-                    $bind[$column] = $params[$column];
+                    if ($column === 'Deleted')
+                    {
+                        $bind[$column] = [ $params[$column], PDO::PARAM_BOOL ];
+                    }
+                    else
+                    {
+                        $bind[$column] = $params[$column];
+                    }
+
                     $field[] = $column;
                 }
                 else
@@ -110,7 +119,7 @@ class BookModel extends Model
             $value = ':' . implode(', :', $field);
             $field = '"' . implode('", "', $field) . '"';
             $sql   = "INSERT INTO public.\"{$this->_tableName}\" ({$field}) VALUES ({$value})";
-            
+
             $result = $this->_db->query($sql, $bind);
         }
         catch (PDOException $ex)
@@ -135,10 +144,12 @@ class BookModel extends Model
      *
      * @param  string          $field           欄位名稱
      * @param  string|integer  $value           關鍵字
+     * @param  integer         $limit           查詢資料限制筆數
+     * @param  integer         $offset          查詢資料偏移量
      * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
      * @return array
      */
-    public function get(string $field, mixed $value, bool $includeDeleted = false): array
+    public function get(string $field, mixed $value, int $limit, int $offset, bool $includeDeleted = false): array
     {
         $functionName = __FUNCTION__;
 
@@ -151,9 +162,26 @@ class BookModel extends Model
                 case 'No':
                 case 'ISN':
                 case 'EAN':
-                    $sql  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" = :{$field} {$withDeleted}";
-                    $bind = [ $field => $value ];
-                    return $this->_db->query($sql, $bind);
+                {
+                    $sql = <<<SQL
+                    SELECT
+                        *
+                    FROM public."{$this->_tableName}"
+                    WHERE
+                        "{$field}" = :{$field}
+                        {$withDeleted}
+                    LIMIT :limit
+                    OFFSET :offset
+                    SQL;
+
+                    $bind = [
+                        $field   => $value,
+                        'limit'  => [ $limit,  PDO::PARAM_INT ],
+                        'offset' => [ $offset, PDO::PARAM_INT ]
+                    ];
+
+                    break;
+                }
 
                 case 'Name':
                 case 'OriginalName':
@@ -163,14 +191,53 @@ class BookModel extends Model
                 case 'Translator':
                 case 'Series':
                 case 'Publisher':
-                    $sql  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE \"{$field}\" LIKE :{$field} {$withDeleted}";
-                    $bind = [ $field => "%{$value}%" ];
-                    return $this->_db->query($sql, $bind);
+                {
+                    $sql = <<<SQL
+                    SELECT
+                        *
+                    FROM public."{$this->_tableName}"
+                    WHERE
+                        "{$field}" LIKE :{$field}
+                        {$withDeleted}
+                    LIMIT :limit
+                    OFFSET :offset
+                    SQL;
+
+                    $bind = [
+                        $field => "%{$value}%",
+                        'limit'  => [ $limit,  PDO::PARAM_INT ],
+                        'offset' => [ $offset, PDO::PARAM_INT ]
+                    ];
+
+                    break;
+                }
 
                 case 'Maker':
-                    $sql  = "SELECT * FROM public.\"{$this->_tableName}\" WHERE CONCAT(\"Author\", \"Illustrator\", \"Editor\", \"Translator\") LIKE :{$field} {$withDeleted}";
-                    $bind = [ $field => "%{$value}%" ];
-                    return $this->_db->query($sql, $bind);
+                {
+                    $sql = <<<SQL
+                    SELECT
+                        *
+                    FROM public."{$this->_tableName}"
+                    WHERE
+                        CONCAT("Author", "Illustrator", "Editor", "Translator") LIKE :{$field}
+                        {$withDeleted}
+                    LIMIT :limit
+                    OFFSET :offset
+                    SQL;
+
+                    $bind = [
+                        $field => "%{$value}%",
+                        'limit'  => [ $limit,  PDO::PARAM_INT ],
+                        'offset' => [ $offset, PDO::PARAM_INT ]
+                    ];
+
+                    break;
+                }
+            }
+
+            if (isset($sql) && isset($bind))
+            {
+                return $this->_db->query($sql, $bind);
             }
         }
         catch (PDOException $ex)

@@ -6,6 +6,7 @@ use Throwable;
 use Libraries\HTTP\Request;
 use Libraries\HTTP\Response;
 use Libraries\Logger;
+use App\Constant;
 use App\Handlers\BookHandler;
 
 /**
@@ -48,7 +49,11 @@ class BookController
         {
             $input = Request::getInstance()->getData();
 
-            $output['Data'] = $input;
+            // 這裡需要資料驗證
+
+            $result = BookHandler::getInstance()->add($input);
+
+            $output['Data'] = $result;
         }
         catch (Throwable $ex)
         {
@@ -56,9 +61,6 @@ class BookController
 
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
-            
-            $logMessage = "{$this->_className}::{$functionName} Exception: ({$exCode}) {$exMessage}";
-            Logger::getInstance()->logError($logMessage);
         }
 
         Response::getInstance()->setCode($httpStatusCode)->output(JsonUnescaped($output));
@@ -85,24 +87,26 @@ class BookController
 
         try
         {
-            if (isset($_GET['include-deleted']))
+            if (isset($_GET['d']) && $_GET['d'] == '1')
             {
                 $includeDeleted = true;
             }
 
-            $output['Data'] = BookHandler::getInstance()->get($field, $param, $includeDeleted);
+            $page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int) $_GET['p'] : Constant::DefaultPageNumber;
+            $limit = (isset($_GET['c']) && is_numeric($_GET['c']) && $_GET['c'] <= Constant::MaxDataCountPerPage) ? (int) $_GET['c'] : Constant::DefaultPageLimit;
+            $offset = ($page - 1) * $limit;
+
+            $output['Data'] = BookHandler::getInstance()->get($field, $param, $limit, $offset, $includeDeleted);
         }
         catch (Throwable $ex)
         {
+            $httpStatusCode = 500;
+
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
-            
-            $strLogMessage = "{$this->_className}::{$functionName} (by {$field} with parameter: {$param}) Exception: ({$exCode}) {$exMessage}";
-
-            header("{$_SERVER['SERVER_PROTOCOL']} 500 Internal Server Error");
         }
 
-        echo JsonUnescaped($output);
+        Response::getInstance()->setCode($httpStatusCode)->output(JsonUnescaped($output));
     }
 
     /**

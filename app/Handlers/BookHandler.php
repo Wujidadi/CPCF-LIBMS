@@ -42,14 +42,34 @@ class BookHandler
     }
 
     /**
+     * 新增書籍資料
+     *
+     * @param  array   $data  待新增書籍資料
+     * @return integer
+     */
+    public function add(array $data): int
+    {
+        $functionName = __FUNCTION__;
+
+        if (!isset($data['Deleted']))
+        {
+            $data['Deleted'] = false;
+        }
+
+        return BookModel::getInstance()->addOne($data);
+    }
+
+    /**
      * 指定欄位和值查詢書籍資料
      *
      * @param  string          $field           欄位名稱
      * @param  string|integer  $param           關鍵字
+     * @param  integer         $limit           查詢資料限制筆數
+     * @param  integer         $offset          查詢資料偏移量
      * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
      * @return array
      */
-    public function get(string $field, mixed $param, bool $includeDeleted): array
+    public function get(string $field, mixed $param, int $limit, int $offset, bool $includeDeleted): array
     {
         $functionName = __FUNCTION__;
 
@@ -60,7 +80,8 @@ class BookHandler
                 $param = str_replace('-', '', $param);
             }
 
-            $result = BookModel::getInstance()->get($field, $param, $includeDeleted);
+            $result = BookModel::getInstance()->get($field, $param, $limit, $offset, $includeDeleted);
+
             return [
                 'BookTotal' => count($result),
                 'BookList'  => $result
