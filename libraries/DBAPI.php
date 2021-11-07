@@ -257,36 +257,45 @@ class DBAPI
     {
         if (!empty($params))
         {
-            $arrayParameterFound = false;
-
             foreach ($params as $paramKey => $parameter)
             {
+                unset($params[$paramKey]);
+
                 if (is_array($parameter))
                 {
-                    $arrayParameterFound = true;
-
-                    $in = '';
-
-                    foreach ($parameter as $key => $value)
+                    if (is_array($parameter[0]))
                     {
-                        $namePlaceholder = "{$paramKey}_{$key}";
+                        $in = '';
 
-                        $in .= ":{$namePlaceholder}, ";         // Concatenates params as named placeholders
+                        foreach ($parameter[0] as $key => $value)
+                        {
+                            $namePlaceholder = "{$paramKey}_{$key}";
 
-                        $params[$namePlaceholder] = $value;     // Adds each single parameter to $params
+                            $in .= ":{$namePlaceholder}, ";                 // Concatenates params as named placeholders
+
+                            $params[$namePlaceholder]['value'] = $value;    // Adds each single parameter to $params
+
+                            $params[$namePlaceholder]['type'] = (isset($parameter[1]) && is_int($parameter[1])) ? $parameter[1] : PDO::PARAM_STR;
+                        }
+
+                        $in = '(' . rtrim($in, ', ') . ')';
+
+                        $query = preg_replace("/:{$paramKey}/", $in, $query);
                     }
-
-                    $in = rtrim($in, ', ');
-
-                    $query = preg_replace("/:{$paramKey}/", $in, $query);
-
-                    // Removes array form $params
-                    unset($params[$paramKey]);
+                    else
+                    {
+                        $params[$paramKey]['value'] = $parameter[0];
+                        $params[$paramKey]['type']  = (isset($parameter[1]) && is_int($parameter[1])) ? $parameter[1] : PDO::PARAM_STR;
+                    }
+                }
+                else
+                {
+                    $params[$paramKey]['value'] = $parameter;
+                    $params[$paramKey]['type']  = PDO::PARAM_STR;
                 }
             }
 
-            // Updates $this->_parameters if $params and $query have changed
-            if ($arrayParameterFound) $this->parameters = $params;
+            $this->_parameters = $params;
         }
 
         return $query;
