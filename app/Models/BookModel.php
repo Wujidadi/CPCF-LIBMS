@@ -92,7 +92,7 @@ class BookModel extends Model
                 {
                     if (!isset($params[$column]) || (trim($params[$column]) === '' && $params[$column] !== false))
                     {
-                        throw new Exception("Column \"{$column}\" is required but unfilled", 83);    // 「unfilled」的字母值加總
+                        throw new Exception("Column \"{$column}\" is required but unfilled", SumWord('unfilled'));
                     }
 
                     if ($column === 'Deleted')
@@ -133,7 +133,7 @@ class BookModel extends Model
             $exMsg  = $ex->getMessage();
             Logger::getInstance()->logError("{$this->_className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
 
-            throw new Exception($exMsg, 35);    // 「PDO」的字母值加總
+            throw new Exception($exMsg, SumWord('PDO'));
         }
 
         return $result;
@@ -251,7 +251,7 @@ class BookModel extends Model
             $exMsg  = $ex->getMessage();
             Logger::getInstance()->logError("{$this->_className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
 
-            throw new Exception($exMsg, 35);    // 「PDO」的字母值加總
+            throw new Exception($exMsg, SumWord('PDO'));
         }
     }
 }

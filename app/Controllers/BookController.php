@@ -87,6 +87,8 @@ class BookController
 
         try
         {
+            // 這裡需要資料驗證
+
             if (isset($_GET['d']) && $_GET['d'] == '1')
             {
                 $includeDeleted = true;

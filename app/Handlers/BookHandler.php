@@ -94,7 +94,7 @@ class BookHandler
             $logMessage = "{$this->_className}::{$functionName} Error: {$errorMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($errorMessage, 69);    // 「BookData」的字母值加總
+            throw new Exception($errorMessage, SumWord('BookData'));
         }
     }
 }
