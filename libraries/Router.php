@@ -3,7 +3,7 @@
 namespace Libraries;
 
 /**
- * Router handle class.
+ * Router handling class.
  */
 class Router
 {

@@ -5,7 +5,7 @@ namespace Libraries;
 use Exception;
 
 /**
- * Log handle class.
+ * Log handling class.
  */
 class Logger
 {

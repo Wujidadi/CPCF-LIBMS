@@ -3,7 +3,7 @@
 namespace Libraries;
 
 /**
- * cURL handle class.
+ * cURL handling class.
  */
 class Curl
 {

@@ -8,7 +8,7 @@ use PDOException;
 use Libraries\Logger;
 
 /**
- * Database API and handle class.
+ * Database API and handling class.
  */
 class DBAPI
 {
