@@ -90,7 +90,7 @@ class Request
      *
      * @return string|array
      */
-    public function getRawInput(): string|array
+    public function getRawInput(): mixed
     {
         return $this->_rawInput;
     }
@@ -101,7 +101,7 @@ class Request
      * @param  boolean  $arrType  The data should be return in array type or not.
      * @return string|array
      */
-    public function getData(bool $arrType = true): string|array
+    public function getData(bool $arrType = true): mixed
     {
         if ($arrType)
         {
