@@ -193,7 +193,7 @@ class DBAPI
      * @param  array       $driverOptions  SQL Driver options
      * @return boolean|null
      */
-    private function _init(string $query, mixed $parameters = null, array $driverOptions = []): mixed
+    private function _init(string $query, ?array $parameters = null, array $driverOptions = []): ?bool
     {
         $execResult = null;
 
@@ -253,7 +253,7 @@ class DBAPI
      * @param  array|null  $params  Binding Variables
      * @return string
      */
-    private function _buildParams(string $query, mixed $params = null): string
+    private function _buildParams(string $query, ?array $params = null): string
     {
         if (!empty($params))
         {
@@ -309,7 +309,7 @@ class DBAPI
      * @param  integer     $fetchMode  Fetch mode
      * @return array|integer|boolean|null
      */
-    public function query(string $query, mixed $params = null, int $fetchMode = PDO::FETCH_ASSOC): mixed
+    public function query(string $query, ?array $params = null, int $fetchMode = PDO::FETCH_ASSOC): mixed
     {
         $query        = trim($query);
         $rawStatement = preg_split("/( |\r|\n)/", $query);

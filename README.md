@@ -13,6 +13,9 @@
 
 ## 開發日誌
 
+### 2021 年 11 月 8 日
+* 調整各類別中函數及參數的型態宣告使更符合 PHP 8 的形式，且同步 Tarascanta Beta。
+
 ### 2021 年 11 月 7 日
 * 框架層級的變動（同步 Tarascanta Beta）：
   - 引入 HTTP request/response 處理類別。

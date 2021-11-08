@@ -60,7 +60,7 @@ class SourceFileHandler
      * @param  string|null  $fileSuffix  輸出檔名後綴：建議為當天日期（`Ymd` 格式）
      * @return object
      */
-    public function trimOriginalBookExcelFile(mixed $fileSuffix = null): object
+    public function trimOriginalBookExcelFile(?string $fileSuffix = null): object
     {
         $strFunction = __FUNCTION__;
 
@@ -218,7 +218,7 @@ class SourceFileHandler
      * @param  string|null  $dstFileSuffix  輸出檔名後綴：建議為當天日期（`Ymd` 格式）
      * @return object
      */
-    public function retrimBookExcelFile(mixed $srcFileSuffix = null, mixed $dstFileSuffix = null): object
+    public function retrimBookExcelFile(?string $srcFileSuffix = null, ?string $dstFileSuffix = null): object
     {
         $strFunction = __FUNCTION__;
 
@@ -353,7 +353,7 @@ class SourceFileHandler
      * @param  integer       $intGroup   分組：SQL insert 時每次執行的筆數，預設為 `200`
      * @return object
      */
-    public function insertBookDataToDB(string $strFile, mixed $intCount = null, int $intOffset = 0, int $intGroup = 200): object
+    public function insertBookDataToDB(string $strFile, ?int $intCount = null, int $intOffset = 0, int $intGroup = 200): object
     {
         $strFunction = __FUNCTION__;
 
@@ -466,7 +466,7 @@ class SourceFileHandler
      * @param  string|null  $value  原始入庫事由
      * @return string|null
      */
-    protected function _makeStorageNotes(mixed $value): string|null
+    protected function _makeStorageNotes(?string $value): ?string
     {
         switch ($value)
         {

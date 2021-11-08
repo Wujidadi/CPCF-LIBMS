@@ -66,7 +66,7 @@ class Router
      * @param  string|null  $url     Route URL
      * @return boolean
      */
-    public function match(mixed $method = null, mixed $url = null): bool
+    public function match(?string $method = null, ?string $url = null): bool
     {
         if (is_null($method))
         {

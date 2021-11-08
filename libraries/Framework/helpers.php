@@ -132,7 +132,7 @@ if (!function_exists('MsTimestamp'))
      * @param  string|null  $TimeString  Time string
      * @return double
      */
-    function MsTimestamp(mixed $TimeString = null): float
+    function MsTimestamp(?string $TimeString = null): float
     {
         if ($TimeString !== null)
         {
@@ -223,7 +223,7 @@ if (!function_exists('SecondsToEnglishString'))
      * @param  integer  $Seconds  Number of seconds
      * @return string|null
      */
-    function SecondsToEnglishString(int $Seconds): mixed
+    function SecondsToEnglishString(int $Seconds): ?string
     {
         $Second = $Seconds % 60;
         $Minute = ($Seconds - $Second) / 60 % 60;
@@ -300,7 +300,7 @@ if (!function_exists('ChineseWeekDate'))
      * @param  string        $Prefix  Prefix of name of day of the week. Default value is `x` (星期), other options: `z` (週)
      * @return string[]
      */
-    function ChineseWeekDate(mixed $Date = null, bool $Gap = true, string $Prefix = 'x'): array
+    function ChineseWeekDate(?string $Date = null, bool $Gap = true, string $Prefix = 'x'): array
     {
         if ($Date === null)
         {
