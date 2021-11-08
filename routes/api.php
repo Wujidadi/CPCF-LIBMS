@@ -15,6 +15,12 @@ $Route->map('GET', '/api/books/{field}/{value}', function($field, $param)
     BookController::getInstance()->getBooks($field, $param);
 });
 
+# 修改書籍資料
+$Route->map('PATCH', '/api/book/{bookId}', function($bookId)
+{
+    BookController::getInstance()->editBook($bookId);
+});
+
 # 刪除書籍資料（軟刪除）
 $Route->map('DELETE', '/api/book/{bookId}', function($bookId)
 {

@@ -13,7 +13,7 @@
 <body class="caterpillar caterpillar-default">
     <?php include viewPath('components.common.header'); ?>
     <?php include viewPath('components.common.sidebar'); ?>
-    <main class="p-3" style="height: 2000px">
+    <main class="p-3">
         <div id="mainContent" class="tab-content">
             <div id="home"        class="tab-pane fade show active">首頁</div>
             <div id="circulation" class="tab-pane fade"            >借還書</div>

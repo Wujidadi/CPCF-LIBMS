@@ -4,6 +4,7 @@ namespace App\Handlers;
 
 use Exception;
 use Libraries\Logger;
+use App\ExceptionCode;
 use App\Models\BookModel;
 
 /**
@@ -12,7 +13,7 @@ use App\Models\BookModel;
 class BookHandler
 {
     /**
-     * 可用於查詢書籍資料的欄位名稱
+     * 可用於查詢書籍資料的欄位名稱（應以輸入驗證取代）
      *
      * @var string[]
      */
@@ -20,6 +21,19 @@ class BookHandler
         'No',
         'Name', 'OriginalName',
         'Author', 'Illustrator', 'Editor', 'Translator', 'Maker',
+        'Series',
+        'Publisher',
+        'ISN', 'EAN'
+    ];
+
+    /**
+     * 書籍資料中可修改的欄位名稱（應以輸入驗證取代）
+     *
+     * @var string[]
+     */
+    protected $_allowedEditField = [
+        'Name', 'OriginalName',
+        'Author', 'Illustrator', 'Editor', 'Translator',
         'Series',
         'Publisher',
         'ISN', 'EAN'
@@ -73,8 +87,8 @@ class BookHandler
     {
         $functionName = __FUNCTION__;
 
-        if (in_array($field, $this->_allowedQueryField))
-        {
+        // if (in_array($field, $this->_allowedQueryField))
+        // {
             if (in_array($field, [ 'ISN', 'EAN' ]))
             {
                 $param = str_replace('-', '', $param);
@@ -83,18 +97,48 @@ class BookHandler
             $result = BookModel::getInstance()->get($field, $param, $limit, $offset, $includeDeleted);
 
             return [
-                'BookTotal' => count($result),
-                'BookList'  => $result
+                'Total' => count($result),
+                'List'  => $result
             ];
+        // }
+        // else
+        // {
+        //     $errorMessage = "Given field ({$field}) is not allowed";
+
+        //     $logMessage = "{$this->_className}::{$functionName} Error: {$errorMessage}";
+        //     Logger::getInstance()->logError($logMessage);
+
+        //     throw new Exception($errorMessage, ExceptionCode::BookData);
+        // }
+    }
+
+    public function edit(int $bookId, array $data): int
+    {
+        $functionName = __FUNCTION__;
+
+        $updatedData = [];
+
+        foreach ($data as $field => $value)
+        {
+            if (in_array($field, [ 'ISN', 'EAN' ]))
+            {
+                $value = str_replace('-', '', $value);
+            }
+            $updatedData[$field] = $value;
+        }
+
+        if (count($updatedData) > 0)
+        {
+            return BookModel::getInstance()->edit($bookId, $updatedData);
         }
         else
         {
-            $errorMessage = "Given field ({$field}) is not allowed";
+            $errorMessage = "No data to be updated";
 
             $logMessage = "{$this->_className}::{$functionName} Error: {$errorMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($errorMessage, SumWord('BookData'));
+            throw new Exception($errorMessage, ExceptionCode::BookData);
         }
     }
 }

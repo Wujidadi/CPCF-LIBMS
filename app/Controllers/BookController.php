@@ -49,9 +49,9 @@ class BookController
         {
             $input = Request::getInstance()->getData();
 
-            // 這裡需要資料驗證
+            $filteredData = $input;    // 這裡需要資料驗證
 
-            $result = BookHandler::getInstance()->add($input);
+            $result = BookHandler::getInstance()->add($filteredData);
 
             $output['Data'] = $result;
         }
@@ -59,8 +59,12 @@ class BookController
         {
             $httpStatusCode = 500;
 
+            $exType    = get_class($ex);
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} {$exType}({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
         }
 
         Response::getInstance()->setCode($httpStatusCode)->output(JsonUnescaped($output));
@@ -104,8 +108,45 @@ class BookController
         {
             $httpStatusCode = 500;
 
+            $exType    = get_class($ex);
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} {$exType}({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+        }
+
+        Response::getInstance()->setCode($httpStatusCode)->output(JsonUnescaped($output));
+    }
+
+    public function editBook(int $bookId): void
+    {
+        $functionName = __FUNCTION__;
+
+        $httpStatusCode = 200;
+        $output = [
+            'Code'    => 200,
+            'Message' => 'OK'
+        ];
+
+        try
+        {
+            $input = Request::getInstance()->getData();
+
+            $filteredData = $input;    // 這裡需要資料驗證
+
+            $output['Data'] = BookHandler::getInstance()->edit($bookId, $filteredData);
+        }
+        catch (Throwable $ex)
+        {
+            $httpStatusCode = 500;
+
+            $exType    = get_class($ex);
+            $exCode    = $output['Code']    = $ex->getCode();
+            $exMessage = $output['Message'] = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} {$exType}({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
         }
 
         Response::getInstance()->setCode($httpStatusCode)->output(JsonUnescaped($output));

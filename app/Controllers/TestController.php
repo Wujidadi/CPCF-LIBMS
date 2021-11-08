@@ -29,7 +29,10 @@ class TestController
      */
     public function main()
     {
-        $result = SumWord('kubernetes.117');
+        $result = [
+            'Text' => $text = 'PDO',
+            'Sum'  => SumWord($text)
+        ];
 
         Response::getInstance()->setCode(200)->output(JsonUnescaped($result));
     }

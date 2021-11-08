@@ -2,6 +2,9 @@
 
 namespace App;
 
+/**
+ * 自訂常數類別
+ */
 class Constant
 {
     /**

@@ -6,6 +6,7 @@ use PDO;
 use Exception;
 use PDOException;
 use Libraries\Logger;
+use App\ExceptionCode;
 use App\Model;
 
 /**
@@ -26,32 +27,34 @@ class BookModel extends Model
      * @var array
      */
     protected $_columns = [
-        'No'              => [ 'required' => true  ],
-        'Name'            => [ 'required' => true  ],
-        "OriginalName"    => [ 'required' => false ],
-        "Author"          => [ 'required' => false ],
-        "Illustrator"     => [ 'required' => false ],
-        "Editor"          => [ 'required' => false ],
-        "Translator"      => [ 'required' => false ],
-        "Series"          => [ 'required' => false ],
-        "Publisher"       => [ 'required' => false ],
-        "PublishDate"     => [ 'required' => false ],
-        "PublishDateType" => [ 'required' => false ],
-        "Edition"         => [ 'required' => false ],
-        "Print"           => [ 'required' => false ],
-        "StorageDate"     => [ 'required' => false ],
-        "StorageType"     => [ 'required' => false ],
-        "Deleted"         => [ 'required' => true  ],
-        "DeleteDate"      => [ 'required' => false ],
-        "DeleteType"      => [ 'required' => false ],
-        "Notes"           => [ 'required' => false ],
-        "ISN"             => [ 'required' => false ],
-        "EAN"             => [ 'required' => false ],
-        "Barcode1"        => [ 'required' => false ],
-        "Barcode2"        => [ 'required' => false ],
-        "Barcode3"        => [ 'required' => false ],
-        "CategoryId"      => [ 'required' => false ],
-        "LocationId"      => [ 'required' => false ]
+        'No'              => [ 'required' => true,  'editable' => false ],
+        'Name'            => [ 'required' => true,  'editable' => true  ],
+        'OriginalName'    => [ 'required' => false, 'editable' => true  ],
+        'Author'          => [ 'required' => false, 'editable' => true  ],
+        'Illustrator'     => [ 'required' => false, 'editable' => true  ],
+        'Editor'          => [ 'required' => false, 'editable' => true  ],
+        'Translator'      => [ 'required' => false, 'editable' => true  ],
+        'Series'          => [ 'required' => false, 'editable' => true  ],
+        'Publisher'       => [ 'required' => false, 'editable' => true  ],
+        'PublishDate'     => [ 'required' => false, 'editable' => true  ],
+        'PublishDateType' => [ 'required' => false, 'editable' => true  ],
+        'Edition'         => [ 'required' => false, 'editable' => true  ],
+        'Print'           => [ 'required' => false, 'editable' => true  ],
+        'StorageDate'     => [ 'required' => false, 'editable' => true  ],
+        'StorageType'     => [ 'required' => false, 'editable' => true  ],
+        'Deleted'         => [ 'required' => true,  'editable' => true  ],
+        'DeleteDate'      => [ 'required' => false, 'editable' => true  ],
+        'DeleteType'      => [ 'required' => false, 'editable' => true  ],
+        'Notes'           => [ 'required' => false, 'editable' => true  ],
+        'ISN'             => [ 'required' => false, 'editable' => true  ],
+        'EAN'             => [ 'required' => false, 'editable' => true  ],
+        'Barcode1'        => [ 'required' => false, 'editable' => true  ],
+        'Barcode2'        => [ 'required' => false, 'editable' => true  ],
+        'Barcode3'        => [ 'required' => false, 'editable' => true  ],
+        'CategoryId'      => [ 'required' => false, 'editable' => true  ],
+        'LocationId'      => [ 'required' => false, 'editable' => true  ],
+        'CreatedAt'       => [ 'required' => false, 'editable' => true  ],
+        'UpdatedAt'       => [ 'required' => false, 'editable' => true  ]
     ];
 
     protected $_className;
@@ -84,15 +87,26 @@ class BookModel extends Model
         $field = [];
         $bind  = [];
 
+        $createdAt = MsTime();
+
         try
         {
+            if (!isset($data['CreatedAt']))
+            {
+                $data['CreatedAt'] = $createdAt;
+            }
+            if (!isset($data['UpdatedAt']))
+            {
+                $data['UpdatedAt'] = $createdAt;
+            }
+
             foreach (array_keys($this->_columns) as $column)
             {
                 if ($this->_columns[$column]['required'])
                 {
                     if (!isset($params[$column]) || (trim($params[$column]) === '' && $params[$column] !== false))
                     {
-                        throw new Exception("Column \"{$column}\" is required but unfilled", SumWord('unfilled'));
+                        throw new Exception("Column \"{$column}\" is required but unfilled", ExceptionCode::Unfilled);
                     }
 
                     if ($column === 'Deleted')
@@ -130,10 +144,12 @@ class BookModel extends Model
             }
 
             $exCode = $ex->getCode();
-            $exMsg  = $ex->getMessage();
-            Logger::getInstance()->logError("{$this->_className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
+            $exMessage = $ex->getMessage();
 
-            throw new Exception($exMsg, SumWord('PDO'));
+            $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+
+            throw new Exception($exMessage, ExceptionCode::PDO);
         }
 
         return $result;
@@ -248,10 +264,95 @@ class BookModel extends Model
             }
 
             $exCode = $ex->getCode();
-            $exMsg  = $ex->getMessage();
-            Logger::getInstance()->logError("{$this->_className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
+            $exMessage = $ex->getMessage();
 
-            throw new Exception($exMsg, SumWord('PDO'));
+            $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+
+            throw new Exception($exMessage, ExceptionCode::PDO);
         }
+    }
+
+    public function edit(int $bookId, array $data): int
+    {
+        $functionName = __FUNCTION__;
+
+        $field = [];
+        $bind  = [];
+
+        $updatedAt = MsTime();
+
+        try
+        {
+            foreach (array_keys($this->_columns) as $column)
+            {
+                if (isset($data[$column]))
+                {
+                    if ($this->_columns[$column]['editable'])
+                    {
+                        if ($column === 'Deleted')
+                        {
+                            $bind[$column] = [ $data[$column], PDO::PARAM_BOOL ];
+                        }
+                        else
+                        {
+                            $bind[$column] = $data[$column];
+                        }
+
+                        $field[] = "\"{$column}\" = :{$column}";
+                    }
+                    else
+                    {
+                        $logMessage = "{$this->_className}::{$functionName} Warning: Given field {$column} is not editable";
+                        Logger::getInstance()->logWarning($logMessage);
+                    }
+                }
+            }
+
+            if (count($field) > 0)
+            {
+                if (!isset($bind['UpdatedAt']))
+                {
+                    $bind['UpdatedAt'] = $updatedAt;
+                    $field[] = '"UpdatedAt" = :UpdatedAt';
+                }
+
+                $field = implode(', ', $field);
+                $bind['Id'] = $bookId;
+                $sql = "UPDATE public.\"{$this->_tableName}\" SET {$field} WHERE \"Id\" = :Id";
+
+                $result = $this->_db->query($sql, $bind);
+
+                $jsonBind = JsonUnescaped($bind);
+                $logMessage = "{$this->_className}::{$functionName} Success\nSQL: {$sql}\nBind: {$jsonBind}";
+                Logger::getInstance()->logInfo($logMessage);
+            }
+            else
+            {
+                $exMessage = 'No editable data given';
+
+                $logMessage = "{$this->_className}::{$functionName} Error: {$exMessage}";
+                Logger::getInstance()->logError($logMessage);
+
+                throw new Exception($exMessage, ExceptionCode::BookData);
+            }
+        }
+        catch (PDOException $ex)
+        {
+            if ($this->_db->inTransaction())
+            {
+                $this->_db->rollBack();
+            }
+
+            $exCode = $ex->getCode();
+            $exMessage = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+
+            throw new Exception($exMessage, ExceptionCode::PDO);
+        }
+
+        return $result;
     }
 }
