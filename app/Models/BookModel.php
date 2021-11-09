@@ -273,6 +273,13 @@ class BookModel extends Model
         }
     }
 
+    /**
+     * 編輯書籍資料
+     *
+     * @param  integer  $bookId  書籍 ID
+     * @param  array    $data    待更新的書籍資料
+     * @return integer
+     */
     public function edit(int $bookId, array $data): int
     {
         $functionName = __FUNCTION__;
@@ -322,10 +329,6 @@ class BookModel extends Model
                 $sql = "UPDATE public.\"{$this->_tableName}\" SET {$field} WHERE \"Id\" = :Id";
 
                 $result = $this->_db->query($sql, $bind);
-
-                $jsonBind = JsonUnescaped($bind);
-                $logMessage = "{$this->_className}::{$functionName} Success\nSQL: {$sql}\nBind: {$jsonBind}";
-                Logger::getInstance()->logInfo($logMessage);
             }
             else
             {
@@ -336,6 +339,54 @@ class BookModel extends Model
 
                 throw new Exception($exMessage, ExceptionCode::BookData);
             }
+        }
+        catch (PDOException $ex)
+        {
+            if ($this->_db->inTransaction())
+            {
+                $this->_db->rollBack();
+            }
+
+            $exCode = $ex->getCode();
+            $exMessage = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+
+            throw new Exception($exMessage, ExceptionCode::PDO);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 刪除書籍資料（軟刪除）
+     *
+     * @param  integer       $bookId      書籍 ID
+     * @param  integer|null  $deleteType  刪除原因類別 ID
+     * @return integer
+     */
+    public function delete(int $bookId, ?int $deleteType = null): int
+    {
+        $functionName = __FUNCTION__;
+
+        try
+        {
+            $sql = <<<SQL
+            UPDATE public."{$this->_tableName}" SET
+                "Deleted" = true,
+                "DeleteDate" = :deleteDate,
+                "DeleteType" = :deleteType
+            WHERE "Id" = :bookId
+            SQL;
+
+            $bind = [
+                'bookId' => $bookId,
+                'deleteDate' => date('Y-m-d'),
+                'deleteType' => !is_null($deleteType) ? [ $deleteType , PDO::PARAM_INT ] : [ null, PDO::PARAM_NULL ]
+            ];
+
+            $result = $this->_db->query($sql, $bind);
         }
         catch (PDOException $ex)
         {

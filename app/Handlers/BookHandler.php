@@ -87,6 +87,7 @@ class BookHandler
     {
         $functionName = __FUNCTION__;
 
+        # 註釋掉的程式碼，應於輸入驗證完成後刪除，現暫留作參考
         // if (in_array($field, $this->_allowedQueryField))
         // {
             if (in_array($field, [ 'ISN', 'EAN' ]))
@@ -112,6 +113,13 @@ class BookHandler
         // }
     }
 
+    /**
+     * 編輯書籍資料
+     *
+     * @param  integer  $bookId  書籍 ID
+     * @param  array    $data    待更新的書籍資料
+     * @return integer
+     */
     public function edit(int $bookId, array $data): int
     {
         $functionName = __FUNCTION__;
@@ -140,5 +148,19 @@ class BookHandler
 
             throw new Exception($errorMessage, ExceptionCode::BookData);
         }
+    }
+
+    /**
+     * 刪除書籍資料（軟刪除）
+     *
+     * @param  integer       $bookId      書籍 ID
+     * @param  integer|null  $deleteType  刪除原因類別 ID
+     * @return integer
+     */
+    public function delete(int $bookId, ?int $deleteType = null): int
+    {
+        $functionName = __FUNCTION__;
+
+        return BookModel::getInstance()->delete($bookId, $deleteType);
     }
 }
