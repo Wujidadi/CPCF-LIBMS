@@ -8,6 +8,8 @@ use Libraries\HTTP\Response;
 use Libraries\Logger;
 use App\Constant;
 use App\Handlers\BookHandler;
+use App\Validators\InputCheckers\BookInputChecker;
+use App\Validators\InputException;
 
 /**
  * 書籍資料控制器
@@ -49,11 +51,26 @@ class BookController
         {
             $input = Request::getInstance()->getData();
 
-            $filteredData = $input;    // 這裡需要資料驗證
+            BookInputChecker::getInstance()->verifyAdd($input);
+            $filteredData = BookInputChecker::getInstance()->getFilteredData();
 
             $result = BookHandler::getInstance()->add($filteredData);
 
             $output['Data'] = $result;
+        }
+        catch (InputException $ex)
+        {
+            $httpStatusCode = 400;
+
+            $exCode    = $output['Code']    = $ex->getCode();
+            $exMessage = $output['Message'] = $ex->getMessage();
+            $output['Data'] = [
+                'ErrorField' => BookInputChecker::getInstance()->getErrorFields()
+            ];
+
+            $jsonData = JsonUnescaped($output['Data']);
+            $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
+            Logger::getInstance()->logError($logMessage);
         }
         catch (Throwable $ex)
         {
@@ -74,10 +91,10 @@ class BookController
      * 指定欄位及關鍵字查詢書籍資料
      *
      * @param  string          $field  欄位
-     * @param  string|integer  $param  關鍵字
+     * @param  string|integer  $value  關鍵字
      * @return void
      */
-    public function getBooks(string $field, mixed $param): void
+    public function getBooks(string $field, mixed $value): void
     {
         $functionName = __FUNCTION__;
 
@@ -91,7 +108,12 @@ class BookController
 
         try
         {
-            // 這裡需要資料驗證
+            $input = [ 'Field' => $field, 'Value' => $value ];
+
+            BookInputChecker::getInstance()->verifyGet($input);
+            $filteredData = BookInputChecker::getInstance()->getFilteredData();
+            $field = $filteredData['Field'];
+            $value = $filteredData['Value'];
 
             if (isset($_GET['d']) && $_GET['d'] == '1')
             {
@@ -102,7 +124,21 @@ class BookController
             $limit = (isset($_GET['c']) && is_numeric($_GET['c']) && $_GET['c'] <= Constant::MaxDataCountPerPage) ? (int) $_GET['c'] : Constant::DefaultPageLimit;
             $offset = ($page - 1) * $limit;
 
-            $output['Data'] = BookHandler::getInstance()->get($field, $param, $limit, $offset, $includeDeleted);
+            $output['Data'] = BookHandler::getInstance()->get($field, $value, $limit, $offset, $includeDeleted);
+        }
+        catch (InputException $ex)
+        {
+            $httpStatusCode = 400;
+
+            $exCode    = $output['Code']    = $ex->getCode();
+            $exMessage = $output['Message'] = $ex->getMessage();
+            $output['Data'] = [
+                'ErrorField' => BookInputChecker::getInstance()->getErrorFields()
+            ];
+
+            $jsonData = JsonUnescaped($output['Data']);
+            $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
+            Logger::getInstance()->logError($logMessage);
         }
         catch (Throwable $ex)
         {
@@ -133,9 +169,24 @@ class BookController
         {
             $input = Request::getInstance()->getData();
 
-            $filteredData = $input;    // 這裡需要資料驗證
+            BookInputChecker::getInstance()->verifyEdit($input);
+            $filteredData = BookInputChecker::getInstance()->getFilteredData();
 
             $output['Data'] = BookHandler::getInstance()->edit($bookId, $filteredData);
+        }
+        catch (InputException $ex)
+        {
+            $httpStatusCode = 400;
+
+            $exCode    = $output['Code']    = $ex->getCode();
+            $exMessage = $output['Message'] = $ex->getMessage();
+            $output['Data'] = [
+                'ErrorField' => BookInputChecker::getInstance()->getErrorFields()
+            ];
+
+            $jsonData = JsonUnescaped($output['Data']);
+            $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
+            Logger::getInstance()->logError($logMessage);
         }
         catch (Throwable $ex)
         {
@@ -171,11 +222,28 @@ class BookController
         try
         {
             $input = Request::getInstance()->getData();
+            $input['Id'] = $bookId;
 
-            $filteredData = $input;    // 這裡需要資料驗證
-            $deleteType = $filteredData['DeleteType'];
+            BookInputChecker::getInstance()->verifyDelete($input);
+            $filteredData = BookInputChecker::getInstance()->getFilteredData();
+            $bookId = $filteredData['Id'];
+            $deleteType = $filteredData['DeleteType'] ?? null;
 
             $output['Data'] = BookHandler::getInstance()->delete($bookId, $deleteType);
+        }
+        catch (InputException $ex)
+        {
+            $httpStatusCode = 400;
+
+            $exCode    = $output['Code']    = $ex->getCode();
+            $exMessage = $output['Message'] = $ex->getMessage();
+            $output['Data'] = [
+                'ErrorField' => BookInputChecker::getInstance()->getErrorFields()
+            ];
+
+            $jsonData = JsonUnescaped($output['Data']);
+            $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
+            Logger::getInstance()->logError($logMessage);
         }
         catch (Throwable $ex)
         {

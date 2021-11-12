@@ -30,7 +30,7 @@ class TestController
     public function main()
     {
         $result = [
-            'Text' => $text = 'PDO',
+            'Text' => $text = 'Input',
             'Sum'  => SumWord($text)
         ];
 

@@ -10,9 +10,9 @@ $Route->map('POST', '/api/book', function()
 });
 
 # 查詢書籍資料
-$Route->map('GET', '/api/books/{field}/{value}', function($field, $param)
+$Route->map('GET', '/api/books/{field}/{value}', function($field, $value)
 {
-    BookController::getInstance()->getBooks($field, $param);
+    BookController::getInstance()->getBooks($field, $value);
 });
 
 # 修改書籍資料

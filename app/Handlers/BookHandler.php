@@ -13,20 +13,6 @@ use App\Models\BookModel;
 class BookHandler
 {
     /**
-     * 可用於查詢書籍資料的欄位名稱（應以輸入驗證取代）
-     *
-     * @var string[]
-     */
-    protected $_allowedQueryField = [
-        'No',
-        'Name', 'OriginalName',
-        'Author', 'Illustrator', 'Editor', 'Translator', 'Maker',
-        'Series',
-        'Publisher',
-        'ISN', 'EAN'
-    ];
-
-    /**
      * 書籍資料中可修改的欄位名稱（應以輸入驗證取代）
      *
      * @var string[]
@@ -87,30 +73,24 @@ class BookHandler
     {
         $functionName = __FUNCTION__;
 
-        # 註釋掉的程式碼，應於輸入驗證完成後刪除，現暫留作參考
-        // if (in_array($field, $this->_allowedQueryField))
-        // {
-            if (in_array($field, [ 'ISN', 'EAN' ]))
-            {
-                $param = str_replace('-', '', $param);
-            }
+        if (in_array($field, [ 'ISN', 'EAN' ]))
+        {
+            $param = str_replace('-', '', $param);
+        }
 
-            $result = BookModel::getInstance()->get($field, $param, $limit, $offset, $includeDeleted);
+        $result = BookModel::getInstance()->get($field, $param, $limit, $offset, $includeDeleted);
 
-            return [
-                'Total' => count($result),
-                'List'  => $result
-            ];
-        // }
-        // else
-        // {
-        //     $errorMessage = "Given field ({$field}) is not allowed";
+        # 移除時區標記
+        $bookList = array_map(function($row) {
+            $row['CreatedAt'] = preg_replace(TimeZoneSuffix, '', $row['CreatedAt']);
+            $row['UpdatedAt'] = preg_replace(TimeZoneSuffix, '', $row['UpdatedAt']);
+            return $row;
+        }, $result);
 
-        //     $logMessage = "{$this->_className}::{$functionName} Error: {$errorMessage}";
-        //     Logger::getInstance()->logError($logMessage);
-
-        //     throw new Exception($errorMessage, ExceptionCode::BookData);
-        // }
+        return [
+            'Total' => count($result),
+            'List'  => $bookList
+        ];
     }
 
     /**

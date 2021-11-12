@@ -8,6 +8,13 @@ namespace App;
 class ExceptionCode
 {
     /**
+     * `PDO` 的字母值（`SumWord('PDO')`）
+     *
+     * @var integer
+     */
+    const PDO = 35;
+
+    /**
      * `BookData` 的字母值（`SumWord('BookData')`）
      *
      * @var integer
@@ -15,11 +22,11 @@ class ExceptionCode
     const BookData = 69;
 
     /**
-     * `PDO` 的字母值（`SumWord('PDO')`）
+     * `Input` 的字母值（`SumWord('Input')`）
      *
      * @var integer
      */
-    const PDO = 35;
+    const Input = 80;
 
     /**
      * `Unfilled` 的字母值（`SumWord('unfilled')`）

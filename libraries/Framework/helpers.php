@@ -19,6 +19,7 @@
 |   - function  CheckYmdHis
 |   - function  SecondsToEnglishString
 |   - function  ChineseWeekDate
+|   - const     TimeZoneSuffix
 |
 | + Conversions between Excel column name and number (Base 26 in another way)
 |   - function  ExcelColumnToNumber
@@ -359,6 +360,16 @@ if (!function_exists('ChineseWeekDate'))
 
         return [ $Day, $ChineseWeekDay ];
     }
+}
+
+if (!defined('TimeZoneSuffix'))
+{
+    /**
+     * Regular expression of the time zone suffix behind a datetime or timestamp (`+hh:mm:ss|-hh:mm:ss`).
+     *
+     * @var string
+     */
+    define('TimeZoneSuffix', '/[\+\-](?:[01]\d|2[0-4])(?:(?::[0-5]\d)?:[0-5]\d)?$/');
 }
 
 if (!function_exists('ExcelColumnToNumber'))
