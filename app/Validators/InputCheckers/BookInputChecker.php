@@ -467,7 +467,7 @@ class BookInputChecker extends InputChecker
     protected function _checkPublishDate(): void
     {
         $field = 'PublishDate';
-        $regex = '/^\d{4}-\d{2}-\d{2}$/';
+        $regex = '/^\d{4}[\-\/]\d{2}[\-\/]\d{2}$/';
         $dateFormat = 'Y-m-d';
 
         if (isset($this->_rawInput[$field]) && $this->_rawInput[$field] !== '')
@@ -563,7 +563,7 @@ class BookInputChecker extends InputChecker
     protected function _checkStorageDate(): void
     {
         $field = 'StorageDate';
-        $regex = '/^\d{4}-\d{2}-\d{2}$/';
+        $regex = '/^\d{4}[\-\/]\d{2}[\-\/]\d{2}$/';
         $dateFormat = 'Y-m-d';
 
         if (isset($this->_rawInput[$field]) && $this->_rawInput[$field] !== '')
