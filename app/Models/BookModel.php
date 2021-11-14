@@ -156,7 +156,7 @@ class BookModel extends Model
     }
 
     /**
-     * 依指定的欄位和值，查詢複數的書籍資料
+     * 依指定的欄位和值，查詢複數資料
      *
      * @param  string          $field           欄位名稱
      * @param  string|integer  $value           關鍵字
@@ -274,7 +274,7 @@ class BookModel extends Model
     }
 
     /**
-     * 更新單筆書籍資料
+     * 更新單筆資料
      *
      * @param  integer  $bookId  書籍 ID
      * @param  array    $data    待更新的書籍資料
@@ -360,7 +360,7 @@ class BookModel extends Model
     }
 
     /**
-     * 軟刪除單筆書籍資料
+     * 軟刪除單筆資料
      *
      * @param  integer       $bookId      書籍 ID
      * @param  integer|null  $deleteType  刪除原因類別 ID

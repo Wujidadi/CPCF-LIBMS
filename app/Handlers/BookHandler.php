@@ -53,7 +53,7 @@ class BookHandler
      * @param  string|integer  $param           關鍵字
      * @param  integer         $limit           查詢資料限制筆數
      * @param  integer         $offset          查詢資料偏移量
-     * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
+     * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍
      * @return array
      */
     public function getBooks(string $field, mixed $param, int $limit, int $offset, bool $includeDeleted): array
