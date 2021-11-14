@@ -70,7 +70,7 @@ class Members extends Migration
                 "Birthday"    date                                                       NULL,
                 "Address"     character varying(512)   COLLATE pg_catalog."C.UTF-8"      NULL,
                 "Tel"         character varying(20)    COLLATE pg_catalog."C.UTF-8"      NULL,
-                "Mobile"      character varying(12)    COLLATE pg_catalog."C.UTF-8"      NULL,
+                "Mobile"      character varying(20)    COLLATE pg_catalog."C.UTF-8"      NULL,
                 "JoinDate"    date                                                       NULL,
                 "Membership"  unsigned_tinyint                                       NOT NULL  DEFAULT 1,
                 "Disabled"    boolean                                                NOT NULL  DEFAULT FALSE,
