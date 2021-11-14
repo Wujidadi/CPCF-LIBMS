@@ -155,6 +155,12 @@ class BookController
         Response::getInstance()->setCode($httpStatusCode)->output(JsonUnescaped($output));
     }
 
+    /**
+     * 修改書籍資料
+     *
+     * @param  integer  $bookId  書籍 ID
+     * @return void
+     */
     public function editBook(int $bookId): void
     {
         $functionName = __FUNCTION__;
