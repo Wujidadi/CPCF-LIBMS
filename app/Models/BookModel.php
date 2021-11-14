@@ -80,7 +80,7 @@ class BookModel extends Model
      * @param  array  $params  待新增資料陣列
      * @return integer
      */
-    public function addOne(array $params): int
+    public function createOne(array $params): int
     {
         $functionName = __FUNCTION__;
 
@@ -156,7 +156,7 @@ class BookModel extends Model
     }
 
     /**
-     * 依指定的欄位和值查詢書籍資料
+     * 依指定的欄位和值，查詢複數的書籍資料
      *
      * @param  string          $field           欄位名稱
      * @param  string|integer  $value           關鍵字
@@ -165,7 +165,7 @@ class BookModel extends Model
      * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
      * @return array
      */
-    public function get(string $field, mixed $value, int $limit, int $offset, bool $includeDeleted = false): array
+    public function selectMultiple(string $field, mixed $value, int $limit, int $offset, bool $includeDeleted = false): array
     {
         $functionName = __FUNCTION__;
 
@@ -274,13 +274,13 @@ class BookModel extends Model
     }
 
     /**
-     * 編輯書籍資料
+     * 更新單筆書籍資料
      *
      * @param  integer  $bookId  書籍 ID
      * @param  array    $data    待更新的書籍資料
      * @return integer
      */
-    public function edit(int $bookId, array $data): int
+    public function updateOne(int $bookId, array $data): int
     {
         $functionName = __FUNCTION__;
 
@@ -360,13 +360,13 @@ class BookModel extends Model
     }
 
     /**
-     * 刪除書籍資料（軟刪除）
+     * 軟刪除單筆書籍資料
      *
      * @param  integer       $bookId      書籍 ID
      * @param  integer|null  $deleteType  刪除原因類別 ID
      * @return integer
      */
-    public function delete(int $bookId, ?int $deleteType = null): int
+    public function softDeleteOne(int $bookId, ?int $deleteType = null): int
     {
         $functionName = __FUNCTION__;
 

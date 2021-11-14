@@ -54,7 +54,7 @@ class BookController
             BookInputChecker::getInstance()->verifyAdd($input);
             $filteredData = BookInputChecker::getInstance()->getFilteredData();
 
-            $result = BookHandler::getInstance()->add($filteredData);
+            $result = BookHandler::getInstance()->addBook($filteredData);
 
             $output['Data'] = $result;
         }
@@ -124,7 +124,7 @@ class BookController
             $limit = (isset($_GET['c']) && is_numeric($_GET['c']) && $_GET['c'] <= Constant::MaxDataCountPerPage) ? (int) $_GET['c'] : Constant::DefaultPageLimit;
             $offset = ($page - 1) * $limit;
 
-            $output['Data'] = BookHandler::getInstance()->get($field, $value, $limit, $offset, $includeDeleted);
+            $output['Data'] = BookHandler::getInstance()->getBooks($field, $value, $limit, $offset, $includeDeleted);
         }
         catch (InputException $ex)
         {
@@ -172,7 +172,7 @@ class BookController
             BookInputChecker::getInstance()->verifyEdit($input);
             $filteredData = BookInputChecker::getInstance()->getFilteredData();
 
-            $output['Data'] = BookHandler::getInstance()->edit($bookId, $filteredData);
+            $output['Data'] = BookHandler::getInstance()->editBook($bookId, $filteredData);
         }
         catch (InputException $ex)
         {
@@ -229,7 +229,7 @@ class BookController
             $bookId = $filteredData['Id'];
             $deleteType = $filteredData['DeleteType'] ?? null;
 
-            $output['Data'] = BookHandler::getInstance()->delete($bookId, $deleteType);
+            $output['Data'] = BookHandler::getInstance()->deleteBook($bookId, $deleteType);
         }
         catch (InputException $ex)
         {

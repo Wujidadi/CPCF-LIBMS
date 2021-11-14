@@ -12,19 +12,6 @@ use App\Models\BookModel;
  */
 class BookHandler
 {
-    /**
-     * 書籍資料中可修改的欄位名稱（應以輸入驗證取代）
-     *
-     * @var string[]
-     */
-    protected $_allowedEditField = [
-        'Name', 'OriginalName',
-        'Author', 'Illustrator', 'Editor', 'Translator',
-        'Series',
-        'Publisher',
-        'ISN', 'EAN'
-    ];
-
     protected $_className;
 
     protected static $_uniqueInstance = null;
@@ -47,7 +34,7 @@ class BookHandler
      * @param  array   $data  待新增書籍資料
      * @return integer
      */
-    public function add(array $data): int
+    public function addBook(array $data): int
     {
         $functionName = __FUNCTION__;
 
@@ -56,11 +43,11 @@ class BookHandler
             $data['Deleted'] = false;
         }
 
-        return BookModel::getInstance()->addOne($data);
+        return BookModel::getInstance()->createOne($data);
     }
 
     /**
-     * 指定欄位和值查詢書籍資料
+     * 指定欄位和值查詢複數書籍資料
      *
      * @param  string          $field           欄位名稱
      * @param  string|integer  $param           關鍵字
@@ -69,7 +56,7 @@ class BookHandler
      * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
      * @return array
      */
-    public function get(string $field, mixed $param, int $limit, int $offset, bool $includeDeleted): array
+    public function getBooks(string $field, mixed $param, int $limit, int $offset, bool $includeDeleted): array
     {
         $functionName = __FUNCTION__;
 
@@ -78,7 +65,7 @@ class BookHandler
             $param = str_replace('-', '', $param);
         }
 
-        $result = BookModel::getInstance()->get($field, $param, $limit, $offset, $includeDeleted);
+        $result = BookModel::getInstance()->selectMultiple($field, $param, $limit, $offset, $includeDeleted);
 
         # 移除時區標記
         $bookList = array_map(function($row) {
@@ -100,7 +87,7 @@ class BookHandler
      * @param  array    $data    待更新的書籍資料
      * @return integer
      */
-    public function edit(int $bookId, array $data): int
+    public function editBook(int $bookId, array $data): int
     {
         $functionName = __FUNCTION__;
 
@@ -117,7 +104,7 @@ class BookHandler
 
         if (count($updatedData) > 0)
         {
-            return BookModel::getInstance()->edit($bookId, $updatedData);
+            return BookModel::getInstance()->updateOne($bookId, $updatedData);
         }
         else
         {
@@ -137,10 +124,10 @@ class BookHandler
      * @param  integer|null  $deleteType  刪除原因類別 ID
      * @return integer
      */
-    public function delete(int $bookId, ?int $deleteType = null): int
+    public function deleteBook(int $bookId, ?int $deleteType = null): int
     {
         $functionName = __FUNCTION__;
 
-        return BookModel::getInstance()->delete($bookId, $deleteType);
+        return BookModel::getInstance()->softDeleteOne($bookId, $deleteType);
     }
 }
