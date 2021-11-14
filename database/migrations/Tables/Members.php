@@ -73,6 +73,7 @@ class Members extends Migration
                 "Mobile"      character varying(12)    COLLATE pg_catalog."C.UTF-8"      NULL,
                 "JoinDate"    date                                                       NULL,
                 "Membership"  unsigned_tinyint                                       NOT NULL  DEFAULT 1,
+                "Disabled"    boolean                                                NOT NULL  DEFAULT FALSE,
                 "Notes"       text                                                       NULL,
                 "CreatedAt"   timestamp(6) with time zone                            NOT NULL  DEFAULT CURRENT_TIMESTAMP,
                 "UpdatedAt"   timestamp(6) with time zone                            NOT NULL  DEFAULT CURRENT_TIMESTAMP,
@@ -103,6 +104,7 @@ class Members extends Migration
             "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Mobile\"          IS '手機號碼'",
             "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"JoinDate\"        IS '入會日期'",
             "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Membership\"      IS '會籍狀態 (0=無會籍/會籍取消, 1=會籍正常, 2=會籍保留)'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Disabled\"        IS '可用狀態'",
             "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Notes\"           IS '附註'",
             "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"CreatedAt\"       IS '資料創建時間'",
             "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"UpdatedAt\"       IS '資料最後更新時間'",
@@ -149,6 +151,13 @@ class Members extends Migration
             )
             SQL,
             "COMMENT ON INDEX public.\"{$this->_tableName}_Membership\" IS '會籍狀態索引（借閱者資料表）'",
+
+            <<<SQL
+            CREATE INDEX "{$this->_tableName}_Disabled" ON public."{$this->_tableName}" USING btree (
+                "Disabled"  ASC  NULLS LAST
+            )
+            SQL,
+            "COMMENT ON INDEX public.\"{$this->_tableName}_Disabled\" IS '可用狀態索引（借閱者資料表）'",
 
             <<<SQL
             CREATE INDEX "{$this->_tableName}_CreatedAt" ON public."{$this->_tableName}" USING btree (
