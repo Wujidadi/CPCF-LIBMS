@@ -13,3 +13,10 @@ define('REWRITE_INDEX', true);
  * @var boolean
  */
 define('REWRITE_PHP_EXT', true);
+
+/**
+ * Whether is it under the development environment.
+ *
+ * @var boolean
+ */
+define('IS_DEV', true);

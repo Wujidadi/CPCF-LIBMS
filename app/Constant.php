@@ -41,4 +41,11 @@ class Constant
      * @var integer
      */
     const DefaultPageLimit = 10;
+
+    /**
+     * 查詢借閱紀錄的時間起訖最大間距秒數（180 天）
+     *
+     * @var integer
+     */
+    const MaxRecordsDateRange = 15552000;
 }

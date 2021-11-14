@@ -131,18 +131,7 @@ class Circulation extends Migration
                 "ReturnedAt"  ASC  NULLS LAST
             )
             SQL,
-            "COMMENT ON INDEX public.\"{$this->_tableName}_ReturnedAt\" IS '歸還時間索引（書籍流通紀錄資料表）'",
-
-            /*
-            |--------------------------------------------------
-            | 觸發器
-            |--------------------------------------------------
-            */
-
-            <<<SQL
-            CREATE TRIGGER auto_update_time BEFORE UPDATE ON public."{$this->_tableName}"
-                FOR EACH ROW EXECUTE FUNCTION public.update_timestamp();
-            SQL
+            "COMMENT ON INDEX public.\"{$this->_tableName}_ReturnedAt\" IS '歸還時間索引（書籍流通紀錄資料表）'"
 
         ];
 

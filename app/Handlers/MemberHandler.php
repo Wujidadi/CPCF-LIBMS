@@ -48,7 +48,7 @@ class MemberHandler
             $data['Disabled'] = false;
         }
 
-        return MemberModel::getInstance()->createOne($data);
+        return MemberModel::getInstance()->insertOne($data);
     }
 
     /**

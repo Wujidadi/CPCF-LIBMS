@@ -80,7 +80,7 @@ class BookModel extends Model
      * @param  array  $params  待新增資料陣列
      * @return integer
      */
-    public function createOne(array $params): int
+    public function insertOne(array $params): int
     {
         $functionName = __FUNCTION__;
 
@@ -153,6 +153,28 @@ class BookModel extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * 依 ID 查詢資料筆數
+     *
+     * @param  integer  $id  ID（主鍵）
+     * @return integer
+     */
+    public function countById(int $id): int
+    {
+        $sql = <<<SQL
+        SELECT
+            COUNT("Id") AS "Count"
+        FROM public."{$this->_tableName}"
+        WHERE "Id" = :id
+        SQL;
+
+        $bind = [
+            'id' => $id
+        ];
+
+        return $this->_db->query($sql, $bind)[0]['Count'];
     }
 
     /**

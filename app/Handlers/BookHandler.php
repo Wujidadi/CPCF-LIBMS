@@ -43,7 +43,7 @@ class BookHandler
             $data['Deleted'] = false;
         }
 
-        return BookModel::getInstance()->createOne($data);
+        return BookModel::getInstance()->insertOne($data);
     }
 
     /**

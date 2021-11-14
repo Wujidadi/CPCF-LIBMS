@@ -426,7 +426,7 @@ class SourceFileHandler
                     BookModel::getInstance()->beginTransaction();
                 }
 
-                BookModel::getInstance()->createOne($arrParams);
+                BookModel::getInstance()->insertOne($arrParams);
                 $intInserted++;
 
                 $intGroupRow++;

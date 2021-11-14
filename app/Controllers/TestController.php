@@ -5,6 +5,8 @@ namespace App\Controllers;
 use PDO;
 use Libraries\HTTP\Response;
 use Libraries\DBAPI;
+use App\Models\BookModel;
+use App\Models\MemberModel;
 
 class TestController
 {
@@ -30,8 +32,9 @@ class TestController
     public function main()
     {
         $result = [
-            'Text' => $text = 'MemberData',
-            'Sum'  => SumWord($text)
+            'Text'  => $text = 'MemberNotExist',
+            'Sum'   => SumWord($text),
+            // 'Count' => MemberModel::getInstance()->countById(3)
         ];
 
         Response::getInstance()->setCode(200)->output(JsonUnescaped($result));

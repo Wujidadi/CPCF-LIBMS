@@ -5,7 +5,7 @@ namespace App\Validators\InputCheckers;
 use Libraries\Logger;
 use App\ExceptionCode;
 use App\Validators\InputChecker;
-use App\Validators\InputException;
+use App\Exceptions\InputException;
 
 /**
  * 書籍資料輸入驗證器

@@ -3,6 +3,16 @@
 use App\Controllers\TestController;
 use App\Controllers\BookController;
 use App\Controllers\MemberController;
+use App\Controllers\CirculationController;
+
+if (IS_DEV)
+{
+    # 測試
+    $Route->map('GET', '/apt/test', function()
+    {
+        TestController::getInstance()->main();
+    });
+}
 
 # 新增書籍資料
 $Route->map('POST', '/api/book', function()
@@ -58,8 +68,44 @@ $Route->map('PATCH', '/api/member/{memberId}/enable', function($memberId)
     MemberController::getInstance()->disableMember($memberId, false);
 });
 
-# 測試
-$Route->map('GET', '/apt/test', function()
+# 查詢書籍借閱紀錄
+$Route->map('GET', '/api/records/book/{bookId}', function($bookId)
 {
-    TestController::getInstance()->main();
+    CirculationController::getInstance()->getRecords($bookId);
+});
+
+# 查詢借閱者借閱紀錄
+$Route->map('GET', '/api/records/member/{memberId}', function($memberId)
+{
+    CirculationController::getInstance()->getRecords($memberId, true);
+});
+
+# 查詢書籍當前流通狀態
+$Route->map('GET', '/api/status/book/{bookId}', function($bookId)
+{
+    CirculationController::getInstance()->getBookStatus($bookId);
+});
+
+# 借書
+$Route->map('POST', '/api/borrow/book/{bookId}/{memberId}', function($bookId, $memberId)
+{
+    CirculationController::getInstance()->borrow($bookId, $memberId);
+});
+
+# 還書
+$Route->map('PATCH', '/api/return/book/{bookId}', function($bookId)
+{
+    CirculationController::getInstance()->return($bookId);
+});
+
+# 書籍借閱排行榜
+$Route->map('GET', '/api/rank/books', function($bookId)
+{
+    //
+});
+
+# 借閱者排行榜
+$Route->map('GET', '/api/rank/members', function($bookId)
+{
+    //
 });

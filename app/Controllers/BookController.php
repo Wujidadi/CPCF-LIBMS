@@ -9,7 +9,7 @@ use Libraries\Logger;
 use App\Constant;
 use App\Handlers\BookHandler;
 use App\Validators\InputCheckers\BookInputChecker;
-use App\Validators\InputException;
+use App\Exceptions\InputException;
 
 /**
  * 書籍資料控制器
@@ -158,10 +158,10 @@ class BookController
     /**
      * 修改書籍資料
      *
-     * @param  integer  $bookId  書籍 ID
+     * @param  integer|string  $bookId  書籍 ID
      * @return void
      */
-    public function editBook(int $bookId): void
+    public function editBook(mixed $bookId): void
     {
         $functionName = __FUNCTION__;
 
@@ -212,10 +212,10 @@ class BookController
     /**
      * 刪除指定 ID 的書籍資料（軟刪除）
      *
-     * @param  integer  $bookId  書籍 ID
+     * @param  integer|string  $bookId  書籍 ID
      * @return void
      */
-    public function deleteBook(int $bookId): void
+    public function deleteBook(mixed $bookId): void
     {
         $functionName = __FUNCTION__;
 
@@ -227,7 +227,6 @@ class BookController
 
         try
         {
-            $input = Request::getInstance()->getData();
             $input['Id'] = $bookId;
 
             BookInputChecker::getInstance()->verifyDelete($input);

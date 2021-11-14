@@ -9,7 +9,7 @@ use Libraries\Logger;
 use App\Constant;
 use App\Handlers\MemberHandler;
 use App\Validators\InputCheckers\MemberInputChecker;
-use App\Validators\InputException;
+use App\Exceptions\InputException;
 
 /**
  * 借閱者/會員資料控制器
@@ -158,10 +158,10 @@ class MemberController
     /**
      * 修改借閱者/會員資料
      *
-     * @param  integer  $memberId  借閱者/會員 ID
+     * @param  integer|string  $memberId  借閱者/會員 ID
      * @return void
      */
-    public function editMember(int $memberId): void
+    public function editMember(mixed $memberId): void
     {
         $functionName = __FUNCTION__;
 
@@ -212,11 +212,11 @@ class MemberController
     /**
      * 禁用或啟用指定 ID 的借閱者/會員資料
      *
-     * @param  integer  $memberId  借閱者/會員 ID
-     * @param  boolean  $action    禁用（`true`）或啟用（`false`）
+     * @param  integer|string  $memberId  借閱者/會員 ID
+     * @param  boolean         $action    禁用（`true`）或啟用（`false`）
      * @return void
      */
-    public function disableMember(int $memberId, bool $action = true): void
+    public function disableMember(mixed $memberId, bool $action = true): void
     {
         $functionName = __FUNCTION__;
 
@@ -228,7 +228,6 @@ class MemberController
 
         try
         {
-            $input = Request::getInstance()->getData();
             $input['Id'] = $memberId;
 
             MemberInputChecker::getInstance()->verifyDisable($input);
