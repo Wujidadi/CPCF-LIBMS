@@ -58,14 +58,14 @@ abstract class InputChecker
      *
      * @var array
      */
-    protected $_rawInput;
+    protected $_rawInput = [];
 
     /**
      * 經過驗證的輸入資料
      *
      * @var array
      */
-    protected $_filteredData;
+    protected $_filteredData = [];
 
     /**
      * 驗證錯誤資訊

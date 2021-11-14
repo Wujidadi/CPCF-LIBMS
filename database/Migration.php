@@ -28,7 +28,7 @@ abstract class Migration
 
     /**
      * Get the instance of this class.
-     * 
+     *
      * @return self
      */
     abstract public static function getInstance();

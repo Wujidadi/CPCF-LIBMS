@@ -73,7 +73,7 @@ if (!function_exists('IsSafe'))
 {
     /**
      * Check is the input value exist, not `null`, `false` or empty string.
-     * 
+     *
      * 0、character 0（`'0'`）, empty array or object will be `true`.
      *
      * Warning while `$value` is undefined (not able to replace `isset()` fully), can be suppressed using character `@`.
@@ -296,7 +296,7 @@ if (!function_exists('ChineseWeekDate'))
     /**
      * Convert given date as Chinese in the "Y 年 n 月 j 日" format with name of day of the week
      *
-     * @param  string|null   $Date    Time string can be parse by `strtotime()`. Default value is `null` and the current date will be substituted in 
+     * @param  string|null   $Date    Time string can be parse by `strtotime()`. Default value is `null` and the current date will be substituted in
      * @param  boolean       $Gap     Whether to place blanks between numbers and Chinese characters. Default value is `true`
      * @param  string        $Prefix  Prefix of name of day of the week. Default value is `x` (星期), other options: `z` (週)
      * @return string[]

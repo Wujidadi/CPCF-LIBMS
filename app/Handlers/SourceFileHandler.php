@@ -347,7 +347,7 @@ class SourceFileHandler
     /**
      * 將經 `retrimBookExcelFile` 及人工處理過的最終書籍原資料匯入資料庫
      *
-     * @param  string        $strFile    書單 Excel 檔名   
+     * @param  string        $strFile    書單 Excel 檔名
      * @param  integer|null  $intCount   匯入筆數：預設值為 `null` 即全部匯入
      * @param  integer       $intOffset  偏移量：從第幾筆開始匯入，預設為 `0` 即第 1 筆
      * @param  integer       $intGroup   分組：SQL insert 時每次執行的筆數，預設為 `200`
@@ -426,7 +426,7 @@ class SourceFileHandler
                     BookModel::getInstance()->beginTransaction();
                 }
 
-                BookModel::getInstance()->addOne($arrParams);
+                BookModel::getInstance()->createOne($arrParams);
                 $intInserted++;
 
                 $intGroupRow++;

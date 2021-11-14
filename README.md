@@ -16,7 +16,7 @@
 
 ### 2021 年 11 月 14 日
 * 增加 `InputChecker::_isNotAllowed` 方法。
-* 完成借閱者（會員）資料的輸入驗證。
+* 完成借閱者（會員）資料 API 及輸入驗證。
 
 ### 2021 年 11 月 12 日
 * 在 `Framework/helpers` 定義集中加入 `TimeZoneSuffix` 常數，並同步 Tarascanta Beta。

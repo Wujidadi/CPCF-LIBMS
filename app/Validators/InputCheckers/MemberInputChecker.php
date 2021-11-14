@@ -54,8 +54,8 @@ class MemberInputChecker extends InputChecker
         $illegal = (count($this->_errors['fields']) > 0) ? true : false;
         if ($illegal)
         {
-            $rawInput = json_encode($this->_rawInput);
-            $erroInfo = json_encode($this->_errors['info']);
+            $rawInput = JsonUnescaped($this->_rawInput);
+            $erroInfo = JsonUnescaped($this->_errors['info']);
             Logger::getInstance()->logInfo("{$this->_className}::{$functionName} Input: {$rawInput}");
             Logger::getInstance()->logWarning("{$this->_className}::{$functionName} Error: {$erroInfo}");
             throw new InputException('Input Error', ExceptionCode::Input);
@@ -79,8 +79,8 @@ class MemberInputChecker extends InputChecker
         $illegal = (count($this->_errors['fields']) > 0) ? true : false;
         if ($illegal)
         {
-            $rawInput = json_encode($this->_rawInput);
-            $erroInfo = json_encode($this->_errors['info']);
+            $rawInput = JsonUnescaped($this->_rawInput);
+            $erroInfo = JsonUnescaped($this->_errors['info']);
             Logger::getInstance()->logInfo("{$this->_className}::{$functionName} Input: {$rawInput}");
             Logger::getInstance()->logWarning("{$this->_className}::{$functionName} Error: {$erroInfo}");
             throw new InputException('Input Error', ExceptionCode::Input);
@@ -128,7 +128,8 @@ class MemberInputChecker extends InputChecker
 
         $this->_rawInput = $input;
 
-        $this->_checkName();
+        $this->_checkNo(true);
+        $this->_checkName(true);
         $this->_checkEmail();
         $this->_checkGender();
         $this->_checkBirthday();
@@ -141,16 +142,11 @@ class MemberInputChecker extends InputChecker
         $illegal = (count($this->_errors['fields']) > 0) ? true : false;
         if ($illegal)
         {
-            $rawInput = json_encode($this->_rawInput);
-            $erroInfo = json_encode($this->_errors['info']);
+            $rawInput = JsonUnescaped($this->_rawInput);
+            $erroInfo = JsonUnescaped($this->_errors['info']);
             Logger::getInstance()->logInfo("{$this->_className}::{$functionName} Input: {$rawInput}");
             Logger::getInstance()->logWarning("{$this->_className}::{$functionName} Error: {$erroInfo}");
             throw new InputException('Input Error', ExceptionCode::Input);
-        }
-        else
-        {
-            $field = $this->_rawInput['Field'];
-            $this->_filteredData['Value'] = $this->_filteredData[$field];
         }
     }
 
@@ -171,8 +167,8 @@ class MemberInputChecker extends InputChecker
         $illegal = (count($this->_errors['fields']) > 0) ? true : false;
         if ($illegal)
         {
-            $rawInput = json_encode($this->_rawInput);
-            $erroInfo = json_encode($this->_errors['info']);
+            $rawInput = JsonUnescaped($this->_rawInput);
+            $erroInfo = JsonUnescaped($this->_errors['info']);
             Logger::getInstance()->logInfo("{$this->_className}::{$functionName} Input: {$rawInput}");
             Logger::getInstance()->logWarning("{$this->_className}::{$functionName} Error: {$erroInfo}");
             throw new InputException('Input Error', ExceptionCode::Input);
@@ -205,48 +201,62 @@ class MemberInputChecker extends InputChecker
     /**
      * 檢查輸入的借閱者/會員編號
      *
+     * @param  boolean  $isEditing  是否編輯中
      * @return void
      */
-    protected function _checkNo(): void
+    protected function _checkNo(bool $isEditing = false): void
     {
         $field = 'No';
         $length = 10;
 
         if ($this->_isNull($field))
         {
-            $this->_pushError(['field' => $field, 'reason' => self::REQUIRED_BUT_NULL]);
-        }
-        else if ($this->_isInvalidLength($this->_rawInput[$field], $length))
-        {
-            $this->_pushError(['field' => $field, 'reason' => self::INVALID_LENGTH, 'input' => $this->_rawInput[$field]]);
+            if (!$isEditing)
+            {
+                $this->_pushError(['field' => $field, 'reason' => self::REQUIRED_BUT_NULL]);
+            }
         }
         else
         {
-            $this->_filteredData[$field] = $this->_rawInput[$field];
+            if ($this->_isInvalidLength($this->_rawInput[$field], $length))
+            {
+                $this->_pushError(['field' => $field, 'reason' => self::INVALID_LENGTH, 'input' => $this->_rawInput[$field]]);
+            }
+            else
+            {
+                $this->_filteredData[$field] = $this->_rawInput[$field];
+            }
         }
     }
 
     /**
      * 檢查輸入的借閱者/會員姓名
      *
+     * @param  boolean  $isEditing  是否編輯中
      * @return void
      */
-    protected function _checkName(): void
+    protected function _checkName(bool $isEditing = false): void
     {
         $field = 'Name';
         $length = 1000;
 
         if ($this->_isNull($field))
         {
-            $this->_pushError(['field' => $field, 'reason' => self::REQUIRED_BUT_NULL]);
-        }
-        else if ($this->_isInvalidLength($this->_rawInput[$field], $length, true))
-        {
-            $this->_pushError(['field' => $field, 'reason' => self::INVALID_LENGTH, 'input' => $this->_rawInput[$field]]);
+            if (!$isEditing)
+            {
+                $this->_pushError(['field' => $field, 'reason' => self::REQUIRED_BUT_NULL]);
+            }
         }
         else
         {
-            $this->_filteredData[$field] = $this->_rawInput[$field];
+            if ($this->_isInvalidLength($this->_rawInput[$field], $length, true))
+            {
+                $this->_pushError(['field' => $field, 'reason' => self::INVALID_LENGTH, 'input' => $this->_rawInput[$field]]);
+            }
+            else
+            {
+                $this->_filteredData[$field] = $this->_rawInput[$field];
+            }
         }
     }
 
@@ -280,7 +290,7 @@ class MemberInputChecker extends InputChecker
      */
     protected function _checkGender(): void
     {
-        $field = 'Email';
+        $field = 'Gendor';
         $allowedValue = [ 0, 1 ];
 
         if (isset($this->_rawInput[$field]) && $this->_rawInput[$field] !== '')
@@ -354,7 +364,7 @@ class MemberInputChecker extends InputChecker
      */
     protected function _checkTel(): void
     {
-        $field = 'Email';
+        $field = 'Tel';
         $regex = '/^[\d\-\+\(\),#]{3,20}$/';
 
         if (isset($this->_rawInput[$field]) && $this->_rawInput[$field] !== '')
@@ -400,7 +410,7 @@ class MemberInputChecker extends InputChecker
      */
     protected function _checkJoinDate(): void
     {
-        $field = 'Birthday';
+        $field = 'JoinDate';
         $regex = '/^\d{4}[\-\/]\d{2}[\-\/]\d{2}$/';
         $dateFormat = 'Y-m-d';
 
@@ -431,7 +441,10 @@ class MemberInputChecker extends InputChecker
     protected function _checkNotes(): void
     {
         $field = 'Notes';
-        
-        $this->_filteredData[$field] = $this->_rawInput[$field];
+
+        if (isset($this->_rawInput[$field]))
+        {
+            $this->_filteredData[$field] = $this->_rawInput[$field];
+        }
     }
 }

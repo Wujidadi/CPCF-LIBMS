@@ -30,7 +30,7 @@ class Curl
 
     /**
      * Get the instance of this class.
-     * 
+     *
      * @return self
      */
     public static function getInstance(): self

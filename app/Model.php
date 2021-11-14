@@ -32,7 +32,7 @@ abstract class Model
 
     /**
      * Get the instance of this class.
-     * 
+     *
      * @return self
      */
     abstract public static function getInstance();

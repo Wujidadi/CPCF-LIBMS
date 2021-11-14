@@ -39,7 +39,7 @@ class Logger
 
     /**
      * Get the instance of this class.
-     * 
+     *
      * @return self
      */
     public static function getInstance(): self
@@ -60,7 +60,7 @@ class Logger
 
     /**
      * Initialization method.
-     * 
+     *
      * @return void
      */
     private function _init(): void
