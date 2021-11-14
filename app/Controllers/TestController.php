@@ -30,7 +30,7 @@ class TestController
     public function main()
     {
         $result = [
-            'Text' => $text = 'Input',
+            'Text' => $text = 'MemberData',
             'Sum'  => SumWord($text)
         ];
 
