@@ -62,11 +62,11 @@ class Circulation extends Migration
             <<<SQL
             CREATE TABLE public."{$this->_tableName}"
             (
-                "Id"         smallserial                                           NOT NULL,
-                "Name"       character varying(100)  COLLATE pg_catalog."C.UTF-8"  NOT NULL,
-                "Alias"      character varying(100)  COLLATE pg_catalog."C.UTF-8"      NULL,
-                "CreatedAt"  timestamp(6) with time zone                           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-                "UpdatedAt"  timestamp(6) with time zone                           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+                "Id"          bigserial                    NOT NULL,
+                "BookId"      bigint                       NOT NULL,
+                "MemberId"    bigint                       NOT NULL,
+                "BorrowedAt"  timestamp(6) with time zone  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+                "ReturnedAt"  timestamp(6) with time zone      NULL,
 
                 CONSTRAINT "{$this->_tableName}_Id" UNIQUE ("Id"),
 
@@ -74,7 +74,7 @@ class Circulation extends Migration
             )
             TABLESPACE pg_default
             SQL,
-            "COMMENT ON TABLE public.\"{$this->_tableName}\" IS '書籍刪除類別資料表'",
+            "COMMENT ON TABLE public.\"{$this->_tableName}\" IS '書籍流通紀錄資料表'",
             "ALTER TABLE public.\"{$this->_tableName}\" OWNER to root",
 
             /*
@@ -83,11 +83,11 @@ class Circulation extends Migration
             |--------------------------------------------------
             */
 
-            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Id\"        IS '書籍刪除類別ID (流水號)'",
-            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Name\"      IS '書籍刪除類別名稱'",
-            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Alias\"     IS '書籍刪除類別別名'",
-            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"CreatedAt\" IS '資料創建時間'",
-            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"UpdatedAt\" IS '資料最後更新時間'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"Id\"         IS '書籍刪除類別ID (流水號)'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"BookId\"     IS '書籍ID'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"MemberId\"   IS '借閱者ID'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"BorrowedAt\" IS '借出時間'",
+            "COMMENT ON COLUMN public.\"{$this->_tableName}\".\"ReturnedAt\" IS '歸還時間'",
 
             /*
             |--------------------------------------------------
@@ -95,35 +95,43 @@ class Circulation extends Migration
             |--------------------------------------------------
             */
 
-            "COMMENT ON CONSTRAINT \"{$this->_tableName}_Id\" ON public.\"{$this->_tableName}\" IS '書籍刪除類別資料表主鍵'",
+            "COMMENT ON CONSTRAINT \"{$this->_tableName}_Id\" ON public.\"{$this->_tableName}\" IS '書籍流通紀錄資料表主鍵'",
 
             <<<SQL
-            CREATE UNIQUE INDEX "{$this->_tableName}_Name" ON public."{$this->_tableName}" USING btree (
-                "Name"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
+            CREATE INDEX "{$this->_tableName}_BookId" ON public."{$this->_tableName}" USING btree (
+                "BookId"  ASC  NULLS LAST
             )
             SQL,
-            "COMMENT ON INDEX public.\"{$this->_tableName}_Name\" IS '書籍刪除類別名稱索引（書籍刪除類別資料表）'",
+            "COMMENT ON INDEX public.\"{$this->_tableName}_BookId\" IS '書籍ID索引（書籍流通紀錄資料表）'",
 
             <<<SQL
-            CREATE INDEX "{$this->_tableName}_Alias" ON public."{$this->_tableName}" USING btree (
-                "Alias"  COLLATE pg_catalog."C.UTF-8"  ASC  NULLS LAST
+            CREATE INDEX "{$this->_tableName}_MemberId" ON public."{$this->_tableName}" USING btree (
+                "MemberId"  ASC  NULLS LAST
             )
             SQL,
-            "COMMENT ON INDEX public.\"{$this->_tableName}_Alias\" IS '書籍刪除類別別名索引（書籍刪除類別資料表）'",
+            "COMMENT ON INDEX public.\"{$this->_tableName}_MemberId\" IS '借閱者ID索引（書籍流通紀錄資料表）'",
 
             <<<SQL
-            CREATE INDEX "{$this->_tableName}_CreatedAt" ON public."{$this->_tableName}" USING btree (
-                "CreatedAt"  ASC  NULLS LAST
+            CREATE INDEX "{$this->_tableName}_History" ON public."{$this->_tableName}" USING btree (
+                "BookId"    ASC  NULLS LAST,
+                "MemberId"  ASC  NULLS LAST
             )
             SQL,
-            "COMMENT ON INDEX public.\"{$this->_tableName}_CreatedAt\" IS '資料創建時間索引（書籍刪除類別資料表）'",
+            "COMMENT ON INDEX public.\"{$this->_tableName}_History\" IS '借出歷史（書籍ID與借閱者ID組合）索引（書籍流通紀錄資料表）'",
 
             <<<SQL
-            CREATE INDEX "{$this->_tableName}_UpdatedAt" ON public."{$this->_tableName}" USING btree (
-                "UpdatedAt"  ASC  NULLS LAST
+            CREATE INDEX "{$this->_tableName}_BorrowedAt" ON public."{$this->_tableName}" USING btree (
+                "BorrowedAt"  ASC  NULLS LAST
             )
             SQL,
-            "COMMENT ON INDEX public.\"{$this->_tableName}_UpdatedAt\" IS '資料最後更新時間索引（書籍刪除類別資料表）'",
+            "COMMENT ON INDEX public.\"{$this->_tableName}_BorrowedAt\" IS '借出時間索引（書籍流通紀錄資料表）'",
+
+            <<<SQL
+            CREATE INDEX "{$this->_tableName}_ReturnedAt" ON public."{$this->_tableName}" USING btree (
+                "ReturnedAt"  ASC  NULLS LAST
+            )
+            SQL,
+            "COMMENT ON INDEX public.\"{$this->_tableName}_ReturnedAt\" IS '歸還時間索引（書籍流通紀錄資料表）'",
 
             /*
             |--------------------------------------------------
