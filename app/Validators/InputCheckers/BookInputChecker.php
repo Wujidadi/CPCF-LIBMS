@@ -121,7 +121,11 @@ class BookInputChecker extends InputChecker
             'ISN', 'EAN'
         ];
 
-        if (in_array($this->_rawInput['Field'], $allowedField))
+        if ($this->_isNotAllowed($this->_rawInput['Field'], $allowedField))
+        {
+            $this->_pushError(['field' => 'Field', 'reason' => self::NOT_ALLOWED]);
+        }
+        else
         {
             $field = $this->_filteredData['Field'] = $this->_rawInput['Field'];
             $this->_rawInput[$field] = $this->_rawInput['Value'];
@@ -129,10 +133,6 @@ class BookInputChecker extends InputChecker
             $checkMethod = "_check{$field}";
 
             $this->{$checkMethod}();
-        }
-        else
-        {
-            $this->_pushError(['field' => 'Field', 'reason' => self::NOT_ALLOWED]);
         }
     }
 

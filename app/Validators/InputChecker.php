@@ -96,6 +96,18 @@ abstract class InputChecker
     }
 
     /**
+     * 檢查輸入資料是否符合允許值
+     *
+     * @param  string|integer|double  $value         要檢驗的資料
+     * @param  array                  $allowedValue  允許值陣列
+     * @return boolean
+     */
+    protected function _isNotAllowed(mixed $value, array $allowedValue): bool
+    {
+        return (!in_array($value, $allowedValue)) ? true : false;
+    }
+
+    /**
      * 以正規表示法檢驗輸入的字串
      *
      * @param  string  $text     要檢驗的字串
