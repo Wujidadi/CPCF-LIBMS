@@ -1,6 +1,6 @@
 <?php
 
-use App\Controllers\HomeController;
+use App\Controllers\Web\HomeController;
 
 $Route->map('GET', '/', function()
 {

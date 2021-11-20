@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\API;
 
 use Throwable;
 use Libraries\HTTP\Request;
 use Libraries\HTTP\Response;
 use Libraries\Logger;
 use App\Constant;
-use App\Handlers\BookHandler;
-use App\Validators\InputCheckers\BookInputChecker;
+use App\Handlers\MemberHandler;
+use App\Validators\InputCheckers\MemberInputChecker;
 use App\Exceptions\InputException;
 
 /**
- * 書籍資料控制器
+ * 借閱者/會員資料控制器
  */
-class BookController
+class MemberController
 {
     protected $_className;
 
@@ -33,11 +33,11 @@ class BookController
     }
 
     /**
-     * 新增書籍資料
+     * 新增借閱者/會員資料
      *
      * @return void
      */
-    public function addBook(): void
+    public function addMember(): void
     {
         $functionName = __FUNCTION__;
 
@@ -51,10 +51,10 @@ class BookController
         {
             $input = Request::getInstance()->getData();
 
-            BookInputChecker::getInstance()->verifyAdd($input);
-            $filteredData = BookInputChecker::getInstance()->getFilteredData();
+            MemberInputChecker::getInstance()->verifyAdd($input);
+            $filteredData = MemberInputChecker::getInstance()->getFilteredData();
 
-            $result = BookHandler::getInstance()->addBook($filteredData);
+            $result = MemberHandler::getInstance()->addMember($filteredData);
 
             $output['Data'] = $result;
         }
@@ -65,7 +65,7 @@ class BookController
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
             $output['Data'] = [
-                'ErrorField' => BookInputChecker::getInstance()->getErrorFields()
+                'ErrorField' => MemberInputChecker::getInstance()->getErrorFields()
             ];
 
             $jsonData = JsonUnescaped($output['Data']);
@@ -88,13 +88,13 @@ class BookController
     }
 
     /**
-     * 指定欄位及關鍵字查詢書籍資料
+     * 指定欄位及關鍵字查詢借閱者/會員資料
      *
      * @param  string          $field  欄位
      * @param  string|integer  $value  關鍵字
      * @return void
      */
-    public function getBooks(string $field, mixed $value): void
+    public function getMembers(string $field, mixed $value): void
     {
         $functionName = __FUNCTION__;
 
@@ -104,27 +104,27 @@ class BookController
             'Message' => 'OK'
         ];
 
-        $includeDeleted = false;
+        $includeDisabled = false;
 
         try
         {
             $input = [ 'Field' => $field, 'Value' => $value ];
 
-            BookInputChecker::getInstance()->verifyGet($input);
-            $filteredData = BookInputChecker::getInstance()->getFilteredData();
+            MemberInputChecker::getInstance()->verifyGet($input);
+            $filteredData = MemberInputChecker::getInstance()->getFilteredData();
             $field = $filteredData['Field'];
             $value = $filteredData['Value'];
 
             if (isset($_GET['d']) && $_GET['d'] == '1')
             {
-                $includeDeleted = true;
+                $includeDisabled = true;
             }
 
             $page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int) $_GET['p'] : Constant::DefaultPageNumber;
             $limit = (isset($_GET['c']) && is_numeric($_GET['c']) && $_GET['c'] <= Constant::MaxDataCountPerPage) ? (int) $_GET['c'] : Constant::DefaultPageLimit;
             $offset = ($page - 1) * $limit;
 
-            $output['Data'] = BookHandler::getInstance()->getBooks($field, $value, $limit, $offset, $includeDeleted);
+            $output['Data'] = MemberHandler::getInstance()->getMembers($field, $value, $limit, $offset, $includeDisabled);
         }
         catch (InputException $ex)
         {
@@ -133,7 +133,7 @@ class BookController
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
             $output['Data'] = [
-                'ErrorField' => BookInputChecker::getInstance()->getErrorFields()
+                'ErrorField' => MemberInputChecker::getInstance()->getErrorFields()
             ];
 
             $jsonData = JsonUnescaped($output['Data']);
@@ -156,12 +156,12 @@ class BookController
     }
 
     /**
-     * 修改書籍資料
+     * 修改借閱者/會員資料
      *
-     * @param  integer|string  $bookId  書籍 ID
+     * @param  integer|string  $memberId  借閱者/會員 ID
      * @return void
      */
-    public function editBook(mixed $bookId): void
+    public function editMember(mixed $memberId): void
     {
         $functionName = __FUNCTION__;
 
@@ -175,10 +175,10 @@ class BookController
         {
             $input = Request::getInstance()->getData();
 
-            BookInputChecker::getInstance()->verifyEdit($input);
-            $filteredData = BookInputChecker::getInstance()->getFilteredData();
+            MemberInputChecker::getInstance()->verifyEdit($input);
+            $filteredData = MemberInputChecker::getInstance()->getFilteredData();
 
-            $output['Data'] = BookHandler::getInstance()->editBook($bookId, $filteredData);
+            $output['Data'] = MemberHandler::getInstance()->editMember($memberId, $filteredData);
         }
         catch (InputException $ex)
         {
@@ -187,7 +187,7 @@ class BookController
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
             $output['Data'] = [
-                'ErrorField' => BookInputChecker::getInstance()->getErrorFields()
+                'ErrorField' => MemberInputChecker::getInstance()->getErrorFields()
             ];
 
             $jsonData = JsonUnescaped($output['Data']);
@@ -210,12 +210,13 @@ class BookController
     }
 
     /**
-     * 刪除指定 ID 的書籍資料（軟刪除）
+     * 禁用或啟用指定 ID 的借閱者/會員資料
      *
-     * @param  integer|string  $bookId  書籍 ID
+     * @param  integer|string  $memberId  借閱者/會員 ID
+     * @param  boolean         $action    禁用（`true`）或啟用（`false`）
      * @return void
      */
-    public function deleteBook(mixed $bookId): void
+    public function disableMember(mixed $memberId, bool $action = true): void
     {
         $functionName = __FUNCTION__;
 
@@ -227,14 +228,13 @@ class BookController
 
         try
         {
-            $input['Id'] = $bookId;
+            $input['Id'] = $memberId;
 
-            BookInputChecker::getInstance()->verifyDelete($input);
-            $filteredData = BookInputChecker::getInstance()->getFilteredData();
-            $bookId = $filteredData['Id'];
-            $deleteType = $filteredData['DeleteType'] ?? null;
+            MemberInputChecker::getInstance()->verifyDisable($input);
+            $filteredData = MemberInputChecker::getInstance()->getFilteredData();
+            $memberId = $filteredData['Id'];
 
-            $output['Data'] = BookHandler::getInstance()->deleteBook($bookId, $deleteType);
+            $output['Data'] = MemberHandler::getInstance()->disableMember($memberId, $action);
         }
         catch (InputException $ex)
         {
@@ -243,7 +243,7 @@ class BookController
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
             $output['Data'] = [
-                'ErrorField' => BookInputChecker::getInstance()->getErrorFields()
+                'ErrorField' => MemberInputChecker::getInstance()->getErrorFields()
             ];
 
             $jsonData = JsonUnescaped($output['Data']);

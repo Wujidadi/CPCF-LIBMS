@@ -1,9 +1,9 @@
 <?php
 
 use App\Controllers\TestController;
-use App\Controllers\BookController;
-use App\Controllers\MemberController;
-use App\Controllers\CirculationController;
+use App\Controllers\API\BookController;
+use App\Controllers\API\MemberController;
+use App\Controllers\API\CirculationController;
 
 if (IS_DEV)
 {
