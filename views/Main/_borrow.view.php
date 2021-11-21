@@ -1,4 +1,4 @@
-<div class="container-fluid page-circulation-borrow">
+<div class="container-fluid page-circulation page-borrow">
     <div class="form">
         <div class="row form-column">
             <div class="col form-column formcol-label"><?= App\Constant::MemberCall ?>編號</div>
