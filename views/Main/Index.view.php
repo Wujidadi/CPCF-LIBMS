@@ -5,11 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $pageTitle ?? 'title' ?></title>
-    <link rel="stylesheet" href="/libraries/Bootstrap/bootstrap.min.css">
-    <script src="/libraries/Bootstrap/bootstrap.min.js"></script>
-    <script src="/libraries/Vue/vue.global.prod.js"></script>
-    <script src="/libraries/axios/axios.min.js"></script>
-    <script src="/libraries/Cck/cck.encrypt.js"></script>
+    <?php include viewPath('shared._commonLibraries'); ?>
     <link rel="stylesheet" href="/css/caterpillar-main.css">
 </head>
 <body class="caterpillar caterpillar-default">
