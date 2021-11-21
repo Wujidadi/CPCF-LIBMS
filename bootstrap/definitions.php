@@ -45,11 +45,11 @@ define('CONFIG_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'configs');
 define('APP_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'app');
 
 /**
- * Bin directory.
+ * CLI directory.
  *
  * @var string
  */
-define('BIN_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'bin');
+define('CLI_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'cli');
 
 /**
  * Routes directory.

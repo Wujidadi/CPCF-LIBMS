@@ -25,4 +25,4 @@ vendor/
 ~$*
 
 # For this project
-bin/Test.php
+cli/Test.php

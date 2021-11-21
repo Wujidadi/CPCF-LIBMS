@@ -16,6 +16,7 @@
 
 ### 2021 年 11 月 21 日
 * 借書前端頁面初步完成。
+* 將 `bin` 資料夾更名為 `cli`，並同步 Tarascanta Beta。
 
 ### 2021 年 11 月 14 日
 * 增加 `InputChecker::_isNotAllowed` 方法。

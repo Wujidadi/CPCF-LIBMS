@@ -2,10 +2,10 @@
 
 /*
 |--------------------------------------------------------------------------
-| Bin Bootstrap
+| CLI Bootstrap
 |--------------------------------------------------------------------------
 |
-| Entry point of command line scripts under the "bin" directory.
+| Entry point of command line scripts under the "cli" directory.
 |
 */
 
