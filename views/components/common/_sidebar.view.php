@@ -5,7 +5,7 @@
         <div id="cicrulationSubTab" class="fs-r1 mb-2 collapse show"> -->
         <div id="circulationTab" class="nav-link nav-link-default fs-r1.15 border-0 py-3">借還書作業</div>
         <div id="cicrulationSubTab" class="fs-r1 mb-2">
-            <a class="nav-link border-0 ps-4.5" href="/circulation">借書</a>
+            <a id="borrowTab" class="nav-link border-0 ps-4.5" href="/circulation/borrow">借書</a>
         </div>
         <a id="bookTab" class="nav-link fs-r1.15 border-0 py-3" href="/books">圖書管理作業</a>
         <a id="memberTab" class="nav-link fs-r1.15 border-0 py-3" href="/members"><?= App\Constant::MemberCall ?>管理作業</a>

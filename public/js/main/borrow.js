@@ -22,7 +22,7 @@ const vueApp = Vue.createApp({
             return (this[variable] === undefined || this[variable] === null || this[variable] === '') ? false : true;
         },
         // matchContext() {
-        //     return (PageContext === 'circulation') ? true : false;
+        //     return (PageContext === 'borrow') ? true : false;
         // },
         init() {
             this.requestFlag = false;

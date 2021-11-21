@@ -52,21 +52,48 @@ class MainController extends WebPageController
     }
 
     /**
-     * 借還書頁
+     * 借還書作業 - 借書頁
      *
      * @return void
      */
-    public function circulation(): void
+    public function borrow(): void
     {
-        $pageTitle = '借還書作業';
+        $pageTitle = '借書 - 借還書作業';
         $headerTitle = Constant::CustomerFullName. ' ' . Constant::SystemName;
 
-        $template = 'Main._circulation';
+        $template = 'Main._borrow';
 
-        $pageContext = 'circulation';
+        $pageContext = 'borrow';
 
         $scripts = $this->_buildScriptHTML([
-            '/js/main/circulation.js'
+            '/js/main/borrow.js'
+        ]);
+
+        view('Main.Index', compact(
+            'pageTitle',
+            'headerTitle',
+            'template',
+            'pageContext',
+            'scripts'
+        ));
+    }
+
+    /**
+     * 借還書作業 - 還書頁
+     *
+     * @return void
+     */
+    public function return(): void
+    {
+        $pageTitle = '還書 - 借還書作業';
+        $headerTitle = Constant::CustomerFullName. ' ' . Constant::SystemName;
+
+        $template = 'Main._return';
+
+        $pageContext = 'return';
+
+        $scripts = $this->_buildScriptHTML([
+            '/js/main/return.js'
         ]);
 
         view('Main.Index', compact(
