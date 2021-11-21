@@ -54,6 +54,31 @@ class CirculationInputChecker extends InputChecker
     }
 
     /**
+     * 驗證查詢使用者未歸還書籍輸入資料
+     *
+     * @param  array  $input  輸入資料
+     * @return void
+     */
+    public function verifyGetBorrowingRecords(array $input): void
+    {
+        $functionName = __FUNCTION__;
+
+        $this->_rawInput = $input;
+
+        $this->_checkNo('Member');
+
+        $illegal = (count($this->_errors['fields']) > 0) ? true : false;
+        if ($illegal)
+        {
+            $rawInput = JsonUnescaped($this->_rawInput);
+            $erroInfo = JsonUnescaped($this->_errors['info']);
+            Logger::getInstance()->logInfo("{$this->_className}::{$functionName} Input: {$rawInput}");
+            Logger::getInstance()->logWarning("{$this->_className}::{$functionName} Error: {$erroInfo}");
+            throw new InputException('Input Error', ExceptionCode::Input);
+        }
+    }
+
+    /**
      * 驗證查詢書籍當前流通狀態輸入資料
      *
      * @param  array  $input  輸入資料
@@ -146,6 +171,31 @@ class CirculationInputChecker extends InputChecker
         else if ($this->_isInvalidNumber($this->_rawInput[$field]))
         {
             $this->_pushError(['field' => $field, 'reason' => self::INVALID_NUMBER, 'input' => $this->_rawInput[$field]]);
+        }
+        else
+        {
+            $this->_filteredData[$field] = $this->_rawInput[$field];
+        }
+    }
+
+    /**
+     * 檢查輸入的書籍或借閱者/會員編號
+     *
+     * @param  string  $type  編號類型（書籍或借閱者/會員）
+     * @return void
+     */
+    protected function _checkNo(string $type = ''): void
+    {
+        $field = "{$type}No";
+        $length = 10;
+
+        if ($this->_isNull($field))
+        {
+            $this->_pushError(['field' => $field, 'reason' => self::REQUIRED_BUT_NULL]);
+        }
+        else if ($this->_isInvalidLength($this->_rawInput[$field], $length))
+        {
+            $this->_pushError(['field' => $field, 'reason' => self::INVALID_LENGTH, 'input' => $this->_rawInput[$field]]);
         }
         else
         {

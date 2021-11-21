@@ -122,6 +122,61 @@ class CirculationController
     }
 
     /**
+     * 依借閱者/會員編號查詢未歸還（借出中）書籍資料
+     *
+     * @param  string  $memberNo  借閱者編號
+     * @return void
+     */
+    public function getBorrowingRecords(string $memberNo): void
+    {
+        $functionName = __FUNCTION__;
+
+        $httpStatusCode = 200;
+        $output = [
+            'Code'    => 200,
+            'Message' => 'OK'
+        ];
+
+        try
+        {
+            $input = [ 'MemberNo' => $memberNo ];
+
+            CirculationInputChecker::getInstance()->verifyGetBorrowingRecords($input);
+            $filteredData = CirculationInputChecker::getInstance()->getFilteredData();
+            $memberNo = $filteredData['MemberNo'];
+
+            $output['Data'] = CirculationHandler::getInstance()->getBorrowingRecordsByMember($memberNo);
+        }
+        catch (InputException $ex)
+        {
+            $httpStatusCode = 400;
+
+            $exCode    = $output['Code']    = $ex->getCode();
+            $exMessage = $output['Message'] = $ex->getMessage();
+            $output['Data'] = [
+                'ErrorField' => CirculationInputChecker::getInstance()->getErrorFields()
+            ];
+
+            $jsonData = JsonUnescaped($output['Data']);
+            $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
+            Logger::getInstance()->logError($logMessage);
+        }
+        catch (Throwable $ex)
+        {
+            $httpStatusCode = 500;
+
+            $exType    = get_class($ex);
+            $exCode    = $output['Code']    = $ex->getCode();
+            $exMessage = $output['Message'] = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} {$exType}({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+        }
+
+        Response::getInstance()->setCode($httpStatusCode)->output(JsonUnescaped($output));
+    }
+
+    /**
      * 查詢書籍當前流通狀態
      *
      * @param  integer|string  $bookId  書籍 ID

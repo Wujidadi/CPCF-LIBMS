@@ -4,6 +4,8 @@
 @import '_values.scss';
 
 body {
+    background-color: $background-color;
+
     &.caterpillar {
         // header {
         //     .navbar {
@@ -30,8 +32,11 @@ body {
                     .nav {
                         width: 100%;
 
-                        .nav-link {
+                        .nav-link:not(.nav-link-default) {
                             cursor: pointer;
+                        }
+                        .nav-link.nav-link-default {
+                            cursor: default;
                         }
                     }
                 }
@@ -43,7 +48,7 @@ body {
         header {
             .navbar {
                 &.fixed-top {
-                    background-image: linear-gradient(157.5deg, lighten($official-bgcolor, 2.5%), lighten($official-bgcolor, 20%));
+                    background-image: linear-gradient(0deg, lighten($official-bgcolor, 2.5%), lighten($official-bgcolor, 20%));
                     color: bootstrap-utilities.$white;
                 }
             }
@@ -52,7 +57,7 @@ body {
         aside {
             &.navbar {
                 &.fixed-left {
-                    background-image: linear-gradient(112.5deg, $left-aside-bgcolor, $left-aside-bgcolor-end);
+                    background-image: linear-gradient(95deg, $left-aside-bgcolor, $left-aside-bgcolor-end);
 
                     .nav {
                         .nav-link {
@@ -63,11 +68,51 @@ body {
                                 background-color: transparentize($left-aside-fgcolor, 0.6);
                             }
 
-                            &:not(.active):hover {
+                            &:not(.active):not(.nav-link-default):hover {
                                 color: darken($left-aside-fgcolor, 10%);
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    .content {
+        font-size: 1.2em;
+
+        .container, .container-fluid {
+            .row {
+                height: 3rem;
+            }
+
+            .thead {
+                .row {
+                    background-color: desaturate(darken($background-color, 25%), 10%);
+                }
+            }
+
+            .tbody {
+                .row:hover {
+                    background-color: transparentize(darken($background-color, 20%), 0.5);
+                }
+            }
+        }
+
+        .borrow-hint {
+            & {
+                color: inherit;
+            }
+            &-safe {
+                color: #a3a3ff;
+                .borrowed-number, .borrowable-number {
+                    color: #0000ff;
+                }
+            }
+            &-danger {
+                color: #ffa7a7;
+                .borrowed-number, .borrowable-number {
+                    color: #ff0000;
                 }
             }
         }

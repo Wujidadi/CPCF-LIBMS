@@ -1,6 +1,6 @@
 <?php
 
-use App\Controllers\Web\HomeController;
+use App\Controllers\Web\MainController;
 
 $Route->map('GET', '/', function()
 {
@@ -10,5 +10,20 @@ $Route->map('GET', '/', function()
 
 $Route->map('GET', '/home', function()
 {
-    HomeController::getInstance()->main();
+    MainController::getInstance()->home();
+});
+
+$Route->map('GET', '/circulation', function()
+{
+    MainController::getInstance()->circulation();
+});
+
+$Route->map('GET', '/books', function()
+{
+    MainController::getInstance()->books();
+});
+
+$Route->map('GET', '/members', function()
+{
+    MainController::getInstance()->members();
 });

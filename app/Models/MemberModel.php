@@ -164,6 +164,28 @@ class MemberModel extends Model
     }
 
     /**
+     * 依借閱者/會員編號查詢單筆資料
+     *
+     * @param  string  $memberNo  借閱者/會員編號
+     * @return array
+     */
+    public function selectOneByMemberNo(string $memberNo): array
+    {
+        $sql = <<<SQL
+        SELECT
+            *
+        FROM public."{$this->_tableName}"
+        WHERE "No" = :memberNo
+        SQL;
+
+        $bind = [
+            'memberNo' => $memberNo
+        ];
+
+        return $this->_db->query($sql, $bind);
+    }
+
+    /**
      * 依指定的欄位和值，查詢複數資料
      *
      * @param  string          $field           欄位名稱

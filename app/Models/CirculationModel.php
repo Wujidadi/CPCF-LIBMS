@@ -205,6 +205,77 @@ class CirculationModel extends Model
     }
 
     /**
+     * 依借閱者/會員編號查詢未歸還（借出中）紀錄
+     *
+     * @param  string  $memberNo  借閱者編號
+     * @return array
+     */
+    public function selectBorrowingRecordsByMemberNo(string $memberNo): array
+    {
+        $functionName = __FUNCTION__;
+
+        try
+        {
+            $sql = <<<SQL
+            SELECT
+                RecordTable."Id"         AS "RecordId",
+                RecordTable."BookId"     AS "BookId",
+                BookTable."No"           AS "BookNo",
+                BookTable."Name"         AS "BookName",
+                BookTable."OriginalName" AS "OriginalBookName",
+                BookTable."Author"       AS "Author",
+                BookTable."Illustrator"  AS "Illustrator",
+                BookTable."Editor"       AS "Editor",
+                BookTable."Translator"   AS "Translator",
+                BookTable."Series"       AS "Series",
+                BookTable."Publisher"    AS "Publisher",
+                BookTable."Deleted"      AS "Deleted",
+                BookTable."CategoryId"   AS "CategoryId",
+                BookTable."LocationId"   AS "LocationId",
+                RecordTable."MemberId"   AS "BorrowerId",
+                MemberTable."No"         AS "BorrowerNo",
+                MemberTable."Name"       AS "BorrowerName",
+                MemberTable."Membership" AS "BorrowerMembership",
+                MemberTable."Disabled"   AS "BorrowerDisabled",
+                RecordTable."BorrowedAt" AS "BorrowedAt",
+                RecordTable."ReturnedAt" AS "ReturnedAt"
+            FROM public."Members" MemberTable
+            JOIN public."{$this->_tableName}" RecordTable ON
+                RecordTable."MemberId" = MemberTable."Id"
+            JOIN public."Books" BookTable ON
+                BookTable."Id" = RecordTable."BookId"
+            WHERE
+                MemberTable."No" = :memberNo AND
+                RecordTable."ReturnedAt" IS NULL
+            ORDER BY
+                RecordTable."BorrowedAt" ASC,
+                RecordTable."Id" ASC
+            SQL;
+
+            $bind = [
+                'memberNo' => $memberNo
+            ];
+
+            return $this->_db->query($sql, $bind);
+        }
+        catch (PDOException $ex)
+        {
+            if ($this->_db->inTransaction())
+            {
+                $this->_db->rollBack();
+            }
+
+            $exCode = $ex->getCode();
+            $exMessage = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+
+            throw new Exception($exMessage, ExceptionCode::PDO);
+        }
+    }
+
+    /**
      * 依書籍 ID 查詢最新一筆未歸還的紀錄
      *
      * @param  integer  $bookId  書籍 ID

@@ -71,6 +71,82 @@ class CirculationHandler
     }
 
     /**
+     * 依借閱者/會員編號查詢未歸還（借出中）書籍資料
+     *
+     * @param  string  $memberNo  借閱者編號
+     * @return array
+     */
+    public function getBorrowingRecordsByMember(string $memberNo): array
+    {
+        $functionName = __FUNCTION__;
+
+        $borrower = [
+            'Id'         => null,
+            'No'         => $memberNo,
+            'Name'       => null,
+            'Membership' => null,
+            'Disabled'   => null
+        ];
+        $records = [];
+
+        $result = CirculationModel::getInstance()->selectBorrowingRecordsByMemberNo($memberNo);
+        if (count($result) > 0)
+        {
+            $borrower = [
+                'Id'         => $result[0]['BorrowerId'],
+                'No'         => $result[0]['BorrowerNo'],
+                'Name'       => $result[0]['BorrowerName'],
+                'Membership' => $result[0]['BorrowerMembership'],
+                'Disabled'   => $result[0]['BorrowerDisabled']
+            ];
+            foreach ($result as $row)
+            {
+                $records[] = [
+                    'Id' => $row['RecordId'],
+                    'Book' => [
+                        'Id'           => $row['BookId'],
+                        'No'           => $row['BookNo'],
+                        'Name'         => $row['BookName'],
+                        'OriginalName' => $row['OriginalBookName'],
+                        'Author'       => $row['Author'],
+                        'Illustrator'  => $row['Illustrator'],
+                        'Editor'       => $row['Editor'],
+                        'Translator'   => $row['Translator'],
+                        'Series'       => $row['Series'],
+                        'Publisher'    => $row['Publisher'],
+                        'Deleted'      => $row['Deleted'],
+                        'CategoryId'   => $row['CategoryId'],
+                        'LocationId'   => $row['LocationId']
+                    ],
+                    # 移除時區標記
+                    'BorrowedAt' => preg_replace(TimeZoneSuffix, '', $row['BorrowedAt']),
+                    'ReturnedAt' => preg_replace(TimeZoneSuffix, '', $row['ReturnedAt'])
+                ];
+            }
+        }
+        else
+        {
+            $result = MemberModel::getInstance()->selectOneByMemberNo($memberNo);
+            if (count($result) > 0)
+            {
+                $borrower = [
+                    'Id'         => $result[0]['Id'],
+                    'No'         => $result[0]['No'],
+                    'Name'       => $result[0]['Name'],
+                    'Membership' => $result[0]['Membership'],
+                    'Disabled'   => $result[0]['Disabled']
+                ];
+            }
+        }
+
+        return [
+            'Total'    => count($records),
+            'Borrower' => $borrower,
+            'Record'   => $records
+        ];
+    }
+
+    /**
      * 查詢書籍當前流通狀態
      *
      * @param  integer  $bookId  書籍 ID

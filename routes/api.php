@@ -74,10 +74,16 @@ $Route->map('GET', '/api/records/book/{bookId}', function($bookId)
     CirculationController::getInstance()->getRecords($bookId);
 });
 
-# 查詢借閱者借閱紀錄
-$Route->map('GET', '/api/records/member/{memberId}', function($memberId)
+# 查詢借閱者全部借閱紀錄
+$Route->map('GET', '/api/records/member/{memberId}/all', function($memberId)
 {
     CirculationController::getInstance()->getRecords($memberId, true);
+});
+
+# 查詢借閱者未歸還書籍
+$Route->map('GET', '/api/records/member/{memberNo}/borrowing', function($memberNo)
+{
+    CirculationController::getInstance()->getBorrowingRecords($memberNo);
 });
 
 # 查詢書籍當前流通狀態
