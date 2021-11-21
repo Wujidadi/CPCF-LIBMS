@@ -79,11 +79,17 @@ body {
     }
 
     .content {
-        font-size: 1.2em;
+        @media screen and (min-width: 1920px) {
+            font-size: 1.2em;
+        }
+        @media (max-width: 1919px) {
+            font-size: 1em;
+        }
 
         .container, .container-fluid {
             .row {
-                height: 3rem;
+                // height: 3rem;
+                height: max-content;
             }
 
             .thead {
@@ -99,20 +105,127 @@ body {
             }
         }
 
-        .borrow-hint {
-            & {
-                color: inherit;
-            }
-            &-safe {
-                color: #a3a3ff;
-                .borrowed-number, .borrowable-number {
-                    color: #0000ff;
+        .page-circulation {
+            .form {
+                .form-column {
+                    height: 100% !important;
+                    display: flex !important;
+                    justify-content: center !important;
+                    align-items: center !important;
+
+                    $fields:
+                        'label'   7.25  10,
+                        'input'  86.75  82,
+                        'tail'    6      8;
+                    @each $field, $wider-width, $narrower-width in $fields {
+                        &.formcol-#{$field} {
+                            flex: 0 0 auto;
+
+                            @media screen and (min-width: 1920px) {
+                                width: #{calc($wider-width * 1%)};
+                            }
+                            @media (max-width: 1919px) {
+                                width: #{calc($narrower-width * 1%)};
+                            }
+                        }
+                    }
                 }
             }
-            &-danger {
-                color: #ffa7a7;
-                .borrowed-number, .borrowable-number {
-                    color: #ff0000;
+
+            .table, .message-field {
+                @media screen and (min-width: 1920px) {
+                    font-size: 1rem;
+                }
+                @media (max-width: 1919px) {
+                    font-size: 0.9rem;
+                }
+            }
+        
+            .message-field {
+                .message-column {
+                    display: flex !important;
+                    align-items: center !important;
+
+                    $fields:
+                        'body'  94  92  start,
+                        'tail'   6   8  center;
+                    @each $field, $wider-width, $narrower-width, $align in $fields {
+                        &.msgcol-#{$field} {
+                            flex: 0 0 auto;
+                            justify-content: $align !important;
+
+                            @media screen and (min-width: 1920px) {
+                                width: #{calc($wider-width * 1%)};
+                            }
+                            @media (max-width: 1919px) {
+                                width: #{calc($narrower-width * 1%)};
+                            }
+                        }
+                    }
+                }
+
+                .borrow-hint {
+                    & {
+                        color: inherit;
+                    }
+                    &-safe {
+                        color: #a3a3ff;
+                        .borrowed-number, .borrowable-number {
+                            color: #0000ff;
+                        }
+                    }
+                    &-danger {
+                        color: #ffa7a7;
+                        .borrowed-number, .borrowable-number {
+                            color: #ff0000;
+                        }
+                    }
+                }
+            }
+
+            .table {
+                @media screen and (min-width: 1920px) {
+                    font-size: 1rem;
+                }
+                @media (max-width: 1919px) {
+                    font-size: 0.9rem;
+                }
+
+                .data-column {
+                    display: flex !important;
+                    align-items: center !important;
+
+                    $fields:
+                        'book-no'       5     6.5  center,
+                        'book-name'    20    14.5  start,
+                        'author'        9.5   9    start,
+                        'illustrator'   9.5   9    start,
+                        'editor'        9.5   9    start,
+                        'translator'    9.5   9    start,
+                        'publisher'     9.5   9    center,
+                        'category'      7.5   6    center,
+                        'location'      5     6    center,
+                        'borrowed-at'  10    13.5  center,
+                        'function'      5     8    center;
+                    @each $field, $wider-width, $narrower-width, $align in $fields {
+                        &.data-#{$field} {
+                            flex: 0 0 auto;
+
+                            @media screen and (min-width: 1920px) {
+                                width: #{calc($wider-width * 1%)};
+                            }
+                            @media (max-width: 1919px) {
+                                width: #{calc($narrower-width * 1%)};
+                            }
+
+                            &.th {
+                                justify-content: center !important;
+                            }
+                            &.td {
+                                justify-content: $align !important;
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -141,8 +141,8 @@ const vueApp = Vue.createApp({
 
 vueApp.component('borrow-hint', {
     template:
-        `<div class="col i-col-94 h-100 fs-r1 d-flex align-items-center" v-bind:class="borrowHintStyle">` +
-            `<p class="mt-2 mb-0 h-100 d-flex align-items-center" v-html="borrowHint"></p>` +
+        `<div class="col message-column msgcol-body" v-bind:class="borrowHintStyle">` +
+            `<p class="m-0 h-100 d-flex align-items-center" v-html="borrowHint"></p>` +
         `</div>`,
     props: [ 'circulationData' ],
     data() {
