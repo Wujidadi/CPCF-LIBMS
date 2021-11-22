@@ -323,10 +323,10 @@ class CirculationController
     /**
      * 還書
      *
-     * @param  integer|string  $bookId  書籍 ID
+     * @param  integer|string  $bookKey  書籍識別碼（ID 或書號）
      * @return void
      */
-    public function return(mixed $bookId): void
+    public function return(mixed $bookKey): void
     {
         $functionName = __FUNCTION__;
 
@@ -338,12 +338,21 @@ class CirculationController
 
         try
         {
-            $input['BookId'] = $bookId;
+            if (!isset($_GET['no']))
+            {
+                $input['BookId'] = $bookKey;
+                $context = 'Id';
+            }
+            else
+            {
+                $input['BookNo'] = $bookKey;
+                $context = 'No';
+            }
 
-            CirculationInputChecker::getInstance()->verifyReturn($input);
+            CirculationInputChecker::getInstance()->verifyReturn($input, $context);
             $filteredData = CirculationInputChecker::getInstance()->getFilteredData();
 
-            $result = CirculationHandler::getInstance()->returnBook($filteredData);
+            $result = CirculationHandler::getInstance()->returnBook($filteredData, $context);
             if ($result)
             {
                 $output['Data'] = $result;
@@ -354,9 +363,15 @@ class CirculationController
 
                 $exCode    = $output['Code']    = ExceptionCode::BookNotBorrowed;
                 $exMessage = $output['Message'] = "Book not borrowed";
-                $output['Data'] = [
-                    'BookId' => $bookId
-                ];
+                $output['Data'] = [];
+                if ($context === 'Id')
+                {
+                    $output['Data']['BookId'] = $bookKey;
+                }
+                else
+                {
+                    $output['Data']['BookNo'] = $bookKey;
+                }
 
                 $logMessage = "{$this->_className}::{$functionName} Error({$exCode}): {$exMessage}";
                 Logger::getInstance()->logError($logMessage);
@@ -382,9 +397,15 @@ class CirculationController
 
             $exCode    = $output['Code']    = $ex->getCode();
             $exMessage = $output['Message'] = $ex->getMessage();
-            $output['Data'] = [
-                'Id' => $ex->getPayload()['Id']
-            ];
+            $output['Data'] = [];
+            if ($context === 'Id')
+            {
+                $output['Data']['Id'] = $ex->getPayload()['Id'];
+            }
+            else
+            {
+                $output['Data']['No'] = $ex->getPayload()['No'];
+            }
 
             $jsonData = JsonUnescaped($output['Data']);
             $logMessage = "{$this->_className}::{$functionName} CirculationException({$exCode}): {$exMessage} {$jsonData}";

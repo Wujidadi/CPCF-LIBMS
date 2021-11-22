@@ -178,6 +178,54 @@ class BookModel extends Model
     }
 
     /**
+     * 依書籍 ID 查詢單筆書籍資料
+     *
+     * @param  integer  $id  書籍 ID
+     * @return array
+     */
+    public function selectOneById(int $id): array
+    {
+        $functionName = __FUNCTION__;
+
+        $sql = <<<SQL
+        SELECT
+            *
+        FROM public."{$this->_tableName}"
+        WHERE "Id" = :id
+        SQL;
+
+        $bind = [
+            'id' => $id
+        ];
+
+        return $this->_db->query($sql, $bind);
+    }
+
+    /**
+     * 依書號查詢單筆書籍資料
+     *
+     * @param  string  $no  書籍編號
+     * @return array
+     */
+    public function selectOneByNo(string $no): array
+    {
+        $functionName = __FUNCTION__;
+
+        $sql = <<<SQL
+        SELECT
+            *
+        FROM public."{$this->_tableName}"
+        WHERE "No" = :no
+        SQL;
+
+        $bind = [
+            'no' => $no
+        ];
+
+        return $this->_db->query($sql, $bind);
+    }
+
+    /**
      * 依指定的欄位和值，查詢複數資料
      *
      * @param  string          $field           欄位名稱

@@ -99,9 +99,9 @@ $Route->map('POST', '/api/borrow/book/{bookId}/{memberId}', function($bookId, $m
 });
 
 # 還書
-$Route->map('PATCH', '/api/return/book/{bookId}', function($bookId)
+$Route->map('PATCH', '/api/return/book/{bookKey}', function($bookKey)
 {
-    CirculationController::getInstance()->return($bookId);
+    CirculationController::getInstance()->return($bookKey);
 });
 
 # 書籍借閱排行榜

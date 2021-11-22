@@ -105,7 +105,7 @@ body {
             }
         }
 
-        .page-circulation-borrow {
+        .page-circulation {
             .form {
                 .form-column {
                     height: 100% !important;
@@ -179,6 +179,16 @@ body {
                         .borrowed-number, .borrowable-number {
                             color: #ff0000;
                         }
+                    }
+                }
+
+                .returned-book {
+                    &-info {
+                        color: #058105;
+                    }
+                    &-borrower {
+                        color: #4a4af8;
+                        font-weight: bold;
                     }
                 }
             }

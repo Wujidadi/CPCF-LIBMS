@@ -170,7 +170,7 @@ class CirculationHandler
                 'Borrowed' => true,
                 'RecordId' => $result[0]['Id'],
                 'Borrower' => $result[0]['MemberId'],
-                'BorrowedAt' => $result[0]['MemberId']
+                'BorrowedAt' => $result[0]['BorrowedAt']
             ];
         }
 
@@ -207,23 +207,70 @@ class CirculationHandler
     /**
      * 還書
      *
-     * @param  array  $param  書籍 ID 與借閱者/會員 ID 陣列
+     * @param  array   $param    書籍 ID 或書號陣列
+     * @param  string  $context  上下文類型：`Id` 或 `No`
      * @return integer|false
      */
-    public function returnBook(array $param): mixed
+    public function returnBook(array $param, string $context): mixed
     {
         $functionName = __FUNCTION__;
 
         $result = false;
 
-        $bookId = $param['BookId'];
-
-        $this->_checkBookExistence($bookId);
-
-        $bookStatus = $this->getBookStatus($bookId);
-        if ($bookStatus['Borrowed'])
+        if ($context === 'Id')
         {
-            $result = CirculationModel::getInstance()->updateRecord($bookStatus['RecordId']);
+            $bookId = $param['BookId'];
+        }
+        else
+        {
+            $bookNo = $param['BookNo'];
+            $book = BookModel::getInstance()->selectOneByNo($bookNo);
+            if (is_array($book) && count($book) > 0)
+            {
+                $bookId = $book[0]['Id'];
+            }
+            else
+            {
+                $bookId = false;
+            }
+        }
+
+        if ($bookId)
+        {
+            $this->_checkBookExistence($bookId);
+
+            $bookStatus = $this->getBookStatus($bookId);
+            if ($bookStatus['Borrowed'])
+            {
+                $bookInfo = null;
+                $borrower = null;
+
+                $book = BookModel::getInstance()->selectOneById($bookId);
+                if (is_array($book) && count($book) > 0)
+                {
+                    $bookInfo = [
+                        'Id'   => $bookId,
+                        'No'   => $bookNo ?? $book[0]['No'],
+                        'Name' => $book[0]['Name']
+                    ];
+                }
+
+                $member = MemberModel::getInstance()->selectOneByMemberId($bookStatus['Borrower']);
+                if (is_array($member) && count($member) > 0)
+                {
+                    $borrower = [
+                        'Id'   => $bookStatus['Borrower'],
+                        'No'   => $member[0]['No'],
+                        'Name' => $member[0]['Name']
+                    ];
+                }
+
+                $result = [
+                    'Book' => $bookInfo,
+                    'Borrower' => $borrower,
+                    'Returned' => CirculationModel::getInstance()->updateRecord($bookStatus['RecordId'])
+                ];
+            }
         }
 
         return $result;

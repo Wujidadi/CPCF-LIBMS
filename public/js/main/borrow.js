@@ -123,7 +123,7 @@ const vueApp = Vue.createApp({
             axios.patch(`/api/return/book/${bookId}`)
             .then(response => {
                 const resData = response.data;
-                if (resData.Code === 200 && resData.Message === 'OK' && resData.Data === 1) {
+                if (resData.Code === 200 && resData.Message === 'OK' && resData.Data.Returned === 1) {
                     this.getCirculationByMember(this.deepMemberNo);
                 }
             })

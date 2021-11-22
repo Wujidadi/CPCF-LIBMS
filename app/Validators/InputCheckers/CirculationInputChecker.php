@@ -132,16 +132,24 @@ class CirculationInputChecker extends InputChecker
     /**
      * 驗證還書輸入資料
      *
-     * @param  array  $input  輸入資料
+     * @param  array   $input    輸入資料
+     * @param  string  $context  輸入類型：`Id` 或 `No`
      * @return void
      */
-    public function verifyReturn(array $input): void
+    public function verifyReturn(array $input, string $context): void
     {
         $functionName = __FUNCTION__;
 
         $this->_rawInput = $input;
 
-        $this->_checkId('Book');
+        if ($context === 'Id')
+        {
+            $this->_checkId('Book');
+        }
+        else
+        {
+            $this->_checkNo('Book');
+        }
 
         $illegal = (count($this->_errors['fields']) > 0) ? true : false;
         if ($illegal)

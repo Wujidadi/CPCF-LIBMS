@@ -164,6 +164,28 @@ class MemberModel extends Model
     }
 
     /**
+     * 依借閱者/會員 ID 查詢單筆資料
+     *
+     * @param  string  $memberNo  借閱者/會員 ID
+     * @return array
+     */
+    public function selectOneByMemberId(int $memberId): array
+    {
+        $sql = <<<SQL
+        SELECT
+            *
+        FROM public."{$this->_tableName}"
+        WHERE "Id" = :memberId
+        SQL;
+
+        $bind = [
+            'memberId' => $memberId
+        ];
+
+        return $this->_db->query($sql, $bind);
+    }
+
+    /**
      * 依借閱者/會員編號查詢單筆資料
      *
      * @param  string  $memberNo  借閱者/會員編號

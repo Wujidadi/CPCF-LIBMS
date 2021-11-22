@@ -32,9 +32,11 @@ class TestController
     public function main()
     {
         $result = [
-            'Text'  => $text = 'MemberNotExist',
-            'Sum'   => SumWord($text),
-            // 'Count' => MemberModel::getInstance()->countById(3)
+            // 'Text'  => $text = 'MemberNotExist',
+            // 'Sum'   => SumWord($text),
+            // 'Count' => MemberModel::getInstance()->countById(3),
+            // 'No'    => $_GET['no'] ?? 'Number',
+            'Data'  => BookModel::getInstance()->selectOneByNo('245')
         ];
 
         Response::getInstance()->setCode(200)->output(JsonUnescaped($result));
