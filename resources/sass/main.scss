@@ -97,10 +97,32 @@ body {
                     background-color: desaturate(darken($background-color, 25%), 10%);
                 }
             }
-
             .tbody {
                 .row:hover {
                     background-color: transparentize(darken($background-color, 20%), 0.5);
+                }
+            }
+
+            .table {
+                .data-column {
+                    display: flex !important;
+                    align-items: center !important;
+                }
+            }
+
+            .form {
+                .form-column {
+                    height: 100% !important;
+                    display: flex !important;
+                    justify-content: center !important;
+                    align-items: center !important;
+                }
+            }
+
+            .message-field {
+                .message-column {
+                    display: flex !important;
+                    align-items: center !important;
                 }
             }
         }
@@ -108,11 +130,6 @@ body {
         .page-circulation {
             .form {
                 .form-column {
-                    height: 100% !important;
-                    display: flex !important;
-                    justify-content: center !important;
-                    align-items: center !important;
-
                     $fields:
                         'label'   7.25  10,
                         'input'  86.75  82,
@@ -140,12 +157,9 @@ body {
                     font-size: 0.9rem;
                 }
             }
-        
+
             .message-field {
                 .message-column {
-                    display: flex !important;
-                    align-items: center !important;
-
                     $fields:
                         'body'  94  92  start,
                         'tail'   6   8  center;
@@ -202,9 +216,6 @@ body {
                 }
 
                 .data-column {
-                    display: flex !important;
-                    align-items: center !important;
-
                     $fields:
                         'book-no'       5     6.5  center,
                         'book-name'    20    14.5  start,

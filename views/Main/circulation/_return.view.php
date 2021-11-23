@@ -6,7 +6,7 @@
                 <input type="text" class="w-100 h-100 p-2" v-model="bookNo" v-on:keyup.enter="returnBook">
             </div>
             <div class="col form-column formcol-tail">
-                <div class="btn btn-warning w-100" v-on:click="returnBook">還書</div>
+                <div class="btn btn-primary w-100" v-on:click="returnBook">還書</div>
             </div>
         </div>
     </div>

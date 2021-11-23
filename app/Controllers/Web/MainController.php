@@ -61,12 +61,12 @@ class MainController extends WebPageController
         $pageTitle = '借書 - 借還書作業';
         $headerTitle = Constant::CustomerFullName. ' ' . Constant::SystemName;
 
-        $template = 'Main._borrow';
+        $template = 'Main.circulation._borrow';
 
         $pageContext = 'borrow';
 
         $scripts = $this->_buildScriptHTML([
-            '/js/main/borrow.js'
+            '/js/main/circulation/borrow.js'
         ]);
 
         view('Main.Index', compact(
@@ -88,12 +88,12 @@ class MainController extends WebPageController
         $pageTitle = '還書 - 借還書作業';
         $headerTitle = Constant::CustomerFullName. ' ' . Constant::SystemName;
 
-        $template = 'Main._return';
+        $template = 'Main.circulation._return';
 
         $pageContext = 'return';
 
         $scripts = $this->_buildScriptHTML([
-            '/js/main/return.js'
+            '/js/main/circulation/return.js'
         ]);
 
         view('Main.Index', compact(
@@ -115,12 +115,12 @@ class MainController extends WebPageController
         $pageTitle = '圖書管理作業';
         $headerTitle = Constant::CustomerFullName. ' ' . Constant::SystemName;
 
-        $template = 'Main._books';
+        $template = 'Main.book._list';
 
         $pageContext = 'books';
 
         $scripts = $this->_buildScriptHTML([
-            '/js/main/books.js'
+            '/js/main/book/list.js'
         ]);
 
         view('Main.Index', compact(
@@ -142,12 +142,12 @@ class MainController extends WebPageController
         $pageTitle = Constant::MemberCall . '管理作業';
         $headerTitle = Constant::CustomerFullName. ' ' . Constant::SystemName;
 
-        $template = 'Main._members';
+        $template = 'Main.member._list';
 
         $pageContext = 'members';
 
         $scripts = $this->_buildScriptHTML([
-            '/js/main/members.js'
+            '/js/main/member/list.js'
         ]);
 
         view('Main.Index', compact(
