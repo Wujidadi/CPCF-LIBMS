@@ -47,6 +47,33 @@ class BookHandler
     }
 
     /**
+     * 查詢全部書籍資料
+     *
+     * @param  integer  $limit           查詢資料限制筆數
+     * @param  integer  $offset          查詢資料偏移量
+     * @param  boolean  $includeDeleted  是否包含除帳（軟刪除）書籍
+     * @return array
+     */
+    public function getAllBooks(int $limit, int $offset, bool $includeDeleted): array
+    {
+        $functionName = __FUNCTION__;
+
+        $result = BookModel::getInstance()->selectAllWithPage($limit, $offset, $includeDeleted);
+
+        # 移除時區標記
+        $bookList = array_map(function($row) {
+            $row['CreatedAt'] = preg_replace(TimeZoneSuffix, '', $row['CreatedAt']);
+            $row['UpdatedAt'] = preg_replace(TimeZoneSuffix, '', $row['UpdatedAt']);
+            return $row;
+        }, $result);
+
+        return [
+            'Total' => count($result),
+            'List'  => $bookList
+        ];
+    }
+
+    /**
      * 指定欄位和值查詢複數書籍資料
      *
      * @param  string          $field           欄位名稱

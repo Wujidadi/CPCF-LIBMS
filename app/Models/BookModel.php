@@ -344,6 +344,55 @@ class BookModel extends Model
     }
 
     /**
+     * 依分頁查詢全部資料
+     *
+     * @param  integer  $limit           查詢資料限制筆數
+     * @param  integer  $offset          查詢資料偏移量
+     * @param  boolean  $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
+     * @return array
+     */
+    public function selectAllWithPage(int $limit, int $offset, bool $includeDeleted = false): array
+    {
+        $functionName = __FUNCTION__;
+
+        try
+        {
+            $withDeleted = ($includeDeleted) ? '' : 'WHERE "Deleted" IS FALSE';
+
+            $sql = <<<SQL
+            SELECT
+                *
+            FROM public."{$this->_tableName}"
+            {$withDeleted}
+            LIMIT :limit
+            OFFSET :offset
+            SQL;
+
+            $bind = [
+                'limit'  => [ $limit,  PDO::PARAM_INT ],
+                'offset' => [ $offset, PDO::PARAM_INT ]
+            ];
+
+            return $this->_db->query($sql, $bind);
+        }
+        catch (PDOException $ex)
+        {
+            if ($this->_db->inTransaction())
+            {
+                $this->_db->rollBack();
+            }
+
+            $exCode = $ex->getCode();
+            $exMessage = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+
+            throw new Exception($exMessage, ExceptionCode::PDO);
+        }
+    }
+
+    /**
      * 更新單筆資料
      *
      * @param  integer  $bookId  書籍 ID

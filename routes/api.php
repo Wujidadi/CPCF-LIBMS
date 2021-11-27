@@ -20,7 +20,13 @@ $Route->map('POST', '/api/book', function()
     BookController::getInstance()->addBook();
 });
 
-# 查詢書籍資料
+# 查詢全部書籍資料
+$Route->map('GET', '/api/books/all', function()
+{
+    BookController::getInstance()->getAllBooks();
+});
+
+# 依欄位及關鍵字查詢書籍資料
 $Route->map('GET', '/api/books/{field}/{value}', function($field, $value)
 {
     BookController::getInstance()->getBooks($field, $value);

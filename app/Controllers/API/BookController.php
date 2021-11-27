@@ -88,6 +88,51 @@ class BookController
     }
 
     /**
+     * 查詢全部書籍資料
+     *
+     * @return void
+     */
+    public function getAllBooks(): void
+    {
+        $functionName = __FUNCTION__;
+
+        $httpStatusCode = 200;
+        $output = [
+            'Code'    => 200,
+            'Message' => 'OK'
+        ];
+
+        $includeDeleted = false;
+
+        try
+        {
+            if (isset($_GET['d']) && $_GET['d'] == '1')
+            {
+                $includeDeleted = true;
+            }
+
+            $page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int) $_GET['p'] : Constant::DefaultPageNumber;
+            $limit = (isset($_GET['c']) && is_numeric($_GET['c']) && $_GET['c'] <= Constant::MaxDataCountPerPage) ? (int) $_GET['c'] : Constant::DefaultPageLimit;
+            $offset = ($page - 1) * $limit;
+
+            $output['Data'] = BookHandler::getInstance()->getAllBooks($limit, $offset, $includeDeleted);
+        }
+        catch (Throwable $ex)
+        {
+            $httpStatusCode = 500;
+
+            $exType    = get_class($ex);
+            $exCode    = $output['Code']    = $ex->getCode();
+            $exMessage = $output['Message'] = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} {$exType}({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+        }
+
+        Response::getInstance()->setCode($httpStatusCode)->output(JsonUnescaped($output));
+    }
+
+    /**
      * 指定欄位及關鍵字查詢書籍資料
      *
      * @param  string          $field  欄位
