@@ -13,3 +13,19 @@ const MemberCall = '借閱者';
  * @type integer
  */
 const DefaultBorrowableCount = 7;
+
+/**
+ * 顯示資料每頁預設筆數  
+ * 應與後端 `App::Constant` 的 `DefaultPageLimit` 一致
+ *
+ * @type integer
+ */
+const DefaultPageLimit = 10;
+
+/**
+ * 顯示資料預設頁碼  
+ * 應與後端 `App::Constant` 的 `DefaultPageNumber` 一致
+ *
+ * @type integer
+ */
+const DefaultPageNumber = 1;

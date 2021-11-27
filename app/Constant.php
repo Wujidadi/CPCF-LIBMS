@@ -43,18 +43,20 @@ class Constant
     const MaxDataCountPerPage = 200;
 
     /**
-     * 顯示資料預設頁碼
-     *
-     * @var integer
-     */
-    const DefaultPageNumber = 1;
-
-    /**
      * 顯示資料每頁預設筆數
+     * 應與前端 `common.js` 的 `DefaultPageLimit` 一致
      *
      * @var integer
      */
     const DefaultPageLimit = 10;
+
+    /**
+     * 顯示資料預設頁碼
+     * 應與前端 `common.js` 的 `DefaultPageNumber` 一致
+     *
+     * @var integer
+     */
+    const DefaultPageNumber = 1;
 
     /**
      * 查詢借閱紀錄的時間起訖最大間距秒數（180 天）
