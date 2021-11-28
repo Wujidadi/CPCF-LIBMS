@@ -417,14 +417,14 @@ function formDateFormat(date, s = 0, ms = 0, milli = false)
     let snum = parseInt(s),
         msnum = parseInt(ms),
         second, millisecond;
-    
+
     // 指定秒數
     switch (true)
     {
         case (snum >= 60):
             second = '59';
             break;
-        
+
         case (snum >= 0):
             second = padding(snum, '0', 2);
             break;
@@ -461,10 +461,10 @@ function formDateFormat(date, s = 0, ms = 0, milli = false)
 
                 case (ymdthi.test(date)):
                     return date.replace('T', ' ') + ':' + second + '.' + millisecond;
-                
+
                 case (ymdthis.test(date)):
                     return date.replace('T', ' ') + '.' + millisecond;
-                
+
                 case (ymdthisu.test(date)):
                     return date.replace('T', ' ');
 
@@ -481,10 +481,10 @@ function formDateFormat(date, s = 0, ms = 0, milli = false)
 
                 case (ymdthi.test(date)):
                     return date.replace('T', ' ') + ':' + second;
-                
+
                 case (ymdthis.test(date)):
                     return date.replace('T', ' ');
-                
+
                 case (ymdthisu.test(date)):
                     return date.replace('T', ' ').replace(/\.\d{3}/, '');
 
@@ -943,41 +943,48 @@ function randStr(radix, len, caps = false)
 /**
  * 取代或增添 URL 中的 GET 參數
  *
- * @param  {string}  key    參數鍵名
- * @param  {string}  value  參數值
+ * @param  {{}}  pairs  參數物件
  * @return {void}
  */
-function replaceParameter(key, value)
+function replaceParameter(pairs)
 {
-    let locationPath = `${location.origin}${location.pathname}`,
-        search = location.search,
-        keyVal = `${key}=[^&]*`,
-        regex = new RegExp(keyVal),
-        newKeyVal = (value === null) ? '' : `${key}=${value}`,
+    const locationPath = `${location.origin}${location.pathname}`,
+          search = location.search;
+    let newSearch = search,
         newLocation = '';
 
-    if (regex.test(location.search))
+    if (pairs instanceof Object && pairs.objectLength > 0)
     {
-        newLocation = locationPath + search.replace(regex, newKeyVal);
-    }
-    else
-    {
-        if (/^\?/.test(location.search))
+        Object.keys(pairs).forEach(key =>
         {
-            newLocation = `${locationPath}${search}` + (newKeyVal === '' ? '' : `&${newKeyVal}`)
-        }
-        else
-        {
-            newLocation = locationPath + (newKeyVal === '' ? '' : `?${newKeyVal}`);
-        }
-    }
+            const value = pairs[key],
+                  keyVal = `${key}=[^&]*`,
+                  regex = new RegExp(keyVal),
+                  newKeyVal = (value === null) ? '' : `${key}=${value}`;
 
-    if (/\?$/.test(newLocation) || /&$/.test(newLocation))
-    {
-        newLocation = newLocation.slice(0, -1);
-    }
+            if (regex.test(search))
+            {
+                newSearch = newSearch.replace(regex, newKeyVal);
+            }
+            else
+            {
+                if (/^\?/.test(search))
+                {
+                    newSearch = newSearch + (newKeyVal === '' ? '' : `&${newKeyVal}`);
+                }
+                else
+                {
+                    newSearch = newKeyVal === '' ? '' : `?${newKeyVal}`;
+                }
+            }
+        });
 
-    history.replaceState({}, '', newLocation);
+        newSearch = newSearch.replace(/\?+$/, '').replace(/&+$/, '')
+                             .replace(/\?{2,}/, '?').replace(/&{2,}/, '&');
+        newLocation = `${locationPath}${newSearch}`;
+
+        history.replaceState({}, '', newLocation);
+    }
 }
 
 
