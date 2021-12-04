@@ -33,6 +33,12 @@ $Route->map('GET', '/books', function()
     MainController::getInstance()->books();
 });
 
+# 新增圖書
+$Route->map('GET', '/book/add', function()
+{
+    MainController::getInstance()->addBook();
+});
+
 # 借閱者管理作業
 $Route->map('GET', '/members', function()
 {

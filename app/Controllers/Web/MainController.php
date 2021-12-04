@@ -106,7 +106,7 @@ class MainController extends WebPageController
     }
 
     /**
-     * 圖書管理頁
+     * 圖書管理（列表）頁
      *
      * @return void
      */
@@ -121,6 +121,32 @@ class MainController extends WebPageController
 
         $scripts = $this->_buildScriptHTML([
             '/js/main/book/list.js'
+        ]);
+
+        view('Main.Index', compact(
+            'pageTitle',
+            'headerTitle',
+            'template',
+            'pageContext',
+            'scripts'
+        ));
+    }
+    /**
+     * 新增圖書頁
+     *
+     * @return void
+     */
+    public function addBook(): void
+    {
+        $pageTitle = '新增圖書 - 圖書管理作業';
+        $headerTitle = Constant::CustomerFullName. ' ' . Constant::SystemName;
+
+        $template = 'Main.book._add';
+
+        $pageContext = 'addBook';
+
+        $scripts = $this->_buildScriptHTML([
+            '/js/main/book/add.js'
         ]);
 
         view('Main.Index', compact(
