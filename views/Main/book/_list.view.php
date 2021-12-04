@@ -139,7 +139,4 @@
             </div>
         </div>
     </template>
-    <!-- <div class="row message-field mt-4">
-        <div class="col message-column" v-html="bookReturningMessage"></div>
-    </div> -->
 </div>

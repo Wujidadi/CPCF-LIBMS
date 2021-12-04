@@ -137,6 +137,7 @@ const vueApp = Vue.createApp({
             } else {
                 paramObj.p = null;
             }
+
             replaceParameter(paramObj);
         },
         clearBookData() {
