@@ -42,10 +42,19 @@ const vueApp = Vue.createApp({
             this.memberNo = null;
             this.deepMemberNo = null;
             this.bookNo = null;
+            replaceParameter({
+                m: null,
+                b: null
+            });
             this.init();
         },
         getParam() {
-            let b = getParameter('b');
+            let m = getParameter('m');    // Member
+            let b = getParameter('b');    // Book
+
+            if (m !== undefined && m !== null && m !== '') {
+                this.memberNo = m;
+            }
             if (b !== undefined && b !== null && b !== '') {
                 this.bookNo = b;
             }
@@ -54,10 +63,16 @@ const vueApp = Vue.createApp({
             if (memNo !== null) {
                 this.memberNo = memNo;
             }
+
+            replaceParameter({
+                m: this.isset('memberNo') ? this.memberNo : null
+            });
+
             if (!this.isset('memberNo')) {
                 alert(`請輸入${MemberCall}編號！`);
             } else {
                 this.init();
+
                 axios.get(`/api/records/member/${this.memberNo}/borrowing`)
                 .then(response => {
                     const resData = response.data;
@@ -69,7 +84,19 @@ const vueApp = Vue.createApp({
                     }
                 })
                 .catch(error => {
-                    console.warn(error);
+                    if (error.response !== undefined) {
+                        const errRes = error.response;
+                        if (errRes.status !== undefined) {
+                            if (errRes.status === 400 && errRes.data !== undefined) {
+                                const errData = errRes.data;
+                                if (errData.Code !== undefined ) {
+                                    if (errData.Code === 80) {
+                                        alert('輸入格式錯誤！');
+                                    }
+                                }
+                            }
+                        }
+                    }
                 });
             }
         },
@@ -77,12 +104,21 @@ const vueApp = Vue.createApp({
             let notFilled = [];
             let alertMsg = '';
 
+            let newQueryParam = {
+                m: this.memberNo,
+                b: this.bookNo
+            };
+
             if (!this.isset('memberNo')) {
+                newQueryParam.m = null;
                 notFilled.push(MemberCall);
             }
             if (!this.isset('bookNo')) {
+                newQueryParam.b = null;
                 notFilled.push('圖書');
             }
+
+            replaceParameter(newQueryParam);
 
             if (notFilled.length > 1) {
                 let lastElm = notFilled.pop(notFilled);
@@ -94,6 +130,9 @@ const vueApp = Vue.createApp({
             if (alertMsg !== '') {
                 alert(`請輸入${alertMsg}編號！`);
             } else {
+                this.init();
+                replaceParameter({ m: this.memberNo, b: this.bookNo });
+
                 axios.post(`/api/borrow/book/${this.bookNo}/${this.memberNo}`)
                 .then(response => {
                     const resData = response.data;
@@ -107,11 +146,23 @@ const vueApp = Vue.createApp({
                     // console.warn(error.response.data.status);
                     if (error.response !== undefined) {
                         const errRes = error.response;
-                        if (errRes.status !== undefined && errRes.status === 409) {
-                            if (errRes.data !== undefined) {
+                        if (errRes.status !== undefined) {
+                            if (errRes.status === 409 && errRes.data !== undefined) {
                                 const errData = errRes.data;
                                 if (errData.Code !== undefined && errData.Code === 143) {
                                     alert('該書籍已借出！');
+                                }
+                            } else if (errRes.status === 400 && errRes.data !== undefined) {
+                                const errData = errRes.data;
+                                if (errData.Code !== undefined ) {
+                                    if (errData.Code === 80) {
+                                        alert('輸入格式錯誤！');
+                                    } else if (errData.Code === 169) {
+                                        alert('該圖書不存在！');
+                                    } else if (errData.Code === 182) {
+                                        // alert('借閱者不存在！');
+                                        this.requestFlag = true;
+                                    }
                                 }
                             }
                         }
@@ -144,7 +195,7 @@ vueApp.component('borrow-hint', {
         `<div class="col message-column msgcol-body" v-bind:class="borrowHintStyle">` +
             `<p class="m-0 h-100 d-flex align-items-center" v-html="borrowHint"></p>` +
         `</div>`,
-    props: [ 'circulationData' ],
+    props: [ 'circulationData', 'memberNo' ],
     data() {
         return {
             maxBorrowable: null    // Todo: 每人可借數量資料表
@@ -170,9 +221,14 @@ vueApp.component('borrow-hint', {
                     `目前已借 <span class="borrowed-number mx-1">${this.circulationData.Total}</span> 本，` +
                     `可再借 <span class="borrowable-number mx-1">${this.circulationData.Borrowable}</span> 本`;
             } else {
-                html = `${MemberCall}【${this.circulationData.Borrower.No} 號】不存在！`;
+                html = `${MemberCall}【${this.getMember()} 號】不存在！`;
             }
             return html;
+        }
+    },
+    methods: {
+        getMember() {
+            return this.circulationData.Borrower?.No || this.memberNo;
         }
     },
     created() {

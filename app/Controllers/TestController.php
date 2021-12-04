@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use PDO;
+use Libraries\HTTP\Request;
 use Libraries\HTTP\Response;
 use Libraries\DBAPI;
 use App\Models\BookModel;
@@ -37,6 +38,20 @@ class TestController
             // 'Count' => MemberModel::getInstance()->countById(3),
             // 'No'    => $_GET['no'] ?? 'Number',
             'Data'  => BookModel::getInstance()->selectOneByNo('245')
+        ];
+
+        Response::getInstance()->setCode(200)->output(JsonUnescaped($result));
+    }
+
+    public function sumWord()
+    {
+        $input = Request::getInstance()->getData();
+
+        $text = $input['text'] ?? '';
+
+        $result = [
+            'Text' => $text,
+            'Sum' => SumWord($text)
         ];
 
         Response::getInstance()->setCode(200)->output(JsonUnescaped($result));

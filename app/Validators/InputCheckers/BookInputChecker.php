@@ -76,18 +76,59 @@ class BookInputChecker extends InputChecker
     }
 
     /**
-     * 驗證查詢書籍輸入資料
+     * 查詢全部書籍資料時輸入的附加欄位
      *
      * @param  array  $input  輸入資料
      * @return void
      */
-    public function verifyGet(array $input): void
+    public function verifyGetAll(array $input): void
+    {
+        $functionName = __FUNCTION__;
+
+        $this->_rawInput = $input;
+
+        if (isset($input['Maker']))
+        {
+            $this->_checkMaker();
+        }
+        if (isset($input['Publisher']))
+        {
+            $this->_checkPublisher();
+        }
+
+        $illegal = (count($this->_errors['fields']) > 0) ? true : false;
+        if ($illegal)
+        {
+            $rawInput = JsonUnescaped($this->_rawInput);
+            $erroInfo = JsonUnescaped($this->_errors['info']);
+            Logger::getInstance()->logInfo("{$this->_className}::{$functionName} Input: {$rawInput}");
+            Logger::getInstance()->logWarning("{$this->_className}::{$functionName} Error: {$erroInfo}");
+            throw new InputException('Input Error', ExceptionCode::Input);
+        }
+    }
+
+    /**
+     * 驗證依欄位及關鍵字查詢書籍輸入資料
+     *
+     * @param  array  $input  輸入資料
+     * @return void
+     */
+    public function verifyGetByField(array $input): void
     {
         $functionName = __FUNCTION__;
 
         $this->_rawInput = $input;
 
         $this->_verifyGetParam();
+
+        if (isset($input['Maker']))
+        {
+            $this->_checkMaker();
+        }
+        if (isset($input['Publisher']))
+        {
+            $this->_checkPublisher();
+        }
 
         $illegal = (count($this->_errors['fields']) > 0) ? true : false;
         if ($illegal)

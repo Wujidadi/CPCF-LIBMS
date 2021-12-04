@@ -979,7 +979,7 @@ function replaceParameter(pairs)
             }
         });
 
-        newSearch = newSearch.replace(/\?+$/, '').replace(/&+$/, '')
+        newSearch = newSearch.replace(/\?+$/, '').replace(/&+$/, '').replace(/^\?&+/, '?')
                              .replace(/\?{2,}/, '?').replace(/&{2,}/, '&');
         newLocation = `${locationPath}${newSearch}`;
 

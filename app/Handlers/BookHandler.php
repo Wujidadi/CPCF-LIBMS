@@ -51,14 +51,15 @@ class BookHandler
      *
      * @param  integer  $limit           查詢資料限制筆數
      * @param  integer  $offset          查詢資料偏移量
+     * @param  array    $appendField     附加欄位，用於連同創作者或出版者一起查詢
      * @param  boolean  $includeDeleted  是否包含除帳（軟刪除）書籍
      * @return array
      */
-    public function getAllBooks(int $limit, int $offset, bool $includeDeleted): array
+    public function getAllBooks(int $limit, int $offset, array $appendField, bool $includeDeleted): array
     {
         $functionName = __FUNCTION__;
 
-        $result = BookModel::getInstance()->selectAllWithPage($limit, $offset, $includeDeleted);
+        $result = BookModel::getInstance()->selectAllWithPage($limit, $offset, $appendField, $includeDeleted);
 
         # 移除時區標記
         $bookList = array_map(function($row) {
@@ -80,10 +81,11 @@ class BookHandler
      * @param  string|integer  $param           關鍵字
      * @param  integer         $limit           查詢資料限制筆數
      * @param  integer         $offset          查詢資料偏移量
+     * @param  array           $appendField     附加欄位，主要用於以書名查詢時，連同創作者或出版者一起查詢
      * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍
      * @return array
      */
-    public function getBooks(string $field, mixed $param, int $limit, int $offset, bool $includeDeleted): array
+    public function getBooks(string $field, mixed $param, int $limit, int $offset, array $appendField, bool $includeDeleted): array
     {
         $functionName = __FUNCTION__;
 
@@ -92,7 +94,9 @@ class BookHandler
             $param = str_replace('-', '', $param);
         }
 
-        $result = BookModel::getInstance()->selectMultiple($field, $param, $limit, $offset, $includeDeleted);
+        $total = BookModel::getInstance()->countByCondition($field, $param, $appendField, $includeDeleted);
+
+        $result = BookModel::getInstance()->selectMultiple($field, $param, $limit, $offset, $appendField, $includeDeleted);
 
         # 移除時區標記
         $bookList = array_map(function($row) {
@@ -102,7 +106,10 @@ class BookHandler
         }, $result);
 
         return [
-            'Total' => count($result),
+            'Total' => [
+                'Count' => $total,
+                'Page' => ceil($total / $limit)
+            ],
             'List'  => $bookList
         ];
     }

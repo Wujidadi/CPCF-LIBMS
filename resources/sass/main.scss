@@ -6,6 +6,13 @@
 body {
     background-color: $background-color;
 
+    .btn-text-center {
+        display: flex !important;
+        flex-wrap: wrap;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
     &.caterpillar {
         // header {
         //     .navbar {
@@ -98,12 +105,18 @@ body {
                 }
             }
             .tbody {
-                .row:hover {
-                    background-color: transparentize(darken($background-color, 20%), 0.5);
+                .info-container {
+                    &:hover {
+                        background-color: transparentize(darken($background-color, 20%), 0.5);
+                    }
                 }
             }
 
             .table {
+                .th {
+                    font-weight: bold;
+                }
+
                 .data-column {
                     display: flex !important;
                     align-items: center !important;
@@ -114,6 +127,7 @@ body {
                 .form-column {
                     height: 100% !important;
                     display: flex !important;
+                    flex-wrap: wrap;
                     justify-content: center !important;
                     align-items: center !important;
                 }
@@ -244,6 +258,164 @@ body {
                             }
                             &.td {
                                 justify-content: $align !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        .page-book {
+            .form {
+                .form-column {
+                    $fields:
+                        'trunk'  94  92,
+                        'side'    6   8,
+
+                        'label'   7  10,
+                        'input'  93  90;
+                    @each $field, $wider-width, $narrower-width in $fields {
+                        &.formcol-#{$field} {
+                            flex: 0 0 auto;
+
+                            @media screen and (min-width: 1920px) {
+                                width: #{calc($wider-width * 1%)};
+                            }
+                            @media (max-width: 1919px) {
+                                width: #{calc($narrower-width * 1%)};
+                            }
+                        }
+                    }
+                }
+            }
+
+            .table {
+                @media screen and (min-width: 1920px) {
+                    font-size: 1rem;
+                }
+                @media (max-width: 1919px) {
+                    font-size: 0.9rem;
+                }
+
+                .data-column {
+                    // $fields:
+                    //     'book-no'       5   7  center,
+                    //     'book-name'    21  16  start,
+                    //     'author'       10  10  start,
+                    //     'illustrator'  10  10  start,
+                    //     'editor'       10  10  start,
+                    //     'translator'   10  10  start,
+                    //     'publisher'    10  10  center,
+                    //     'category'      8   9  center,
+                    //     'location'      7   8  center,
+                    //     'function'      9  10  center;
+                    $fields:
+                        'work'          8    12    center,
+                        'book-no'       5     7    center,
+                        'book-name'    22    15    start,
+                        'author'       11.4  10.8  start,
+                        'illustrator'  11.4  10.8  start,
+                        'editor'       11.4  10.8  start,
+                        'translator'   11.4  10.8  start,
+                        'publisher'    11.4  10.8  center,
+                        'function'      8    12    center;
+                    @each $field, $wider-width, $narrower-width, $align in $fields {
+                        &.data-#{$field} {
+                            flex: 0 0 auto;
+
+                            @media screen and (min-width: 1920px) {
+                                width: #{calc($wider-width * 1%)};
+                            }
+                            @media (max-width: 1919px) {
+                                width: #{calc($narrower-width * 1%)};
+                            }
+
+                            &.th {
+                                justify-content: center !important;
+                            }
+                            &.td {
+                                justify-content: $align !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .page-book-list {
+            .tbody {
+                $gutter-x: 1.5rem;    // --bs-gutter-x: 1.5rem
+                .info-container {
+                    margin: {
+                        left: calc($gutter-x * -.5);
+                        right: calc($gutter-x * -.5);
+                    };
+                    padding: {
+                        left: calc($gutter-x / 6);
+                        right: calc($gutter-x / 6);
+                    };
+                }
+
+                .detail-info-container {
+                    padding: {
+                        top: 3px;
+                        left: 1.25rem;
+                        right: 1.25rem;
+                    }
+
+                    .detail-info-table {
+                        width: 100% !important;
+
+                        >.tr:not(:first-child) {
+                            padding: {
+                                top: 4px;
+                            }
+                        }
+
+                        .label-column {
+                            background-color: transparentize(gray, 0.6);
+                            font-weight: 700;
+                            text-align: center;
+                        }
+
+                        $fields:
+                            'label-book-oriname'   9   9  center,
+                            'info-book-oriname'   57  56  start,
+                            'label-book-series'    9  10  center,
+                            'info-book-series'    25  25  start,
+
+                            'label-book-edition'   9   9    center,
+                            'info-book-edition'   24  23.5  center,
+                            'label-book-print'     9   9    center,
+                            'info-book-print'     24  23.5  center,
+                            'label-publish-date'   9  10    center,
+                            'info-publish-date'   25  25    center,
+
+                            'label-isn'        9   9  center,
+                            'info-isn'        16  16  center,
+                            'label-ean'        9   9  center,
+                            'info-ean'        16  16  center,
+                            'label-category'   9   9  center,
+                            'info-category'   16  16  center,
+                            'label-location'   9   9  center,
+                            'info-location'   16  16  center;
+                        @each $field, $wider-width, $narrower-width, $align in $fields {
+                            .#{$field} {
+                                flex: 0 0 auto;
+                                display: flex !important;
+                                justify-content: $align !important;
+                                align-items: center !important;
+                                word-wrap: break-word;
+                                word-break: break-all;
+                                padding: 4px 6px;
+    
+                                @media screen and (min-width: 1920px) {
+                                    width: #{calc($wider-width * 1%)};
+                                }
+                                @media (max-width: 1919px) {
+                                    width: #{calc($narrower-width * 1%)};
+                                }
                             }
                         }
                     }

@@ -2,7 +2,6 @@ const vueApp = Vue.createApp({
     data() {
         return {
             bookNo: null,
-            requestFlag: false,
             circulationData: {},
             bookReturningMessage: ''
         };
@@ -14,24 +13,9 @@ const vueApp = Vue.createApp({
         // matchContext() {
         //     return (PageContext === 'return') ? true : false;
         // },
-        init() {
-            this.requestFlag = false;
-            this.circulationData = {
-                // 'Total': 0,
-                // 'Borrower': {
-                //     "Id": null,
-                //     "No": null,
-                //     "Name": null,
-                //     "Membership": null,
-                //     "Disabled": null
-                // },
-                // 'Record': []
-            };
-        },
         reset() {
-            this.bookReturningMessage = '';
             this.bookNo = null;
-            this.init();
+            this.bookReturningMessage = '';
         },
         getParam() {
             let b = getParameter('b');
@@ -73,7 +57,6 @@ const vueApp = Vue.createApp({
     },
     created() {
         this.getParam();
-        this.init();
     }
 });
 

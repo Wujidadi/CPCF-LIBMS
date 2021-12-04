@@ -2,10 +2,10 @@
     <div class="form">
         <div class="row form-column">
             <div class="col form-column formcol-label">圖書編號</div>
-            <div class="col form-column formcol-input">
-                <input type="text" class="w-100 h-100 p-2" v-model="bookNo" v-on:keyup.enter="returnBook">
+            <div class="col form-column formcol-input ps-0">
+                <input type="text" class="w-100 h-100 p-2" v-model="bookNo" v-on:keypress.enter="returnBook">
             </div>
-            <div class="col form-column formcol-tail">
+            <div class="col form-column formcol-tail ps-0">
                 <div class="btn btn-primary w-100" v-on:click="returnBook">還書</div>
             </div>
         </div>

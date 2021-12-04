@@ -2,19 +2,19 @@
     <div class="form">
         <div class="row form-column">
             <div class="col form-column formcol-label"><?= App\Constant::MemberCall ?>編號</div>
-            <div class="col form-column formcol-input">
-                <input type="text" class="w-100 h-100 p-2" v-model="memberNo" v-on:keyup.enter="getCirculationByMember()">
+            <div class="col form-column formcol-input ps-0">
+                <input type="text" class="w-100 h-100 p-2" v-model="memberNo" v-on:keypress.enter="getCirculationByMember()">
             </div>
-            <div class="col form-column formcol-tail">
+            <div class="col form-column formcol-tail ps-0">
                 <div class="btn btn-primary w-100" v-on:click="getCirculationByMember()">查詢</div>
             </div>
         </div>
         <div class="row form-column mt-2">
             <div class="col form-column formcol-label">圖書編號</div>
-            <div class="col form-column formcol-input">
-                <input type="text" class="w-100 h-100 p-2" v-model="bookNo" v-on:keyup.enter="borrowBook" v-bind:disabled="forbidBorrow">
+            <div class="col form-column formcol-input ps-0">
+                <input type="text" class="w-100 h-100 p-2" v-model="bookNo" v-on:keypress.enter="borrowBook" v-bind:disabled="forbidBorrow">
             </div>
-            <div class="col form-column formcol-tail">
+            <div class="col form-column formcol-tail ps-0">
                 <div class="btn btn-warning w-100" v-on:click="borrowBook" v-bind:class="{ disabled: forbidBorrow }">借書</div>
             </div>
         </div>
@@ -26,16 +26,16 @@
                 Borrower:   circulationData.Borrower,
                 Record:     circulationData.Record,
                 Borrowable: remainBorrowable
-            }"></borrow-hint>
-            <div class="col message-column msgcol-tail">
+            }" v-bind:member-no="memberNo"></borrow-hint>
+            <div class="col message-column msgcol-tail ps-0">
                 <div class="btn btn-danger w-100" v-on:click="reset">清除</div>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="table" v-if="circulationData.Total > 0">
-                <hr>
                 <div class="thead">
-                    <div class="row tr fw-bold">
+                    <div class="row tr">
                         <div class="col th data-column data-book-no"    >書號</div>
                         <div class="col th data-column data-book-name"  >書名</div>
                         <div class="col th data-column data-author"     >作者</div>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="tbody">
-                    <div class="row tr" v-for="data in circulationData.Record">
+                    <div class="info-container row tr" v-for="data in circulationData.Record">
                         <div class="col td data-column data-book-no"    >{{ data.Book.No }}</div>
                         <div class="col td data-column data-book-name"  >{{ data.Book.Name }}</div>
                         <div class="col td data-column data-author"     >{{ data.Book.Author }}</div>
@@ -61,7 +61,7 @@
                         <div class="col td data-column data-category"   >{{ data.Book.CategoryId }}</div>
                         <div class="col td data-column data-location"   >{{ data.Book.LocationId }}</div>
                         <div class="col td data-column data-borrowed-at">{{ data.BorrowedAt.replace(/:[^:]+$/g, '') }}</div>
-                        <div class="col td data-column data-function"   >
+                        <div class="col td data-column data-function">
                             <div class="btn btn-info w-100" v-on:click="returnBook(data.Book.Id)">還書</div>
                         </div>
                     </div>

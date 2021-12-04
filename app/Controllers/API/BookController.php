@@ -102,20 +102,45 @@ class BookController
             'Message' => 'OK'
         ];
 
+        $appendField = [];
+
         $includeDeleted = false;
 
         try
         {
+            $input = [];
+            if (isset($_GET['m']) && $_GET['m'] !== '')
+            {
+                $input['Maker'] = $_GET['m'];
+            }
+            if (isset($_GET['r']) && $_GET['r'] !== '')
+            {
+                $input['Publisher'] = $_GET['r'];
+            }
+            if (count($input) > 0)
+            {
+                BookInputChecker::getInstance()->verifyGetAll($input);
+                $filteredData = BookInputChecker::getInstance()->getFilteredData();
+                if (isset($filteredData['Maker']))
+                {
+                    $appendField['Maker'] = $_GET['m'];
+                }
+                if (isset($filteredData['Publisher']))
+                {
+                    $appendField['Publisher'] = $_GET['r'];
+                }
+            }
+
             if (isset($_GET['d']) && $_GET['d'] == '1')
             {
                 $includeDeleted = true;
             }
 
-            $page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int) $_GET['p'] : Constant::DefaultPageNumber;
-            $limit = (isset($_GET['c']) && is_numeric($_GET['c']) && $_GET['c'] <= Constant::MaxDataCountPerPage) ? (int) $_GET['c'] : Constant::DefaultPageLimit;
+            $page = (isset($_GET['p']) && is_numeric($_GET['p']) && $_GET['p'] > 0) ? (int) $_GET['p'] : Constant::DefaultPageNumber;
+            $limit = (isset($_GET['c']) && is_numeric($_GET['c']) && $_GET['c'] > 0 && $_GET['c'] <= Constant::MaxDataCountPerPage) ? (int) $_GET['c'] : Constant::DefaultPageLimit;
             $offset = ($page - 1) * $limit;
 
-            $output['Data'] = BookHandler::getInstance()->getAllBooks($limit, $offset, $includeDeleted);
+            $output['Data'] = BookHandler::getInstance()->getAllBooks($limit, $offset, $appendField, $includeDeleted);
         }
         catch (Throwable $ex)
         {
@@ -149,16 +174,36 @@ class BookController
             'Message' => 'OK'
         ];
 
+        $appendField = [];
+
         $includeDeleted = false;
 
         try
         {
             $input = [ 'Field' => $field, 'Value' => $value ];
 
-            BookInputChecker::getInstance()->verifyGet($input);
+            if (isset($_GET['m']) && $_GET['m'] !== '')
+            {
+                $input['Maker'] = $_GET['m'];
+            }
+            if (isset($_GET['r']) && $_GET['r'] !== '')
+            {
+                $input['Publisher'] = $_GET['r'];
+            }
+
+            BookInputChecker::getInstance()->verifyGetByField($input);
             $filteredData = BookInputChecker::getInstance()->getFilteredData();
             $field = $filteredData['Field'];
             $value = $filteredData['Value'];
+
+            if (isset($filteredData['Maker']))
+            {
+                $appendField['Maker'] = $_GET['m'];
+            }
+            if (isset($filteredData['Publisher']))
+            {
+                $appendField['Publisher'] = $_GET['r'];
+            }
 
             if (isset($_GET['d']) && $_GET['d'] == '1')
             {
@@ -166,10 +211,10 @@ class BookController
             }
 
             $page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int) $_GET['p'] : Constant::DefaultPageNumber;
-            $limit = (isset($_GET['c']) && is_numeric($_GET['c']) && $_GET['c'] <= Constant::MaxDataCountPerPage) ? (int) $_GET['c'] : Constant::DefaultPageLimit;
+            $limit = (isset($_GET['c']) && is_numeric($_GET['c']) && $_GET['c'] > 0 && $_GET['c'] <= Constant::MaxDataCountPerPage) ? (int) $_GET['c'] : Constant::DefaultPageLimit;
             $offset = ($page - 1) * $limit;
 
-            $output['Data'] = BookHandler::getInstance()->getBooks($field, $value, $limit, $offset, $includeDeleted);
+            $output['Data'] = BookHandler::getInstance()->getBooks($field, $value, $limit, $offset, $appendField, $includeDeleted);
         }
         catch (InputException $ex)
         {

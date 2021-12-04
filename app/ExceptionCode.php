@@ -18,4 +18,5 @@ class ExceptionCode
     const BookNotExist    = 169;
     const MemberNotExist  = 182;
     const BookNotBorrowed = 192;
+    const WrongQueryField = 199;
 }

@@ -5,12 +5,19 @@ use App\Controllers\API\BookController;
 use App\Controllers\API\MemberController;
 use App\Controllers\API\CirculationController;
 
+# 開發測試
 if (IS_DEV)
 {
-    # 測試
-    $Route->map('GET', '/apt/test', function()
+    # 主要測試方法
+    $Route->map('GET', '/api/dev/test', function()
     {
         TestController::getInstance()->main();
+    });
+
+    # 轉換輸入字串為字母碼
+    $Route->map('GET', '/api/dev/sumword', function()
+    {
+        TestController::getInstance()->sumWord();
     });
 }
 

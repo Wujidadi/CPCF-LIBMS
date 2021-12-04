@@ -178,6 +178,148 @@ class BookModel extends Model
     }
 
     /**
+     * 計算符合指定條件的資料筆數
+     *
+     * @param  string          $field           欄位名稱
+     * @param  string|integer  $value           關鍵字
+     * @param  array           $appendField     附加欄位
+     * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
+     * @return integer
+     */
+    public function countByCondition(string $field, mixed $value, array $appendField = [], bool $includeDeleted = false): int
+    {
+        $functionName = __FUNCTION__;
+
+        try
+        {
+            $withDeleted = ($includeDeleted) ? '' : 'AND "Deleted" IS FALSE';
+
+            switch ($field)
+            {
+                case 'No':
+                case 'ISN':
+                case 'EAN':
+                {
+                    $sql = <<<SQL
+                    SELECT
+                        COUNT(*) AS "Count"
+                    FROM public."{$this->_tableName}"
+                    WHERE
+                        "{$field}" = :{$field}
+                        {$withDeleted}
+                    SQL;
+
+                    $bind = [
+                        $field => $value
+                    ];
+
+                    break;
+                }
+
+                case 'Name':
+                case 'OriginalName':
+                case 'Author':
+                case 'Illustrator':
+                case 'Editor':
+                case 'Translator':
+                case 'Series':
+                case 'Publisher':
+                {
+                    $bind = [
+                        $field => "%{$value}%"
+                    ];
+
+                    $appendFieldSql = '';
+
+                    if ($field === 'Name')
+                    {
+                        if (count($appendField) > 0)
+                        {
+                            foreach ($appendField as $key => $val)
+                            {
+                                if ($key === 'Maker')
+                                {
+                                    $keyName = 'CONCAT("Author", "Illustrator", "Editor", "Translator")';
+                                }
+                                else
+                                {
+                                    $keyName = "\"{$key}\"";
+                                }
+
+                                $appendFieldSql .= <<<SQL
+                                    AND {$keyName} LIKE :append{$key}
+                                SQL;
+
+                                $bind["append{$key}"] = "%{$val}%";
+                            }
+                        }
+                    }
+
+                    $sql = <<<SQL
+                    SELECT
+                        COUNT(*) AS "Count"
+                    FROM public."{$this->_tableName}"
+                    WHERE
+                        "{$field}" LIKE :{$field}
+                        {$appendFieldSql}
+                        {$withDeleted}
+                    SQL;
+
+                    break;
+                }
+
+                case 'Maker':
+                {
+                    $sql = <<<SQL
+                    SELECT
+                        COUNT(*) AS "Count"
+                    FROM public."{$this->_tableName}"
+                    WHERE
+                        CONCAT("Author", "Illustrator", "Editor", "Translator") LIKE :{$field}
+                        {$withDeleted}
+                    SQL;
+
+                    $bind = [
+                        $field => "%{$value}%"
+                    ];
+
+                    break;
+                }
+            }
+
+            if (isset($sql) && isset($bind))
+            {
+                return (int) $this->_db->query($sql, $bind)[0]['Count'];
+            }
+            else
+            {
+                $exCode = ExceptionCode::WrongQueryField;
+                $exMessage = "Wrong query field: {$field}";
+
+                $logMessage = "{$this->_className}::{$functionName} {$exMessage}";
+                Logger::getInstance()->logError($logMessage);
+
+                throw new Exception($exMessage, $exCode);
+            }
+        }
+        catch (PDOException $ex)
+        {
+            if ($this->_db->inTransaction())
+            {
+                $this->_db->rollBack();
+            }
+
+            $exCode = $ex->getCode();
+            $exMessage = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+
+            throw new Exception($exMessage, ExceptionCode::PDO);
+        }
+    }
+
+    /**
      * 依書籍 ID 查詢單筆書籍資料
      *
      * @param  integer  $id  書籍 ID
@@ -232,10 +374,11 @@ class BookModel extends Model
      * @param  string|integer  $value           關鍵字
      * @param  integer         $limit           查詢資料限制筆數
      * @param  integer         $offset          查詢資料偏移量
+     * @param  array           $appendField     附加欄位
      * @param  boolean         $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
      * @return array
      */
-    public function selectMultiple(string $field, mixed $value, int $limit, int $offset, bool $includeDeleted = false): array
+    public function selectMultiple(string $field, mixed $value, int $limit, int $offset, array $appendField = [], bool $includeDeleted = false): array
     {
         $functionName = __FUNCTION__;
 
@@ -278,22 +421,49 @@ class BookModel extends Model
                 case 'Series':
                 case 'Publisher':
                 {
+                    $bind = [
+                        $field => "%{$value}%",
+                        'limit'  => [ $limit,  PDO::PARAM_INT ],
+                        'offset' => [ $offset, PDO::PARAM_INT ]
+                    ];
+
+                    $appendFieldSql = '';
+
+                    if ($field === 'Name')
+                    {
+                        if (count($appendField) > 0)
+                        {
+                            foreach ($appendField as $key => $val)
+                            {
+                                if ($key === 'Maker')
+                                {
+                                    $keyName = 'CONCAT("Author", "Illustrator", "Editor", "Translator")';
+                                }
+                                else
+                                {
+                                    $keyName = "\"{$key}\"";
+                                }
+
+                                $appendFieldSql .= <<<SQL
+                                    AND {$keyName} LIKE :append{$key}
+                                SQL;
+
+                                $bind["append{$key}"] = "%{$val}%";
+                            }
+                        }
+                    }
+
                     $sql = <<<SQL
                     SELECT
                         *
                     FROM public."{$this->_tableName}"
                     WHERE
                         "{$field}" LIKE :{$field}
+                        {$appendFieldSql}
                         {$withDeleted}
                     LIMIT :limit
                     OFFSET :offset
                     SQL;
-
-                    $bind = [
-                        $field => "%{$value}%",
-                        'limit'  => [ $limit,  PDO::PARAM_INT ],
-                        'offset' => [ $offset, PDO::PARAM_INT ]
-                    ];
 
                     break;
                 }
@@ -325,6 +495,16 @@ class BookModel extends Model
             {
                 return $this->_db->query($sql, $bind);
             }
+            else
+            {
+                $exCode = ExceptionCode::WrongQueryField;
+                $exMessage = "Wrong query field: {$field}";
+
+                $logMessage = "{$this->_className}::{$functionName} {$exMessage}";
+                Logger::getInstance()->logError($logMessage);
+
+                throw new Exception($exMessage, $exCode);
+            }
         }
         catch (PDOException $ex)
         {
@@ -348,30 +528,55 @@ class BookModel extends Model
      *
      * @param  integer  $limit           查詢資料限制筆數
      * @param  integer  $offset          查詢資料偏移量
+     * @param  array    $appendField     附加欄位
      * @param  boolean  $includeDeleted  是否包含除帳（軟刪除）書籍：預設為 `false`
      * @return array
      */
-    public function selectAllWithPage(int $limit, int $offset, bool $includeDeleted = false): array
+    public function selectAllWithPage(int $limit, int $offset, array $appendField = [], bool $includeDeleted = false): array
     {
         $functionName = __FUNCTION__;
 
         try
         {
+            $bind = [
+                'limit'  => [ $limit,  PDO::PARAM_INT ],
+                'offset' => [ $offset, PDO::PARAM_INT ]
+            ];
+
             $withDeleted = ($includeDeleted) ? '' : 'WHERE "Deleted" IS FALSE';
+
+            $appendFieldSql = '';
+
+            if (count($appendField) > 0)
+            {
+                foreach ($appendField as $key => $val)
+                {
+                    if ($key === 'Maker')
+                    {
+                        $keyName = 'CONCAT("Author", "Illustrator", "Editor", "Translator")';
+                    }
+                    else
+                    {
+                        $keyName = "\"{$key}\"";
+                    }
+
+                    $appendFieldSql .= <<<SQL
+                        AND {$keyName} LIKE :append{$key}
+                    SQL;
+
+                    $bind["append{$key}"] = "%{$val}%";
+                }
+            }
 
             $sql = <<<SQL
             SELECT
                 *
             FROM public."{$this->_tableName}"
             {$withDeleted}
+            {$appendFieldSql}
             LIMIT :limit
             OFFSET :offset
             SQL;
-
-            $bind = [
-                'limit'  => [ $limit,  PDO::PARAM_INT ],
-                'offset' => [ $offset, PDO::PARAM_INT ]
-            ];
 
             return $this->_db->query($sql, $bind);
         }
