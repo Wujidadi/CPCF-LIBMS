@@ -8,7 +8,7 @@ use App\ExceptionCode;
 use App\Models\BookModel;
 
 /**
- * 書籍資料處理類別
+ * 書籍資料處理器
  */
 class BookHandler
 {

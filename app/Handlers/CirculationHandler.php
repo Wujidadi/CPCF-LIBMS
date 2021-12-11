@@ -11,7 +11,7 @@ use App\Models\BookModel;
 use App\Models\MemberModel;
 
 /**
- * 書籍流通（借還書）資料處理類別
+ * 書籍流通（借還書）資料處理器
  */
 class CirculationHandler
 {

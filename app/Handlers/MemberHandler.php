@@ -8,7 +8,7 @@ use App\ExceptionCode;
 use App\Models\MemberModel;
 
 /**
- * 借閱者/會員資料處理類別
+ * 借閱者/會員資料處理器
  */
 class MemberHandler
 {

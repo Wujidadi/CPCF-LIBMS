@@ -13,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use App\Models\BookModel;
 
 /**
- * 原始資料檔處理類別
+ * 原始資料檔處理器
  */
 class SourceFileHandler
 {

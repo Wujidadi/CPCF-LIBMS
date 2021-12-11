@@ -6,8 +6,8 @@ use PDO;
 use Exception;
 use PDOException;
 use Libraries\Logger;
-use App\ExceptionCode;
 use App\Model;
+use App\ExceptionCode;
 
 /**
  * 書籍借閱紀錄資料模型
