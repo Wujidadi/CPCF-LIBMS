@@ -36,7 +36,7 @@ class MainController extends WebPageController
 
         $template = 'Main._home';
 
-        $pageContext = 'home';
+        $pageContext = 'Home';
 
         $scripts = $this->_buildScriptHTML([
             '/js/main/home.js'
@@ -63,7 +63,7 @@ class MainController extends WebPageController
 
         $template = 'Main.circulation._borrow';
 
-        $pageContext = 'borrow';
+        $pageContext = 'Borrow';
 
         $scripts = $this->_buildScriptHTML([
             '/js/main/circulation/borrow.js'
@@ -90,7 +90,7 @@ class MainController extends WebPageController
 
         $template = 'Main.circulation._return';
 
-        $pageContext = 'return';
+        $pageContext = 'Return';
 
         $scripts = $this->_buildScriptHTML([
             '/js/main/circulation/return.js'
@@ -117,7 +117,7 @@ class MainController extends WebPageController
 
         $template = 'Main.book._list';
 
-        $pageContext = 'books';
+        $pageContext = 'BookList';
 
         $scripts = $this->_buildScriptHTML([
             '/js/main/book/list.js'
@@ -143,7 +143,7 @@ class MainController extends WebPageController
 
         $template = 'Main.book._add';
 
-        $pageContext = 'addBook';
+        $pageContext = 'AddBook';
 
         $scripts = $this->_buildScriptHTML([
             '/js/main/book/add.js'
@@ -170,7 +170,7 @@ class MainController extends WebPageController
 
         $template = 'Main.member._list';
 
-        $pageContext = 'members';
+        $pageContext = 'MemberList';
 
         $scripts = $this->_buildScriptHTML([
             '/js/main/member/list.js'

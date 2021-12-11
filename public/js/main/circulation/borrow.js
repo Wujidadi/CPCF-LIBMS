@@ -22,7 +22,7 @@ const vueApp = Vue.createApp({
             return (this[variable] === undefined || this[variable] === null || this[variable] === '') ? false : true;
         },
         // matchContext() {
-        //     return (PageContext === 'borrow') ? true : false;
+        //     return (PageContext === 'Borrow') ? true : false;
         // },
         init() {
             this.requestFlag = false;
@@ -141,9 +141,6 @@ const vueApp = Vue.createApp({
                     }
                 })
                 .catch(error => {
-                    // console.warn(error.response);
-                    // console.warn(error.response.data);
-                    // console.warn(error.response.data.status);
                     if (error.response !== undefined) {
                         const errRes = error.response;
                         if (errRes.status !== undefined) {
