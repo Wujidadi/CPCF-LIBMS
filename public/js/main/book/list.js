@@ -59,9 +59,7 @@ const vueApp = Vue.createApp({
         //     return (PageContext === 'books') ? true : false;
         // },
         init() {
-            // if (!this.emptySearchKey) {
-            //     this.searchBook();
-            // }
+            //
         },
         reset() {
             this.mainSearchKey = '';
@@ -162,17 +160,6 @@ const vueApp = Vue.createApp({
             })
             .catch(error => {
                 console.warn(error);
-                // if (error.response !== undefined) {
-                //     const errRes = error.response;
-                //     if (errRes.status !== undefined && errRes.status === 409) {
-                //         if (errRes.data !== undefined) {
-                //             const errData = errRes.data;
-                //             if (errData.Code !== undefined && errData.Code === 192) {
-                //                 alert('該書籍未借出！');
-                //             }
-                //         }
-                //     }
-                // }
             });
         },
         toggleTargetTage(bookId) {

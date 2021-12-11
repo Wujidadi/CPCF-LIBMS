@@ -80,59 +80,35 @@
                                 <div class="btn btn-danger btn-text-center w-100 px-2 py-1 fs-r0.85">刪除</div>
                             </div>
                         </div>
-                        <div class="detail-info-container collapse" v-bind:id="toggleTargetTage(book.Id)">
-                            <div class="detail-info-table">
-                                <div class="row tr">
-                                    <div class="col th label-column label-book-oriname">原文書名</div>
-                                    <div class="col td info-column  info-book-oriname" >{{ book.OriginalName }}</div>
-                                    <div class="col th label-column label-book-series" >系列/叢書名</div>
-                                    <div class="col td info-column  info-book-series"  >{{ book.Series }}</div>
-                                </div>
-                                <div class="row tr">
-                                    <div class="col th label-column label-book-edition">版本別</div>
-                                    <div class="col td info-column  info-book-edition" >{{ book.Edition }}</div>
-                                    <div class="col th label-column label-book-print"  >印刷別</div>
-                                    <div class="col td info-column  info-book-print"   >{{ book.Print }}</div>
-                                    <div class="col th label-column label-publish-date">出版日期</div>
-                                    <div class="col td info-column  info-publish-date" >{{ book.PublishDate }}</div>
-                                </div>
-                                <div class="row tr">
-                                    <div class="col th label-column label-isn"     >ISBN/ISSN</div>
-                                    <div class="col td info-column  info-isn"      >{{ book.ISN }}</div>
-                                    <div class="col th label-column label-ean"     >EAN</div>
-                                    <div class="col td info-column  info-ean"      >{{ book.EAN }}</div>
-                                    <div class="col th label-column label-category">分類</div>
-                                    <div class="col td info-column  info-category" >{{ book.CategoryId }}</div>
-                                    <div class="col th label-column label-location">架位</div>
-                                    <div class="col td info-column  info-location" >{{ book.LocationId }}</div>
+                        <div class="detail-info-box collapse-container collapse" v-bind:id="toggleTargetTage(book.Id)">
+                            <div class="detail-info-container">
+                                <div class="detail-info-table">
+                                    <div class="row tr">
+                                        <div class="col th label-column label-book-oriname">原文書名</div>
+                                        <div class="col td info-column  info-book-oriname" >{{ book.OriginalName }}</div>
+                                        <div class="col th label-column label-book-series" >系列/叢書名</div>
+                                        <div class="col td info-column  info-book-series"  >{{ book.Series }}</div>
+                                    </div>
+                                    <div class="row tr">
+                                        <div class="col th label-column label-book-edition">版本別</div>
+                                        <div class="col td info-column  info-book-edition" >{{ book.Edition }}</div>
+                                        <div class="col th label-column label-book-print"  >印刷別</div>
+                                        <div class="col td info-column  info-book-print"   >{{ book.Print }}</div>
+                                        <div class="col th label-column label-publish-date">出版日期</div>
+                                        <div class="col td info-column  info-publish-date" >{{ book.PublishDate }}</div>
+                                    </div>
+                                    <div class="row tr">
+                                        <div class="col th label-column label-isn"     >ISBN/ISSN</div>
+                                        <div class="col td info-column  info-isn"      >{{ book.ISN }}</div>
+                                        <div class="col th label-column label-ean"     >EAN</div>
+                                        <div class="col td info-column  info-ean"      >{{ book.EAN }}</div>
+                                        <div class="col th label-column label-category">分類</div>
+                                        <div class="col td info-column  info-category" >{{ book.CategoryId }}</div>
+                                        <div class="col th label-column label-location">架位</div>
+                                        <div class="col td info-column  info-location" >{{ book.LocationId }}</div>
+                                    </div>
                                 </div>
                             </div>
-                            <!-- <table class="detail-info-table">
-                                <tr>
-                                    <th class="label-column label-book-oriname px-1">原文書名</th>
-                                    <td class="info-column info-book-oriname px-1">{{ book.OriginalName }}</td>
-                                    <th class="label-column label-book-series px-1">系列/叢書名</th>
-                                    <td class="info-column info-book-series px-1">{{ book.Series }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="label-column label-book-edition px-1">版本別</th>
-                                    <td class="info-column info-book-edition px-1">{{ book.Edition }}</td>
-                                    <th class="label-column label-book-print px-1">印刷別</th>
-                                    <td class="info-column info-book-print px-1">{{ book.Print }}</td>
-                                    <th class="label-column label-publish-date px-1">出版日期</th>
-                                    <td class="info-column info-publish-date px-1">{{ book.PublishDate }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="label-column label-isn px-1">ISBN/ISSN</th>
-                                    <td class="info-column info-isn px-1">{{ book.ISN }}</td>
-                                    <th class="label-column label-ean px-1">EAN</th>
-                                    <td class="info-column info-ean px-1">{{ book.EAN }}</td>
-                                    <th class="label-column label-category px-1">分類</th>
-                                    <td class="info-column info-category px-1">{{ book.CategoryId }}</td>
-                                    <th class="label-column label-location px-1">架位</th>
-                                    <td class="info-column info-location px-1">{{ book.LocationId }}</td>
-                                </tr>
-                            </table> -->
                         </div>
                     </div>
                 </div>
