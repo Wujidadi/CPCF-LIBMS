@@ -653,9 +653,6 @@ class DBAPI
 
             $sql = "DELETE FROM {$table}{$wherePattern}";
 
-            Logger::getInstance()->logInfo($sql);
-            Logger::getInstance()->logInfo(JsonUnescaped($bind));
-
             $rowCount = $this->query($sql, $bind);
         }
 
