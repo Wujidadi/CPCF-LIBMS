@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use Throwable;
 use PDO;
+use Libraries\Logger;
 use Libraries\HTTP\Request;
 use Libraries\HTTP\Response;
 use Libraries\DBAPI;
@@ -32,15 +34,76 @@ class TestController
      */
     public function main()
     {
-        $result = [
-            // 'Text'  => $text = 'MemberNotExist',
-            // 'Sum'   => SumWord($text),
-            // 'Count' => MemberModel::getInstance()->countById(3),
-            // 'No'    => $_GET['no'] ?? 'Number',
-            'Data'  => BookModel::getInstance()->selectOneByNo('245')
+        $functionName = __FUNCTION__;
+
+        $httpStatusCode = 200;
+        $output = [
+            'Code'    => 200,
+            'Message' => 'OK'
         ];
 
-        Response::getInstance()->setCode(200)->output(JsonUnescaped($result));
+        try
+        {
+            $result = [
+                // 'Text'  => $text = 'MemberNotExist',
+                // 'Sum'   => SumWord($text),
+                // 'Count' => MemberModel::getInstance()->countById(3),
+                // 'No'    => $_GET['no'] ?? 'Number',
+                // 'Data'  => DBAPI::getInstance()->query('SELECT * FROM "public"."StorageTypes"')
+                // 'Data'  => DBAPI::getInstance()->lastInsertId('StorageTypes_Id_seq')
+                // 'Data'  => DBAPI::getInstance()->insert('StorageTypes', [
+                //     'Name' => '測試',
+                //     'Alias' => 'Test'
+                // ])
+                // 'Data'  => DBAPI::getInstance()->insertMulti('StorageTypes', [
+                //     [
+                //         'Name' => '測試1',
+                //         'Alias' => 'Test1'
+                //     ],
+                //     [
+                //         'Name' => '測試2',
+                //         'Alias' => 'Test2'
+                //     ]
+                // ]),
+                // 'Data'  => DBAPI::getInstance()->count('StorageTypes')
+                // 'Data'  => DBAPI::getInstance()->select('StorageTypes', [
+                //     'Id' => '唯一碼',
+                //     'Name',
+                //     'Alias' => '別名'
+                // ], [
+                //     'Name' => ['LIKE', '%測試%'],
+                //     // 'Alias' => 'Test'
+                // ])
+                // 'Data'  => DBAPI::getInstance()->update('StorageTypes', [
+                //     'Alias' => 'TTTEEST'
+                // ], [
+                //     // 'Name' => '測試2'
+                //     'Name' => ['LIKE', '%測試%']
+                // ])
+                'Data'  => DBAPI::getInstance()->delete('StorageTypes', [
+                    'Name' => [ 'LIKE', '%測試%' ]
+                ])
+            ];
+            $output['Data'] = $result;
+        }
+        catch (Throwable $ex)
+        {
+            $httpStatusCode = 500;
+
+            $exType    = get_class($ex);
+            $exCode    = $output['Code']    = $ex->getCode();
+            $exMessage = $output['Message'] = $ex->getMessage();
+
+            $logMessage = "{$this->_className}::{$functionName} {$exType}({$exCode}): {$exMessage}";
+            Logger::getInstance()->logError($logMessage);
+        }
+
+        if (!is_string($output))
+        {
+            $output = JsonUnescaped($output);
+        }
+
+        Response::getInstance()->setCode($httpStatusCode)->output($output);
     }
 
     public function sumWord()

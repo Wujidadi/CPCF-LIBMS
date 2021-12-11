@@ -223,7 +223,7 @@ class DBAPI
                 foreach ($this->_parameters as $column => $value)
                 {
                     $this->_pdoStatement->bindParam(
-                        $parametersType ? intval($column) : ":" . $column,
+                        $parametersType ? intval($column) : ':' . $column,
                         $this->_parameters[$column]['value'],
                         $this->_parameters[$column]['type']
                     );
@@ -250,7 +250,7 @@ class DBAPI
      * Build SQL parameters.
      *
      * @param  string      $query   SQL clause
-     * @param  array|null  $params  Binding Variables
+     * @param  array|null  $params  Binding variables
      * @return string
      */
     private function _buildParams(string $query, ?array $params = null): string
@@ -302,6 +302,149 @@ class DBAPI
     }
 
     /**
+     * Build SQL clauses of `SELECT` columns by given column names.
+     *
+     * @param  string[]  $columns  Column names that should be selected
+     * @return string
+     */
+    private function _buildSelectColumn(array $columns): string
+    {
+        if (is_array($columns) && count($columns) > 0)
+        {
+            $fields = '';
+
+            foreach ($columns as $key => $value)
+            {
+                if (is_numeric($key) && preg_match('/\d+/', $key))
+                {
+                    $fields .= "`{$value}`, ";
+                }
+                else
+                {
+                    $fields .= "`{$key}` AS `{$value}`, ";
+                }
+            }
+            $fields .= preg_replace('/, $/', '', $fields);
+
+            if ($this->_dbtype !== 'mysql')
+            {
+                $fields = $this->_changeSystemIdentifiers($fields);
+            }
+        }
+        else
+        {
+            $fields = '*';
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Build SQL clause and binding parameters by given data for update.
+     *
+     * @param  array  $params  Column names and values to be updated
+     * @return array
+     */
+    private function _buildUpdateValues(array $params): array
+    {
+        $bind = [];
+        $values = '';
+
+        foreach ($params as $key => $val)
+        {
+            $bind["{$key}_to_update"] = $val;
+            $values .= "`{$key}` = :{$key}_to_update, ";
+        }
+
+        $values = preg_replace('/, $/', '', $values);
+
+        if ($this->_dbtype !== 'mysql')
+        {
+            $values = $this->_changeSystemIdentifiers($values);
+        }
+
+        return [
+            'Pattern' => $values,
+            'Bind' => $bind
+        ];
+    }
+
+    /**
+     * Build SQL clauses of `WHERE` conditions and binding parameters by given data.
+     *
+     * `OR` clauses in `WHERE` data are not supported yet
+     *
+     * @param  array  $params  `WHERE` columns and values
+     * @return array
+     */
+    private function _buildWhere(array $params): array
+    {
+        $singleValueOperators = [ '=', '!=', '>', '<', '<>', '<=>', 'is', 'is not', 'like', 'not like' ];
+        $betweenOperators = [ 'between', 'not between' ];
+        $inOperators = [ 'in', 'not in' ];
+
+        $bind = [];
+        $wherePattern = '';
+
+        if ((is_array($params) && count($params) > 0))
+        {
+            foreach ($params as $key => $value)
+            {
+                # Handle "equal" statement
+                if (!is_array($value))
+                {
+                    $wherePattern .= "`{$key}` = :{$key} AND ";
+                    $bind[$key] = $value;
+                }
+                else
+                {
+                    $operator = trim(strtolower($value[0]));
+
+                    # Handle "equal", "compare", "IS/IS NOT" and "LIKE/NOT LIKE" statement
+                    if (in_array($operator, $singleValueOperators) && !is_array($value[1]))
+                    {
+                        $wherePattern .= "`{$key}` {$value[0]} :{$key} AND ";
+                        $bind[$key] = $value[1];
+                    }
+                    else if (is_array($value[1]))
+                    {
+                        # Handle "BETWEEN" statement
+                        if (in_array($operator, $betweenOperators))
+                        {
+                            $wherePattern .= "`{$key}` {$value[0]} :{$key}_FROM AND :{$key}_TO AND ";
+                            $bind["{$key}_FROM"] = $value[1][0];
+                            $bind["{$key}_TO"] = $value[1][1];
+                        }
+                        # Handle "IN" statement
+                        else if (in_array($operator, $inOperators))
+                        {
+                            $wherePattern .= "`{$key}` {$value[0]} (";
+                            foreach ($value[1] as $inIdx => $inVal)
+                            {
+                                $wherePattern .= ":{$key}{$inIdx}, ";
+                                $bind["{$key}{$inIdx}"] = $inVal;
+                            }
+                            $wherePattern = preg_replace('/, $/', '', $wherePattern) . ') AND ';
+                        }
+                    }
+                }
+            }
+
+            $wherePattern = ' WHERE ' . preg_replace('/ AND $/', '', $wherePattern);
+        }
+
+        if ($this->_dbtype !== 'mysql')
+        {
+            $wherePattern = $this->_changeSystemIdentifiers($wherePattern);
+        }
+
+        return [
+            'Pattern' => $wherePattern,
+            'Bind' => $bind
+        ];
+    }
+
+    /**
      * Execute a SQL query, return a result array in the select operation, or return the number of rows affected in other operations.
      *
      * @param  string      $query      SQL clause
@@ -329,6 +472,205 @@ class DBAPI
         {
             return $exec;
         }
+    }
+
+    /**
+     * Select the result of `COUNT()` by given table name and `WHERE` array; `OR` clauses in `WHERE` data are not supported yet.
+     *
+     * @param  string  $tableName  Name of the target table
+     * @param  array   $where      Data of `WHERE` conditions
+     * @return integer
+     */
+    public function count(string $tableName, array $where = []): int
+    {
+        list('Pattern' => $wherePattern, 'Bind' => $bind) = $this->_buildWhere($where);
+
+        $as = '`Count`';
+
+        $table = "`{$tableName}`";
+
+        if ($this->_dbtype !== 'mysql')
+        {
+            $as = $this->_changeSystemIdentifiers($as);
+            $table = $this->_changeSystemIdentifiers($table);
+        }
+
+        $sql = "SELECT COUNT(*) AS {$as} FROM {$table}{$wherePattern}";
+
+        return (int) $this->query($sql, $bind)[0]['Count'];
+    }
+
+    /**
+     * Select by given table name, column names and `WHERE` array; `OR` clauses in `WHERE` data are not supported yet.
+     *
+     * @param  string    $tableName  Name of the target table
+     * @param  string[]  $columns    Column names that should be selected
+     * @param  array     $where      Data of `WHERE` conditions
+     * @return array
+     */
+    public function select(string $tableName, array $columns = [], array $where = []): array
+    {
+        $selectPattern = $this->_buildSelectColumn($columns);
+
+        list('Pattern' => $wherePattern, 'Bind' => $bind) = $this->_buildWhere($where);
+
+        $table = "`{$tableName}`";
+
+        if ($this->_dbtype !== 'mysql')
+        {
+            $table = $this->_changeSystemIdentifiers($table);
+        }
+
+        $sql = "SELECT {$selectPattern} FROM {$table}{$wherePattern}";
+
+        return $this->query($sql, $bind);
+    }
+
+    /**
+     * Insert data by given table name and parameters.
+     *
+     * @param  string    $tableName  Name of the target table
+     * @param  string[]  $params     Binding variables
+     * @return integer
+     */
+    public function insert(string $tableName, array $params = []): int
+    {
+        $keys = array_keys($params);
+
+        $columns = '(`' . implode('`, `', $keys) . '`)';
+
+        $values = '(:' . implode(', :', $keys) . ')';
+
+        $table = "`{$tableName}`";
+
+        if ($this->_dbtype !== 'mysql')
+        {
+            $columns = $this->_changeSystemIdentifiers($columns);
+            $table = $this->_changeSystemIdentifiers($table);
+        }
+
+        $sql = "INSERT INTO {$table} {$columns} VALUES {$values}";
+
+        return $this->query($sql, $params);
+    }
+
+    /**
+     * Insert multiple rows of data by given table name and parameters.
+     *
+     * @param  string  $tableName  Name of the target table
+     * @param  array   $params     Binding variables in two-dimensional array with indexless first dimension
+     * @return boolean             Success or not
+     */
+    public function insertMulti(string $tableName, array $params = []): bool
+    {
+        $rowCount = 0;
+
+        if (!empty($params))
+        {
+            $values = '';
+            $bind = [];
+
+            $columns = '(`' . implode('`, `', array_keys($params[0])) . '`)';
+
+            foreach ($params as $addRow)
+            {
+                $values .= '(' . implode(', ', array_fill(0, count($addRow), '?')) . '), ';
+                $bind = array_merge($bind, array_values($addRow));
+            }
+            $values = preg_replace('/, $/', '', $values);
+
+            $table = "`{$tableName}`";
+
+            if ($this->_dbtype !== 'mysql')
+            {
+                $columns = $this->_changeSystemIdentifiers($columns);
+                $table = $this->_changeSystemIdentifiers($table);
+            }
+
+            $sql = "INSERT INTO {$table} {$columns} VALUES {$values}";
+
+            $rowCount = $this->query($sql, $bind);
+        }
+
+        return (bool) ($rowCount > 0);
+    }
+
+    /**
+     * Update data by by given table name and parameters.
+     *
+     * @param  string    $tableName  Name of the target table
+     * @param  string[]  $params     Binding variables
+     * @param  array     $where      Data of `WHERE` conditions
+     * @return integer               Count of affected rows
+     */
+    public function update(string $tableName, array $params = [], array $where = []): int
+    {
+        $rowCount = 0;
+
+        if (!empty($params))
+        {
+            list('Pattern' => $values, 'Bind' => $updateParam) = $this->_buildUpdateValues($params);
+            list('Pattern' => $wherePattern, 'Bind' => $whereParam) = $this->_buildWhere($where);
+            $bind = array_merge($updateParam, $whereParam);
+
+            $table = "`{$tableName}`";
+
+            if ($this->_dbtype !== 'mysql')
+            {
+                $table = $this->_changeSystemIdentifiers($table);
+            }
+
+            $sql = "UPDATE {$table} SET {$values}{$wherePattern}";
+
+            $rowCount = $this->query($sql, $bind);
+        }
+
+        return $rowCount;
+    }
+
+    /**
+     * Delete data by by given table name and parameters.
+     *
+     * @param  string  $tableName  Name of the target table
+     * @param  array   $where      Data of `WHERE` conditions
+     * @return integer
+     */
+    public function delete(string $tableName, array $where = []): int
+    {
+        $rowCount = 0;
+
+        # To avoid accidentally delete all data, the workflow only continues while `$where` is not empty
+        if (!empty($where))
+        {
+            list('Pattern' => $wherePattern, 'Bind' => $bind) = $this->_buildWhere($where);
+
+            $table = "`{$tableName}`";
+
+            if ($this->_dbtype !== 'mysql')
+            {
+                $table = $this->_changeSystemIdentifiers($table);
+            }
+
+            $sql = "DELETE FROM {$table}{$wherePattern}";
+
+            Logger::getInstance()->logInfo($sql);
+            Logger::getInstance()->logInfo(JsonUnescaped($bind));
+
+            $rowCount = $this->query($sql, $bind);
+        }
+
+        return $rowCount;
+    }
+
+    /**
+     * Get the ID or sequence value of the last inserted row.
+     *
+     * @param  string|null   $name  Name of the sequence object (mainly for DB types besides MySQL, ex: PostgreSQL)
+     * @return string|false
+     */
+    public function lastInsertId(?string $name = null): string|false
+    {
+        return $this->_pdo->lastInsertId();
     }
 
     /**
@@ -365,6 +707,30 @@ class DBAPI
         else
         {
             throw $ex;
+        }
+    }
+
+    /**
+     * Convert system identifiers between DB types.
+     *
+     * @param  string  $text    Clause or text that includes system identifiers
+     * @param  string  $dbType  Type of the database
+     * @return string
+     */
+    private function _changeSystemIdentifiers(string $text, string $dbType = null): string
+    {
+        if (is_null($dbType))
+        {
+            $dbType = $this->_dbtype;
+        }
+
+        switch ($dbType)
+        {
+            case 'pgsql':
+                return preg_replace('/`/', '"', $text);
+
+            default:
+                return $text;
         }
     }
 }

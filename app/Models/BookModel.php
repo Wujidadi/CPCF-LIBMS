@@ -10,7 +10,7 @@ use App\ExceptionCode;
 use App\Model;
 
 /**
- * 書籍資料表模型
+ * 書籍資料模型
  */
 class BookModel extends Model
 {
@@ -56,8 +56,6 @@ class BookModel extends Model
         'CreatedAt'       => [ 'required' => false, 'editable' => true  ],
         'UpdatedAt'       => [ 'required' => false, 'editable' => true  ]
     ];
-
-    protected $_className;
 
     protected static $_uniqueInstance = null;
 

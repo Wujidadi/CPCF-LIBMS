@@ -10,7 +10,7 @@ use App\ExceptionCode;
 use App\Model;
 
 /**
- * 書籍借閱紀錄資料表模型
+ * 書籍借閱紀錄資料模型
  */
 class CirculationModel extends Model
 {
@@ -20,8 +20,6 @@ class CirculationModel extends Model
      * @var string
      */
     protected $_tableName = 'Circulation';
-
-    protected $_className;
 
     protected static $_uniqueInstance = null;
 
