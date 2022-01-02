@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Handlers\StorageTypeHandler;
 use Throwable;
 use PDO;
 use Libraries\Logger;
@@ -10,6 +11,7 @@ use Libraries\HTTP\Response;
 use Libraries\DBAPI;
 use App\Models\BookModel;
 use App\Models\MemberModel;
+use App\Models\StorageTypeModel;
 
 class TestController
 {
@@ -80,9 +82,10 @@ class TestController
                 //     // 'Name' => '測試2'
                 //     'Name' => ['LIKE', '%測試%']
                 // ])
-                'Data'  => DBAPI::getInstance()->delete('StorageTypes', [
-                    'Name' => [ 'LIKE', '%測試%' ]
-                ])
+                // 'Data'  => DBAPI::getInstance()->delete('StorageTypes', [
+                //     'Name' => [ 'LIKE', '%測試%' ]
+                // ]),
+                'Data'  => StorageTypeHandler::getInstance()->getAll()
             ];
             $output['Data'] = $result;
         }

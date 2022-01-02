@@ -95,7 +95,7 @@
                                         <div class="col th label-column label-book-print"  >印刷別</div>
                                         <div class="col td info-column  info-book-print"   >{{ book.Print }}</div>
                                         <div class="col th label-column label-publish-date">出版日期</div>
-                                        <div class="col td info-column  info-publish-date" >{{ book.PublishDate }}</div>
+                                        <div class="col td info-column  info-publish-date" >{{ publishDate(book.PublishDate, book.PublishDateType) }}</div>
                                     </div>
                                     <div class="row tr">
                                         <div class="col th label-column label-isn"     >ISBN/ISSN</div>

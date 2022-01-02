@@ -42,3 +42,11 @@ $font-sizes:
 .collapse-container {
     padding: 0 !important;
 }
+
+.fit-content {
+    max-width: fit-content !important;
+}
+
+.textarea-noresize {
+    resize: none;
+}

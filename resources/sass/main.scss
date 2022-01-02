@@ -1,3 +1,4 @@
+@use 'sass:math';
 @use 'Bootstrap/bootstrap-utilities.scss';
 @import '_common.scss';
 @import '_colors.scss';
@@ -34,7 +35,7 @@ body {
                 &.fixed-left {
                     position: fixed;
                     width: $left-aside-width;
-                    height: calc(100vh - #{$top-navbar-height});
+                    height: #{calc(100vh - $top-navbar-height)};
 
                     .nav {
                         width: 100%;
@@ -153,10 +154,10 @@ body {
                             flex: 0 0 auto;
 
                             @media screen and (min-width: 1920px) {
-                                width: #{calc($wider-width * 1%)};
+                                width: $wider-width * 1%;
                             }
                             @media (max-width: 1919px) {
-                                width: #{calc($narrower-width * 1%)};
+                                width: $narrower-width * 1%;
                             }
                         }
                     }
@@ -183,10 +184,10 @@ body {
                             justify-content: $align !important;
 
                             @media screen and (min-width: 1920px) {
-                                width: #{calc($wider-width * 1%)};
+                                width: $wider-width * 1%;
                             }
                             @media (max-width: 1919px) {
-                                width: #{calc($narrower-width * 1%)};
+                                width: $narrower-width * 1%;
                             }
                         }
                     }
@@ -247,10 +248,10 @@ body {
                             flex: 0 0 auto;
 
                             @media screen and (min-width: 1920px) {
-                                width: #{calc($wider-width * 1%)};
+                                width: $wider-width * 1%;
                             }
                             @media (max-width: 1919px) {
-                                width: #{calc($narrower-width * 1%)};
+                                width: $narrower-width * 1%;
                             }
 
                             &.th {
@@ -280,10 +281,10 @@ body {
                             flex: 0 0 auto;
 
                             @media screen and (min-width: 1920px) {
-                                width: #{calc($wider-width * 1%)};
+                                width: $wider-width * 1%;
                             }
                             @media (max-width: 1919px) {
-                                width: #{calc($narrower-width * 1%)};
+                                width: $narrower-width * 1%;
                             }
                         }
                     }
@@ -299,17 +300,6 @@ body {
                 }
 
                 .data-column {
-                    // $fields:
-                    //     'book-no'       5   7  center,
-                    //     'book-name'    21  16  start,
-                    //     'author'       10  10  start,
-                    //     'illustrator'  10  10  start,
-                    //     'editor'       10  10  start,
-                    //     'translator'   10  10  start,
-                    //     'publisher'    10  10  center,
-                    //     'category'      8   9  center,
-                    //     'location'      7   8  center,
-                    //     'function'      9  10  center;
                     $fields:
                         'work'          8    12    center,
                         'book-no'       5     7    center,
@@ -325,10 +315,10 @@ body {
                             flex: 0 0 auto;
 
                             @media screen and (min-width: 1920px) {
-                                width: #{calc($wider-width * 1%)};
+                                width: $wider-width * 1%;
                             }
                             @media (max-width: 1919px) {
-                                width: #{calc($narrower-width * 1%)};
+                                width: $narrower-width * 1%;
                             }
 
                             &.th {
@@ -412,11 +402,69 @@ body {
                                 padding: 4px 6px;
     
                                 @media screen and (min-width: 1920px) {
-                                    width: #{calc($wider-width * 1%)};
+                                    width: $wider-width * 1%;
                                 }
                                 @media (max-width: 1919px) {
-                                    width: #{calc($narrower-width * 1%)};
+                                    width: $narrower-width * 1%;
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .page-book-add {
+            $amount-wider-publisher: 7.5%;
+
+            $columns:
+                // 出版日期、版次、刷次
+                'publish-date'  56%,
+                'edition'       22%,
+                'print'         22%,
+                // 入庫日期、入庫原因
+                'storage-date'  56%,
+                'storage-type'  44%,
+                // 書籍分類、架位
+                'category'      50%,
+                'location'      50%,
+                // ISBN/ISSN、國際商品條碼
+                'isn'           50%,
+                'ean'           50%,
+                // 送出、取消按鈕
+                'submit'        50%,
+                'cancel'        50%;
+            @each $column, $width in $columns {
+                .col-#{$column} {
+                    flex: 0 0 auto;
+                    width: $width;
+
+                    $ratio: math.div(100%, $width);
+
+                    $fields: ();
+                    @if index(('edition', 'print'), $column) {
+                        $label-at-wider:     7 * $ratio * 1%;
+                        $label-at-narrower: 25%;
+                        $fields:
+                            'label'  $label-at-wider          $label-at-narrower,
+                            'input'  (100 - $label-at-wider)  (100 - $label-at-narrower);
+                    } @else {
+                        $label-at-wider:     7 * $ratio * 1%;
+                        $label-at-narrower: 10 * $ratio * 1%;
+                        $fields:
+                            'label'  $label-at-wider          $label-at-narrower,
+                            'input'  (100 - $label-at-wider)  (100 - $label-at-narrower);
+                    }
+
+                    @each $field, $wider-width, $narrower-width in $fields {
+                        .formcol-#{$field} {
+                            flex: 0 0 auto;
+    
+                            @media screen and (min-width: 1920px) {
+                                width: $wider-width !important;
+                            }
+                            @media (max-width: 1919px) {
+                                width: $narrower-width !important;
                             }
                         }
                     }

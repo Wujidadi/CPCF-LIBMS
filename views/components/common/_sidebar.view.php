@@ -11,7 +11,7 @@
             <a id="borrowTab" class="nav-link border-0 ps-4.5" href="/circulation/borrow">借書</a>
             <a id="returnTab" class="nav-link border-0 ps-4.5" href="/circulation/return">還書</a>
         </div>
-        <a id="bookTab" class="nav-link fs-r1.15 border-0 py-3" href="/books">圖書管理作業</a>
+        <a id="bookTab" class="nav-link fs-r1.15 border-0 py-3" href="/books?t=No">圖書管理作業</a>
         <div id="bookSubTab" class="fs-r1 mb-2">
             <a id="addBookTab" class="nav-link border-0 ps-4.5" href="/book/add">新增圖書</a>
         </div>

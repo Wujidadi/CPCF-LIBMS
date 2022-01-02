@@ -2,8 +2,9 @@
 
 namespace App\Controllers\Web;
 
-use App\Controllers\WebPageController;
 use App\Constant;
+use App\Handlers\StorageTypeHandler;
+use App\Controllers\WebPageController;
 
 /**
  * 主功能頁面控制器
@@ -145,6 +146,8 @@ class MainController extends WebPageController
 
         $pageContext = 'AddBook';
 
+        $storageTypes = StorageTypeHandler::getInstance()->getAll();
+
         $scripts = $this->_buildScriptHTML([
             '/js/main/book/add.js'
         ]);
@@ -154,6 +157,7 @@ class MainController extends WebPageController
             'headerTitle',
             'template',
             'pageContext',
+            'storageTypes',
             'scripts'
         ));
     }

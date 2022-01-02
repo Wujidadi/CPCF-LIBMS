@@ -3,7 +3,7 @@
         <div class="row form-column">
             <div class="col form-column formcol-label"><?= App\Constant::MemberCall ?>編號</div>
             <div class="col form-column formcol-input ps-0">
-                <input type="text" class="w-100 h-100 p-2" v-model="memberNo" v-on:keypress.enter="getCirculationByMember()">
+                <input type="text" class="form-control w-100 h-100 p-2" v-model="memberNo" v-on:keypress.enter="getCirculationByMember()">
             </div>
             <div class="col form-column formcol-tail ps-0">
                 <div class="btn btn-primary w-100" v-on:click="getCirculationByMember()">查詢</div>
@@ -12,7 +12,7 @@
         <div class="row form-column mt-2">
             <div class="col form-column formcol-label">圖書編號</div>
             <div class="col form-column formcol-input ps-0">
-                <input type="text" class="w-100 h-100 p-2" v-model="bookNo" v-on:keypress.enter="borrowBook" v-bind:disabled="forbidBorrow">
+                <input type="text" class="form-control w-100 h-100 p-2" v-model="bookNo" v-on:keypress.enter="borrowBook" v-bind:disabled="forbidBorrow">
             </div>
             <div class="col form-column formcol-tail ps-0">
                 <div class="btn btn-warning w-100" v-on:click="borrowBook" v-bind:class="{ disabled: forbidBorrow }">借書</div>

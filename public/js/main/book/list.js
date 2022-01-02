@@ -162,6 +162,21 @@ const vueApp = Vue.createApp({
                 console.warn(error);
             });
         },
+        publishDate(date, dateType) {
+            switch (dateType) {
+                case 0:
+                    return '';
+
+                case 1:
+                    return date;
+
+                case 2:
+                    return date.replace(/\-\d{2}$/, '');
+
+                case 3:
+                    return date.replace(/\-\d{2}\-\d{2}$/, '');
+            }
+        },
         toggleTargetTage(bookId) {
             return `book${bookId}`;
         },

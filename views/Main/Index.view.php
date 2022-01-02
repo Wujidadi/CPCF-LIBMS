@@ -18,7 +18,12 @@
             </div>
         </main>
     </div>
-    <script>const PageContext = '<?= $pageContext ?>';</script>
+    <script>
+        const PageContext = '<?= $pageContext ?>';
+        <?php if ($pageContext === 'AddBook') { ?>
+            const StorageTypes = <?= JsonUnescaped($storageTypes) ?>;
+        <?php } ?>
+    </script>
     <script src="/js/common.js"></script>
     <?= $scripts ?>
 </body>
