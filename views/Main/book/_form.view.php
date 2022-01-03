@@ -3,13 +3,13 @@
         <div class="row form-column">
             <div class="col form-column formcol-label p-0">書號</div>
             <div class="col form-column formcol-input pe-0">
-                <input type="text" class="form-control w-100 h-100 p-2" placeholder="必填" v-model="bookNumber">
+                <input type="text" class="form-control w-100 h-100 p-2" v-bind:placeholder="requiredHint" v-model="bookNumber">
             </div>
         </div>
         <div class="row form-column mt-2">
             <div class="col form-column formcol-label p-0">書名</div>
             <div class="col form-column formcol-input pe-0">
-                <input type="text" class="form-control w-100 h-100 p-2" placeholder="必填" v-model="bookName">
+                <input type="text" class="form-control w-100 h-100 p-2" v-bind:placeholder="requiredHint" v-model="bookName">
             </div>
         </div>
         <div class="row form-column mt-2">

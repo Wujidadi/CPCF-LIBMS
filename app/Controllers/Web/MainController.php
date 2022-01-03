@@ -2,9 +2,10 @@
 
 namespace App\Controllers\Web;
 
-use App\Constant;
-use App\Handlers\StorageTypeHandler;
 use App\Controllers\WebPageController;
+use App\Constant;
+use App\Handlers\BookHandler;
+use App\Handlers\StorageTypeHandler;
 
 /**
  * 主功能頁面控制器
@@ -132,6 +133,7 @@ class MainController extends WebPageController
             'scripts'
         ));
     }
+
     /**
      * 新增圖書頁
      *
@@ -142,14 +144,14 @@ class MainController extends WebPageController
         $pageTitle = '新增圖書 - 圖書管理作業';
         $headerTitle = Constant::CustomerFullName. ' ' . Constant::SystemName;
 
-        $template = 'Main.book._add';
+        $template = 'Main.book._form';
 
         $pageContext = 'AddBook';
 
         $storageTypes = StorageTypeHandler::getInstance()->getAll();
 
         $scripts = $this->_buildScriptHTML([
-            '/js/main/book/add.js'
+            '/js/main/book/form.js'
         ]);
 
         view('Main.Index', compact(
@@ -157,6 +159,40 @@ class MainController extends WebPageController
             'headerTitle',
             'template',
             'pageContext',
+            'storageTypes',
+            'scripts'
+        ));
+    }
+
+    /**
+     * 編輯圖書頁
+     *
+     * @param  string  $bookId  書籍 ID（主鍵）
+     * @return void
+     */
+    public function editBook(string $bookId): void
+    {
+        $pageTitle = '編輯圖書 - 圖書管理作業';
+        $headerTitle = Constant::CustomerFullName. ' ' . Constant::SystemName;
+
+        $template = 'Main.book._form';
+
+        $pageContext = 'EditBook';
+
+        $bookData = BookHandler::getInstance()->getBook($bookId);
+
+        $storageTypes = StorageTypeHandler::getInstance()->getAll();
+
+        $scripts = $this->_buildScriptHTML([
+            '/js/main/book/form.js'
+        ]);
+
+        view('Main.Index', compact(
+            'pageTitle',
+            'headerTitle',
+            'template',
+            'pageContext',
+            'bookData',
             'storageTypes',
             'scripts'
         ));

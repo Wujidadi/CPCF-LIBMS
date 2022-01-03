@@ -39,6 +39,12 @@ $Route->map('GET', '/book/add', function()
     MainController::getInstance()->addBook();
 });
 
+# 編輯圖書
+$Route->map('GET', '/book/edit/{bookId}', function($bookId)
+{
+    MainController::getInstance()->editBook($bookId);
+});
+
 # 借閱者管理作業
 $Route->map('GET', '/members', function()
 {

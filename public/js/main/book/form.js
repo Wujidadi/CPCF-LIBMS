@@ -1,6 +1,24 @@
 const vueApp = Vue.createApp({
     data() {
         return {
+            // 固定項
+            bookListPage: '/books?t=No',
+            storageTypes: StorageTypes,
+            requiredField: [
+                'bookNumber',
+                'bookName'
+            ],
+            alteredFieldName: {
+                'bookNumber': '書號',
+                'bookName': '書名',
+                'storageType': '入庫原因'
+            },
+
+            // 變動項
+            initialized: false,
+            unfulfilledField: [],
+
+            // 書籍資料
             bookNumber: null,
             bookName: null,
             originalBookName: null,
@@ -22,7 +40,6 @@ const vueApp = Vue.createApp({
             storageDay: null,
             storageDate: null,
             storageType: 0,
-            storageTypes: StorageTypes,
             bookCategory: null,
             bookLocation: null,
             isn: null,
@@ -31,28 +48,66 @@ const vueApp = Vue.createApp({
             barcode2: null,
             barcode3: null,
             bookNotes: null,
-            requiredField: [
-                'bookNumber',
-                'bookName'
-            ],
-            alteredFieldName: {
-                'bookNumber': '書號',
-                'bookName': '書名',
-                'storageType': '入庫原因'
-            },
-            unfulfilledField: [],
-            bookListPage: '/books?t=No'
+
+            // 原始書籍資料（限編輯頁）
+            originalBookData: {}
         };
+    },
+    computed: {
+        requiredHint() {
+            return (PageContext === 'AddBook' || this.initialized) ? '必填' : '';
+        }
     },
     methods: {
         isset(variable) {
             return (this[variable] === undefined || this[variable] === null || this[variable] === '') ? false : true;
         },
         init() {
-            const today = new Date();
-            this.storageYear = today.getFullYear();
-            this.storageMonth = today.getMonth() + 1;
-            this.storageDay = today.getDate();
+            switch (PageContext) {
+                case 'AddBook':
+                    const today = new Date();
+                    this.storageYear = today.getFullYear();
+                    this.storageMonth = today.getMonth() + 1;
+                    this.storageDay = today.getDate();
+                    break;
+
+                case 'EditBook':
+                default:
+                    console.log(BookData);
+                    this.bookNumber       = this.originalBookData.bookNumber       = BookData.No;
+                    this.bookName         = this.originalBookData.bookName         = BookData.Name;
+                    this.originalBookName = this.originalBookData.originalBookName = BookData.OriginalName !== null ? BookData.OriginalName : '';
+                    this.author           = this.originalBookData.author           = BookData.Author       !== null ? BookData.Author       : '';
+                    this.illustrator      = this.originalBookData.illustrator      = BookData.Illustrator  !== null ? BookData.Illustrator  : '';
+                    this.editor           = this.originalBookData.editor           = BookData.Editor       !== null ? BookData.Editor       : '';
+                    this.translator       = this.originalBookData.translator       = BookData.Translator   !== null ? BookData.Translator   : '';
+                    this.series           = this.originalBookData.series           = BookData.Series       !== null ? BookData.Series       : '';
+                    this.publisher        = this.originalBookData.publisher        = BookData.Publisher    !== null ? BookData.Publisher    : '';
+                    this.publishDate      = this.originalBookData.publishDate      = BookData.PublishDate;
+                    this.publishDateType  = this.originalBookData.publishDateType  = BookData.PublishDateType;
+                    const publishDate = this.parsePublishDate();
+                    this.publishYear  = publishDate.year;
+                    this.publishMonth = publishDate.month;
+                    this.publishDay   = publishDate.day;
+                    this.edition          = this.originalBookData.edition          = BookData.Edition      !== null ? BookData.Edition      : '';
+                    this.print            = this.originalBookData.print            = BookData.Print        !== null ? BookData.Print        : '';
+                    this.storageDate      = this.originalBookData.storageDate      = BookData.StorageDate;
+                    this.storageType      = this.originalBookData.storageType      = BookData.StorageType;
+                    const storageDate = this.parseStorageDate();
+                    this.storageYear  = storageDate.year;
+                    this.storageMonth = storageDate.month;
+                    this.storageDay   = storageDate.day;
+                    this.bookCategory     = this.originalBookData.bookCategory     = BookData.CategoryId;    // 待商榷
+                    this.bookLocation     = this.originalBookData.bookLocation     = BookData.LocationId;    // 待商榷
+                    this.isn              = this.originalBookData.isn              = BookData.ISN          !== null ? BookData.ISN          : '';
+                    this.ean              = this.originalBookData.ean              = BookData.EAN          !== null ? BookData.EAN          : '';
+                    this.barcode1         = this.originalBookData.barcode1         = BookData.Barcode1     !== null ? BookData.Barcode1     : '';
+                    this.barcode2         = this.originalBookData.barcode2         = BookData.Barcode2     !== null ? BookData.Barcode2     : '';
+                    this.barcode3         = this.originalBookData.barcode3         = BookData.Barcode3     !== null ? BookData.Barcode3     : '';
+                    this.bookNotes        = this.originalBookData.bookNotes        = BookData.Notes        !== null ? BookData.Notes        : '';
+                    break;
+            }
+            this.initialized = true;
         },
         checkYear(type) {
             const dataName = `${type}Year`;
@@ -98,18 +153,45 @@ const vueApp = Vue.createApp({
                 this[dataName] = data > 0 ? data : new Date().getDate();
             }
         },
-        requiredNotFulfilled() {
-            this.unfulfilledField = [];
-            this.requiredField.forEach(field => {
-                if (!this.isset(field)) {
-                    this.unfulfilledField.push(field);
+        parsePublishDate() {
+            let date = {
+                year: null,
+                month: null,
+                day: null
+            };
+
+            if (this.publishDateType > 0 && this.publishDateType <= 3) {
+                const matches = this.publishDate.match(/^(\d{4,})\-(\d{2})\-(\d{2})$/);
+                if (matches !== null && matches.length > 1) {
+                    date.year = Number(matches[1]);
+                    if (this.publishDateType > 1) {
+                        date.month = Number(matches[2]);
+                    }
+                    if (this.publishDateType > 2) {
+                        date.day = Number(matches[3]);
+                    }
                 }
-            });
-            if (this.storageType === 0) {
-                this.unfulfilledField.push('storageType');
             }
-            console.log(this.unfulfilledField);
-            return (this.unfulfilledField.length > 0) ? true : false;
+
+            return date;
+        },
+        parseStorageDate() {
+            let date = {
+                year: null,
+                month: null,
+                day: null
+            };
+
+            if (this.isset('storageDate')) {
+                const matches = this.storageDate.match(/^(\d{4,})\-(\d{2})\-(\d{2})$/);
+                if (matches !== null && matches.length > 1) {
+                    date.year = Number(matches[1]);
+                    date.month = Number(matches[2]);
+                    date.day = Number(matches[3]);
+                }
+            }
+
+            return date;
         },
         buildPublishDate() {
             if (this.isset('publishYear')) {
@@ -176,6 +258,19 @@ const vueApp = Vue.createApp({
                 CategoryId: this.bookCategory,
                 LocationId: this.bookLocation
             };
+        },
+        requiredNotFulfilled() {
+            this.unfulfilledField = [];
+            this.requiredField.forEach(field => {
+                if (!this.isset(field)) {
+                    this.unfulfilledField.push(field);
+                }
+            });
+            if (this.storageType === 0) {
+                this.unfulfilledField.push('storageType');
+            }
+            console.log(this.unfulfilledField);
+            return (this.unfulfilledField.length > 0) ? true : false;
         },
         submit() {
             if (this.requiredNotFulfilled()) {

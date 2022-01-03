@@ -75,6 +75,31 @@ class BookHandler
     }
 
     /**
+     * 依書籍 ID（主鍵）查詢單筆圖書資料
+     *
+     * @param  string  $bookId  書籍 ID（主鍵）
+     * @return array
+     */
+    public function getBook(string $bookId): array
+    {
+        $functionName = __FUNCTION__;
+
+        $data = [];
+
+        $result = BookModel::getInstance()->selectOneById($bookId);
+        if (is_array($result) && count($result) > 0)
+        {
+            $data = $result[0];
+
+            # 移除時區標記
+            $data['CreatedAt'] = preg_replace(TimeZoneSuffix, '', $data['CreatedAt']);
+            $data['UpdatedAt'] = preg_replace(TimeZoneSuffix, '', $data['UpdatedAt']);
+        }
+
+        return $data;
+    }
+
+    /**
      * 指定欄位和值查詢複數書籍資料
      *
      * @param  string          $field           欄位名稱

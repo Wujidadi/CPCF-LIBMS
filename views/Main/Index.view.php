@@ -20,7 +20,10 @@
     </div>
     <script>
         const PageContext = '<?= $pageContext ?>';
-        <?php if ($pageContext === 'AddBook') { ?>
+        <?php if (in_array($pageContext, ['AddBook', 'EditBook'])) {
+            if ($pageContext === 'EditBook') { ?>
+                const BookData = <?= JsonUnescaped($bookData) ?>;
+            <?php } ?>
             const StorageTypes = <?= JsonUnescaped($storageTypes) ?>;
         <?php } ?>
     </script>
