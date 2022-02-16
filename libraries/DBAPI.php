@@ -667,7 +667,7 @@ class DBAPI
      */
     public function lastInsertId(?string $name = null): string|false
     {
-        return $this->_pdo->lastInsertId();
+        return $this->_pdo->lastInsertId($name);
     }
 
     /**
@@ -682,7 +682,6 @@ class DBAPI
     private function _exceptionLog(PDOException $ex, string $sql = '', string $method = '', array $parameters = []): void
     {
         $message = $ex->getMessage();
-        $exception = "Unhandled exception.<br />{$message}<br />You can find the error back in the log.";
 
         if (!empty($sql))
         {
