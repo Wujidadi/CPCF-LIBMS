@@ -2,8 +2,7 @@
 
 namespace App\Handlers;
 
-use Exception;
-use Libraries\Logger;
+use App\Handler;
 use App\ExceptionCode;
 use App\Exceptions\CirculationException;
 use App\Models\CirculationModel;
@@ -13,7 +12,7 @@ use App\Models\MemberModel;
 /**
  * 書籍流通（借還書）資料處理器
  */
-class CirculationHandler
+class CirculationHandler extends Handler
 {
     protected $_className;
 

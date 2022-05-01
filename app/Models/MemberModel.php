@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use PDO;
-use Exception;
-use PDOException;
 use Libraries\Logger;
 use App\Model;
 use App\ExceptionCode;
@@ -90,12 +87,12 @@ class MemberModel extends Model
                 {
                     if (!isset($params[$column]) || (trim($params[$column]) === '' && $params[$column] !== false))
                     {
-                        throw new Exception("Column \"{$column}\" is required but unfilled", ExceptionCode::Unfilled);
+                        throw new \Exception("Column \"{$column}\" is required but unfilled", ExceptionCode::Unfilled);
                     }
 
                     if ($column === 'Disabled')
                     {
-                        $bind[$column] = [ $params[$column], PDO::PARAM_BOOL ];
+                        $bind[$column] = [ $params[$column], \PDO::PARAM_BOOL ];
                     }
                     else
                     {
@@ -120,7 +117,7 @@ class MemberModel extends Model
 
             $result = $this->_db->query($sql, $bind);
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -133,7 +130,7 @@ class MemberModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
 
         return $result;
@@ -240,8 +237,8 @@ class MemberModel extends Model
 
                     $bind = [
                         $field   => $value,
-                        'limit'  => [ $limit,  PDO::PARAM_INT ],
-                        'offset' => [ $offset, PDO::PARAM_INT ]
+                        'limit'  => [ $limit,  \PDO::PARAM_INT ],
+                        'offset' => [ $offset, \PDO::PARAM_INT ]
                     ];
 
                     break;
@@ -262,8 +259,8 @@ class MemberModel extends Model
 
                     $bind = [
                         $field => "%{$value}%",
-                        'limit'  => [ $limit,  PDO::PARAM_INT ],
-                        'offset' => [ $offset, PDO::PARAM_INT ]
+                        'limit'  => [ $limit,  \PDO::PARAM_INT ],
+                        'offset' => [ $offset, \PDO::PARAM_INT ]
                     ];
 
                     break;
@@ -275,7 +272,7 @@ class MemberModel extends Model
                 return $this->_db->query($sql, $bind);
             }
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -288,7 +285,7 @@ class MemberModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
     }
 
@@ -318,7 +315,7 @@ class MemberModel extends Model
                     {
                         if ($column === 'Disabled')
                         {
-                            $bind[$column] = [ $data[$column], PDO::PARAM_BOOL ];
+                            $bind[$column] = [ $data[$column], \PDO::PARAM_BOOL ];
                         }
                         else
                         {
@@ -359,10 +356,10 @@ class MemberModel extends Model
                 $logMessage = "{$this->_className}::{$functionName} Error: {$exMessage}";
                 Logger::getInstance()->logError($logMessage);
 
-                throw new Exception($exMessage, ExceptionCode::BookData);
+                throw new \Exception($exMessage, ExceptionCode::BookData);
             }
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -375,7 +372,7 @@ class MemberModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
 
         return $result;
@@ -401,13 +398,13 @@ class MemberModel extends Model
             SQL;
 
             $bind = [
-                'disabled' => [ $action, PDO::PARAM_BOOL ],
+                'disabled' => [ $action, \PDO::PARAM_BOOL ],
                 'memberId' => $memberId
             ];
 
             $result = $this->_db->query($sql, $bind);
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -420,7 +417,7 @@ class MemberModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
 
         return $result;

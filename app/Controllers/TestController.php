@@ -2,18 +2,17 @@
 
 namespace App\Controllers;
 
+use App\Controller;
 use App\Handlers\StorageTypeHandler;
-use Throwable;
-use PDO;
 use Libraries\Logger;
 use Libraries\HTTP\Request;
 use Libraries\HTTP\Response;
-use Libraries\DBAPI;
+use Libraries\Database\DBAPI;
 use App\Models\BookModel;
 use App\Models\MemberModel;
 use App\Models\StorageTypeModel;
 
-class TestController
+class TestController extends Controller
 {
     protected $_className;
 
@@ -89,7 +88,7 @@ class TestController
             ];
             $output['Data'] = $result;
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -151,7 +150,7 @@ class TestController
             ],
             'limit' => [
                 '4',
-                PDO::PARAM_INT
+                \PDO::PARAM_INT
             ]
         ];
 

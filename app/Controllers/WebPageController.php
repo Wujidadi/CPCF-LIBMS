@@ -2,10 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Controller;
+
 /**
  * 網頁控制器
  */
-abstract class WebPageController
+abstract class WebPageController extends Controller
 {
     /**
      * 本類別名稱

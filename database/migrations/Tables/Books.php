@@ -2,8 +2,6 @@
 
 namespace Database\Migrations\Tables;
 
-use PDOException;
-use Libraries\DBAPI;
 use Libraries\Logger;
 use Database\Migration;
 
@@ -20,7 +18,7 @@ class Books extends Migration
     protected $_tableName = 'Books';
 
     /**
-     * Instance of this class.
+     * Unique instance of this class.
      *
      * @var self|null
      */

@@ -2,9 +2,7 @@
 
 namespace Database;
 
-use Exception;
-use PDOException;
-use Libraries\DBAPI;
+use Libraries\Database\DBAPI;
 use Libraries\Logger;
 
 /**
@@ -22,12 +20,12 @@ abstract class Migration
     /**
      * Instance of Database connection.
      *
-     * @var Libraries\DBAPI
+     * @var DBAPI
      */
     protected $_db;
 
     /**
-     * Get the instance of this class.
+     * Get the unique instance of this class.
      *
      * @return self
      */
@@ -62,7 +60,7 @@ abstract class Migration
                 $this->_db->query($sql);
             }
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             $this->_db->rollBack();
 
@@ -70,7 +68,7 @@ abstract class Migration
             $exMsg  = $ex->getMessage();
             Logger::getInstance()->logError("{$className}::{$functionName} PDOException: ({$exCode}) {$exMsg}");
 
-            throw new Exception($exMsg, 35);    // Sum of alphabet number of "PDO"
+            throw new \Exception($exMsg, 35);    // Sum of alphabet number of "PDO"
         }
 
         $commitResult = $this->_db->commit();

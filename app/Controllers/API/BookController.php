@@ -2,7 +2,7 @@
 
 namespace App\Controllers\API;
 
-use Throwable;
+use App\Controller;
 use Libraries\HTTP\Request;
 use Libraries\HTTP\Response;
 use Libraries\Logger;
@@ -14,7 +14,7 @@ use App\Exceptions\InputException;
 /**
  * 書籍資料控制器
  */
-class BookController
+class BookController extends Controller
 {
     protected $_className;
 
@@ -72,7 +72,7 @@ class BookController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -142,7 +142,7 @@ class BookController
 
             $output['Data'] = BookHandler::getInstance()->getAllBooks($limit, $offset, $appendField, $includeDeleted);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -230,7 +230,7 @@ class BookController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -284,7 +284,7 @@ class BookController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -340,7 +340,7 @@ class BookController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 

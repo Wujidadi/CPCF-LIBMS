@@ -2,7 +2,7 @@
 
 namespace App\Handlers;
 
-use Exception;
+use App\Handler;
 use Libraries\Logger;
 use App\ExceptionCode;
 use App\Models\MemberModel;
@@ -10,7 +10,7 @@ use App\Models\MemberModel;
 /**
  * 借閱者/會員資料處理器
  */
-class MemberHandler
+class MemberHandler extends Handler
 {
     protected $_className;
 
@@ -109,7 +109,7 @@ class MemberHandler
             $logMessage = "{$this->_className}::{$functionName} Error: {$errorMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($errorMessage, ExceptionCode::MemberData);
+            throw new \Exception($errorMessage, ExceptionCode::MemberData);
         }
     }
 

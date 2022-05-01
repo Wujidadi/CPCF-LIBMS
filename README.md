@@ -23,6 +23,9 @@
 
 ## 開發日誌
 
+### 2022 年 5 月 1 日
+* 同步 Tarascanta Beta 更新。
+
 ### 2022 年 2 月 16 日
 * 修正 `DBAPI`，並同步 Tarascanta Beta。
 

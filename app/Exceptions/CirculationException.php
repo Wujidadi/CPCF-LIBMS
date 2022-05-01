@@ -2,12 +2,10 @@
 
 namespace App\Exceptions;
 
-use Exception;
-
 /**
  * 書籍流通資料（借閱紀錄）例外處理類別
  */
-class CirculationException extends Exception
+class CirculationException extends \Exception
 {
     /**
      * 錯誤訊息

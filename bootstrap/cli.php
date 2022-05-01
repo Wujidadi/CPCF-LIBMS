@@ -9,11 +9,13 @@
 |
 */
 
+chdir(__DIR__);
+
 # PHP decimal precision
 ini_set('precision', 16);
 
 # Basic definitions
-require_once '../bootstrap/definitions.php';
+require_once './definitions.php';
 
 # Autoload
 require_once VENDOR_DIR . '/autoload.php';

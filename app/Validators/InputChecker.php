@@ -2,8 +2,6 @@
 
 namespace App\Validators;
 
-use DateTime;
-
 /**
  * 輸入驗證抽象類別
  */
@@ -175,7 +173,7 @@ abstract class InputChecker
      */
     protected function _isInvalidDate(string $date, string $format): bool
     {
-        $objDT = DateTime::createFromFormat($format, $date);
+        $objDT = \DateTime::createFromFormat($format, $date);
         if ($objDT && $objDT->format($format) == $date)
         {
             return false;

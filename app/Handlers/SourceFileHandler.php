@@ -2,20 +2,17 @@
 
 namespace App\Handlers;
 
-use stdClass;
-use Throwable;
-use Exception;
+use App\Handler;
 use Libraries\Logger;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use App\Models\BookModel;
 
 /**
  * 原始資料檔處理器
  */
-class SourceFileHandler
+class SourceFileHandler extends Handler
 {
     /**
      * 原始資料檔存放路徑
@@ -69,7 +66,7 @@ class SourceFileHandler
         $strSourceFileName = "{$this->_srcStoragePath}20181024-整理毛毛蟲書單_寶芳.xls";
         $strTargetFileName = "{$this->_srcStoragePath}CPCF_Books_trimmed{$strFileSuffix}.xlsx";
 
-        $objReturns = new stdClass;
+        $objReturns = new \stdClass;
         $objReturns->status  = true;
         $objReturns->message = '';
 
@@ -196,7 +193,7 @@ class SourceFileHandler
             $strLogMessage = "{$this->_className}::{$strFunction} {$objReturns->message}";
             Logger::getInstance()->logInfo($strLogMessage);
         }
-        catch (Exception $ex)
+        catch (\Exception $ex)
         {
             $exCode = $ex->getCode();
             $exMsg  = $ex->getMessage();
@@ -228,7 +225,7 @@ class SourceFileHandler
         $strSourceFileName = "{$this->_srcStoragePath}CPCF_Books_trimmed{$strSourceFileSuffix}.xlsx";
         $strTargetFileName = "{$this->_srcStoragePath}CPCF_Books_retrimmed{$strTargetFileSuffix}.xlsx";
 
-        $objReturns = new stdClass;
+        $objReturns = new \stdClass;
         $objReturns->status  = true;
         $objReturns->message = '';
 
@@ -329,7 +326,7 @@ class SourceFileHandler
             $strLogMessage = "{$this->_className}::{$strFunction} {$objReturns->message}";
             Logger::getInstance()->logInfo($strLogMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $exCode = $ex->getCode();
             $exMsg  = $ex->getMessage();
@@ -359,7 +356,7 @@ class SourceFileHandler
 
         $strSourceFileName = "{$this->_srcStoragePath}{$strFile}";
 
-        $objReturns = new stdClass;
+        $objReturns = new \stdClass;
         $objReturns->status  = true;
         $objReturns->message = '';
 
@@ -445,7 +442,7 @@ class SourceFileHandler
             $strLogMessage = "來源檔案：{$strSourceFileName}；指定新增{$strAssignedCount}，從原檔案第 {$intBeginRow} 筆起，每 {$intGroup} 筆寫入資料庫；實際{$objReturns->message}";
             Logger::getInstance()->logInfo($strLogMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $exCode = $ex->getCode();
             $exMsg  = $ex->getMessage();

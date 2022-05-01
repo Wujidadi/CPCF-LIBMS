@@ -42,7 +42,15 @@ else
 
         case 'migrate':
         case 'migration':
-            echo `php tools/migrate.php`;
+            if (in_array('sqlite', $argv))
+            {
+                $command = 'php tools/migrateSQLite.php';
+            }
+            else
+            {
+                $command = 'php tools/migrate.php';
+            }
+            echo shell_exec($command);
             break;
 
         case 'sass2css':
@@ -123,5 +131,9 @@ function showHelp(): void
     echo sprintf("       \033[33m%s\033[0m\n", 'sass');
     echo sprintf("       \033[33m%s\033[0m\n", 'scss');
     echo sprintf("       \033[33m%s\033[0m\n", 'css');
+    echo PHP_EOL;
+    echo sprintf("     * %s\n", 'JavaScript Minimizing and Obfuscation:');
+    echo sprintf("       \033[33m%s\033[0m\n", 'js');
+    echo sprintf("       \033[33m%s\033[0m\n", 'javascript');
     exit(0);
 }

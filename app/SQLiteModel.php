@@ -2,12 +2,12 @@
 
 namespace App;
 
-use Libraries\Database\DBAPI;
+use Libraries\Database\SQLiteAPI;
 
 /**
- * Parent class of model.
+ * Parent class of SQLite models.
  */
-abstract class Model
+abstract class SQLiteModel
 {
     /**
      * Name of this class.
@@ -19,19 +19,26 @@ abstract class Model
     /**
      * Instance of Database connection.
      *
-     * @var DBAPI
+     * @var SQLiteAPI
      */
     protected $_db;
 
     /**
-     * Unique instance of this class.
+     * Path and name of the file of the SQLite database.
+     *
+     * @var string
+     */
+    protected $_dbFile;
+
+    /**
+     * Instance of this class.
      *
      * @var self|null
      */
-    protected static $_uniqueInstance;
+    protected static $_instance;
 
     /**
-     * Get the unique instance of this class.
+     * Get the instance of this class.
      *
      * @return self
      */
@@ -40,11 +47,13 @@ abstract class Model
     /**
      * Constructor.
      *
-     * @param  string  $dbConfigKey  Key of the database configurations in `DB_CONFIG` array which shall be use.
+     * @param  string  $db  Database name
+     * @return void
      */
-    protected function __construct($dbConfigKey = 'DEFAULT')
+    public function __construct(string $db)
     {
-        $this->_db = DBAPI::getInstance($dbConfigKey);
+        $this->_dbFile = STORAGE_DIR . "/sqlite/{$db}.db";
+        $this->_db = new SQLiteAPI($this->_dbFile);
     }
 
     /**

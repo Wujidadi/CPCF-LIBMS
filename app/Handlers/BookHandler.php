@@ -2,7 +2,7 @@
 
 namespace App\Handlers;
 
-use Exception;
+use App\Handler;
 use Libraries\Logger;
 use App\ExceptionCode;
 use App\Models\BookModel;
@@ -10,7 +10,7 @@ use App\Models\BookModel;
 /**
  * 書籍資料處理器
  */
-class BookHandler
+class BookHandler extends Handler
 {
     protected $_className;
 
@@ -172,7 +172,7 @@ class BookHandler
             $logMessage = "{$this->_className}::{$functionName} Error: {$errorMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($errorMessage, ExceptionCode::BookData);
+            throw new \Exception($errorMessage, ExceptionCode::BookData);
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Controllers\API;
 
-use Throwable;
+use App\Controller;
 use Libraries\HTTP\Request;
 use Libraries\HTTP\Response;
 use Libraries\Logger;
@@ -16,7 +16,7 @@ use App\Exceptions\CirculationException;
 /**
  * 書籍流通（借還書）控制器
  */
-class CirculationController
+class CirculationController extends Controller
 {
     protected $_className;
 
@@ -106,7 +106,7 @@ class CirculationController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -161,7 +161,7 @@ class CirculationController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -216,7 +216,7 @@ class CirculationController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -305,7 +305,7 @@ class CirculationController
             $logMessage = "{$this->_className}::{$functionName} CirculationException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -411,7 +411,7 @@ class CirculationController
             $logMessage = "{$this->_className}::{$functionName} CirculationException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 

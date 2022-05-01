@@ -2,7 +2,7 @@
 
 namespace App\Controllers\API;
 
-use Throwable;
+use App\Controller;
 use Libraries\HTTP\Request;
 use Libraries\HTTP\Response;
 use Libraries\Logger;
@@ -14,7 +14,7 @@ use App\Exceptions\InputException;
 /**
  * 借閱者/會員資料控制器
  */
-class MemberController
+class MemberController extends Controller
 {
     protected $_className;
 
@@ -72,7 +72,7 @@ class MemberController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -140,7 +140,7 @@ class MemberController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -194,7 +194,7 @@ class MemberController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 
@@ -250,7 +250,7 @@ class MemberController
             $logMessage = "{$this->_className}::{$functionName} InputException({$exCode}): {$exMessage} {$jsonData}";
             Logger::getInstance()->logError($logMessage);
         }
-        catch (Throwable $ex)
+        catch (\Throwable $ex)
         {
             $httpStatusCode = 500;
 

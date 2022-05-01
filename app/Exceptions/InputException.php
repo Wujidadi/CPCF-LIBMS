@@ -2,12 +2,10 @@
 
 namespace App\Exceptions;
 
-use Exception;
-
 /**
  * 輸入資料驗證例外
  */
-class InputException extends Exception
+class InputException extends \Exception
 {
     /**
      * 錯誤訊息

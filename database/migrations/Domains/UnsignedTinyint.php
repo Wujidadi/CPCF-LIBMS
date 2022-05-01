@@ -2,8 +2,6 @@
 
 namespace Database\Migrations\Domains;
 
-use PDOException;
-use Libraries\DBAPI;
 use Libraries\Logger;
 use Database\Migration;
 
@@ -20,7 +18,7 @@ class UnsignedTinyint extends Migration
     protected $_domainName = 'unsigned_tinyint';
 
     /**
-     * Instance of this class.
+     * Unique instance of this class.
      *
      * @var self|null
      */

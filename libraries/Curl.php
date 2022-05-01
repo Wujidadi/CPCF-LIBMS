@@ -22,14 +22,14 @@ class Curl
     protected $_response = null;
 
     /**
-     * Instance of this class.
+     * Unique instance of this class.
      *
      * @var self|null
      */
     protected static $_uniqueInstance = null;
 
     /**
-     * Get the instance of this class.
+     * Get the unique instance of this class.
      *
      * @return self
      */

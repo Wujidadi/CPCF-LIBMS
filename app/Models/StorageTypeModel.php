@@ -2,12 +2,7 @@
 
 namespace App\Models;
 
-use PDO;
-use Exception;
-use PDOException;
-use Libraries\Logger;
 use App\Model;
-use App\ExceptionCode;
 
 /**
  * 入庫類別資料模型

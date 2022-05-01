@@ -2,8 +2,6 @@
 
 namespace Database\Migrations\TriggerFunctions;
 
-use PDOException;
-use Libraries\DBAPI;
 use Libraries\Logger;
 use Database\Migration;
 
@@ -20,7 +18,7 @@ class UpdateTimestamp extends Migration
     protected $_triggerFunctionName = 'update_timestamp';
 
     /**
-     * Instance of this class.
+     * Unique instance of this class.
      *
      * @var self|null
      */

@@ -2,16 +2,13 @@
 
 namespace App\Handlers;
 
-use Exception;
-use Libraries\Logger;
-use App\ExceptionCode;
-use App\Models\BookModel;
+use App\Handler;
 use App\Models\StorageTypeModel;
 
 /**
  * 入庫類型處理器
  */
-class StorageTypeHandler
+class StorageTypeHandler extends Handler
 {
     protected $_className;
 

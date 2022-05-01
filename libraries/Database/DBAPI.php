@@ -1,24 +1,25 @@
 <?php
 
-namespace Libraries;
+namespace Libraries\Database;
 
-use PDO;
-use PDOStatement;
-use PDOException;
 use Libraries\Logger;
 
 /**
- * Database API and handling class.
+ * Database API and handling class, mainly for MySQL/PostgreSQL.
  */
 class DBAPI
 {
     /**
-     * @var PDO|null
+     * PDO object.
+     *
+     * @var \PDO|null
      */
     private $_pdo;
 
     /**
-     * @var PDOStatement|false
+     * PDO statement.
+     *
+     * @var \PDOStatement|false
      */
     private $_pdoStatement;
 
@@ -38,14 +39,14 @@ class DBAPI
     private $_retryAttempt = 0;
 
     /**
-     * Instance of this class.
+     * Unique instance of this class.
      *
      * @var self|null
      */
     protected static $_uniqueInstance = null;
 
     /**
-     * Get the instance of this class.
+     * Get the unique instance of this class.
      *
      * @param  string  $configKey  Key of the database configurations array.
      * @return self
@@ -92,7 +93,7 @@ class DBAPI
     }
 
     /**
-     * Connect to database.
+     * Connect to the database.
      *
      * @return void
      */
@@ -103,13 +104,13 @@ class DBAPI
             $dsn = "{$this->_dbtype}:host={$this->_host};port={$this->_port};dbname={$this->_dbname}";
 
             $options = [
-                PDO::ATTR_EMULATE_PREPARES   => false,
-                PDO::ATTR_PERSISTENT         => true,
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                \PDO::ATTR_EMULATE_PREPARES   => false,
+                \PDO::ATTR_PERSISTENT         => true,
+                \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
             ];
 
-            $this->_pdo = new PDO(
+            $this->_pdo = new \PDO(
                 $dsn,
                 $this->_username,
                 $this->_password,
@@ -118,7 +119,7 @@ class DBAPI
 
             $this->_connectionStatus = true;
         }
-        catch (PDOException $e)
+        catch (\PDOException $e)
         {
             $this->_exceptionLog($e, '', __FUNCTION__);
         }
@@ -230,13 +231,13 @@ class DBAPI
                 }
             }
 
-            if (!isset($driverOptions[PDO::ATTR_CURSOR]))
+            if (!isset($driverOptions[\PDO::ATTR_CURSOR]))
             {
                 $execResult = $this->_pdoStatement->execute();
             }
             $this->_queryCount++;
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             $this->_exceptionLog($ex, $this->_buildParams($query), __FUNCTION__, ['query' => $query, 'parameters' => $parameters]);
         }
@@ -275,7 +276,7 @@ class DBAPI
 
                             $params[$namePlaceholder]['value'] = $value;    // Adds each single parameter to $params
 
-                            $params[$namePlaceholder]['type'] = (isset($parameter[1]) && is_int($parameter[1])) ? $parameter[1] : PDO::PARAM_STR;
+                            $params[$namePlaceholder]['type'] = (isset($parameter[1]) && is_int($parameter[1])) ? $parameter[1] : \PDO::PARAM_STR;
                         }
 
                         $in = '(' . rtrim($in, ', ') . ')';
@@ -285,13 +286,13 @@ class DBAPI
                     else
                     {
                         $params[$paramKey]['value'] = $parameter[0];
-                        $params[$paramKey]['type']  = (isset($parameter[1]) && is_int($parameter[1])) ? $parameter[1] : PDO::PARAM_STR;
+                        $params[$paramKey]['type']  = (isset($parameter[1]) && is_int($parameter[1])) ? $parameter[1] : \PDO::PARAM_STR;
                     }
                 }
                 else
                 {
                     $params[$paramKey]['value'] = $parameter;
-                    $params[$paramKey]['type']  = PDO::PARAM_STR;
+                    $params[$paramKey]['type']  = \PDO::PARAM_STR;
                 }
             }
 
@@ -452,7 +453,7 @@ class DBAPI
      * @param  integer     $fetchMode  Fetch mode
      * @return array|integer|boolean|null
      */
-    public function query(string $query, ?array $params = null, int $fetchMode = PDO::FETCH_ASSOC): mixed
+    public function query(string $query, ?array $params = null, int $fetchMode = \PDO::FETCH_ASSOC): mixed
     {
         $query        = trim($query);
         $rawStatement = preg_split("/( |\r|\n)/", $query);
@@ -673,13 +674,13 @@ class DBAPI
     /**
      * Log exception and retry.
      *
-     * @param  PDOException  $ex          Error raised by PDO
-     * @param  string        $sql         SQL clause
-     * @param  string        $method      The Function in which the error has been raised
-     * @param  array         $parameters  Query parameters
+     * @param  \PDOException  $ex          Error raised by \PDO
+     * @param  string         $sql         SQL clause
+     * @param  string         $method      The Function in which the error has been raised
+     * @param  array          $parameters  Query parameters
      * @return void
      */
-    private function _exceptionLog(PDOException $ex, string $sql = '', string $method = '', array $parameters = []): void
+    private function _exceptionLog(\PDOException $ex, string $sql = '', string $method = '', array $parameters = []): void
     {
         $message = $ex->getMessage();
 

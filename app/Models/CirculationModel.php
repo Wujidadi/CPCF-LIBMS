@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use PDO;
-use Exception;
-use PDOException;
 use Libraries\Logger;
 use App\Model;
 use App\ExceptionCode;
@@ -71,7 +68,7 @@ class CirculationModel extends Model
 
             return $this->_db->query($sql, $bind);
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -84,7 +81,7 @@ class CirculationModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
     }
 
@@ -122,13 +119,13 @@ class CirculationModel extends Model
                 'bookId' => $bookId,
                 'from'   => $from,
                 'to'     => $to,
-                'limit'  => [ $limit,  PDO::PARAM_INT ],
-                'offset' => [ $offset, PDO::PARAM_INT ]
+                'limit'  => [ $limit,  \PDO::PARAM_INT ],
+                'offset' => [ $offset, \PDO::PARAM_INT ]
             ];
 
             return $this->_db->query($sql, $bind);
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -141,7 +138,7 @@ class CirculationModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
     }
 
@@ -179,13 +176,13 @@ class CirculationModel extends Model
                 'memberId' => $memberId,
                 'from'   => $from,
                 'to'     => $to,
-                'limit'    => [ $limit,  PDO::PARAM_INT ],
-                'offset'   => [ $offset, PDO::PARAM_INT ]
+                'limit'    => [ $limit,  \PDO::PARAM_INT ],
+                'offset'   => [ $offset, \PDO::PARAM_INT ]
             ];
 
             return $this->_db->query($sql, $bind);
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -198,7 +195,7 @@ class CirculationModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
     }
 
@@ -256,7 +253,7 @@ class CirculationModel extends Model
 
             return $this->_db->query($sql, $bind);
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -269,7 +266,7 @@ class CirculationModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
     }
 
@@ -304,7 +301,7 @@ class CirculationModel extends Model
 
             return $this->_db->query($sql, $bind);
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -317,7 +314,7 @@ class CirculationModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
     }
 
@@ -351,7 +348,7 @@ class CirculationModel extends Model
 
             return $this->_db->query($sql, $bind);
         }
-        catch (PDOException $ex)
+        catch (\PDOException $ex)
         {
             if ($this->_db->inTransaction())
             {
@@ -364,7 +361,7 @@ class CirculationModel extends Model
             $logMessage = "{$this->_className}::{$functionName} PDOException({$exCode}): {$exMessage}";
             Logger::getInstance()->logError($logMessage);
 
-            throw new Exception($exMessage, ExceptionCode::PDO);
+            throw new \Exception($exMessage, ExceptionCode::PDO);
         }
     }
 }
